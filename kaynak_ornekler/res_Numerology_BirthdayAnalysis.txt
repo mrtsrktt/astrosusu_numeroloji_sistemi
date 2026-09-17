@@ -1,0 +1,157 @@
+ Astro Şuşu
+Numeroloji / Doğum Tarihi Analizi	
+Doğum Tarihi
+X
+ Analiz
+ Rapor
+NUMEROLOJİK OMURGA HARİTASI
+HAYAT AMACI
+28/10
+YAŞAM YOLU
+(28) 1
+TUTUM
+9
+ERKEN DERS
+1
+PARA KODU
+1361 (11)
+DOĞUM TARİHİ
+15	3	1990		YAŞ
+6	3	1	= (10) 1	36 (9)
+
+GB	AF	SG	AG	RG
+	🌖	   	   	   
+PİN KODU
+Pin Kodu Karşılaştır
+1	2	3	4	5	6	7	8	9
+(15) 6	3	(19) 1	(10) 1	7	9	4	(13) 4	(35) 8
+0-9	9-18	18-27	27-36	36-45	45-54	54-63	63-∞	
+Hava	Su	Ateş	Toprak	Hava	Su	Ateş	Toprak	
+OMURGA
+		AÇILIM	ETKİ	STRES	GÖLGE
+	9	
+(35) 8
+	8	1	1
+	8	
+(13) 4
+	3	4	5
+	7	
+4
+	2	3	5
+	6	
+9
+	6	3	0
+	5	
+7
+	3	2	2
+	4	
+(10) 1
+	5	3	8
+	3	
+(19) 1
+	4	2	8
+	2	
+3
+	5	1	6
+	1	
+(15) 6
+	7	5	3
+DOĞUM GÜNÜ KİŞİSEL GÜN
+TARİH	EVRENSEL	KİŞİSEL	ETKİ	STRES	ARKAPLAN
+1990	1	(28) 1	2	0	-
+3.1990	22	4	8	9	5
+15.3.1990	1	(10) 1	2	0	6
+KİŞİSEL GÜN
+TARİH	EVRENSEL	KİŞİSEL	ETKİ	STRES	ARKAPLAN
+2026	1	(19) 1	2	0	-
+9.2026	1	(10) 1	2	0	2
+17.9.2026	9	9	9	0	11
+DÖNÜŞÜM YILLARI
+Dönüşüm Yılları
+	YIL	EVRENSEL	KİŞİSEL	ETKİ	STRES
+	2009	11	(20) 2	4	9
+	2020	4	(13) 4	8	0
+	2024	8	(17) 8	7	0
+	2032	7	(16) 7	5	0
+	2039	5	(23) 5	1	0
+ÜÇLÜ DÖNEM DÖNGÜLERİ
+	DÖNGÜ	SAYI	YAŞ ARALIĞI	ETKİ
+	1. DÖNGÜ	6	0-30	
+	2. DÖNGÜ	3	34-60	
+	3. DÖNGÜ	1	54+	
+ZİRVE DÖNEMLERİ
+	ZİRVE	SAYI	SÜRE	YAŞ ARALIĞI	YIL ARALIĞI
+	1. ZİRVE	9	35 YIL	0-35	1990-2025
+	2. ZİRVE	7	9 YIL	36-44	2025-2034
+	3. ZİRVE	7	9 YIL	45-53	2034-2043
+	4. ZİRVE	4	∞	54-∞	2043-∞
+MEYDAN OKUMALAR
+	MEYDAN OKUMA	SAYI	SÜRE	YAŞ ARALIĞI	YIL ARALIĞI
+	ANA MEYDAN OKUMA	2	∞	54+	2043+
+	1. MEYDAN OKUMA	3	35 YIL	0-35	1990-2025
+	2. MEYDAN OKUMA	5	9 YIL	36-44	2025-2034
+	3. MEYDAN OKUMA	2	9 YIL	45-53	2034-2043
+KİŞİSEL AYLAR
+Tarih
+Hafta
+Fibonacci
+Döngüler
+Kadersel
+	TARİH	EVRENSEL	KİŞİSEL	ETKİ	STRES	ARKAPLAN	STANDART	ASTROLOJİK	RUNE
+	2026	(10) 1	(18) 9	1	8	-	   	   	   
+	1.2026	11	(10) 1	3	1	1	   	  	   
+	2.2026	(12) 3	11	5	8	2	  	  	
+	2026	(10) 1	(19) 1	2	0	-	  	  	   
+	3.2026	(13) 4	4	8	0	5	  	  	
+	4.2026	(14) 5	5	1	0	6	     	  	 
+	5.2026	(15) 6	6	3	0	7	      	   	   
+	6.2026	(16) 7	7	5	0	8	   	  	    
+	7.2026	(17) 8	8	7	0	9	    	  	  
+	8.2026	(18) 9	9	9	0	1	    	  	  
+	9.2026	(19) 1	(10) 1	2	0	2	    	   	   
+	10.2026	11	2	4	9	3	   	  	   
+	11.2026	(12) 3	(12) 3	6	0	4	    	  	 
+	12.2026	(13) 4	4	8	0	5	    	  	  
+KİŞİSEL İLİŞKİ TİTREŞİMİ
+KİŞİSEL İLİŞKİ	YAŞ	AKTİF TİTREŞİM
+(36) 9	36	7
+9			9	9		9		
+8								
+7							7	
+6								
+5								
+4								
+3								
+2		2						
+1					0			0
+								
+		17	18	19	20	21	22	23
+		24	25	26	27	28	29	30
+		31	32	33	34	35	36	37
+		38	39	40	41	42	43	44
+		45	46	47	48	49	50	51
+		52	53	54	55	56	57	58
+		59	60	61	62	63	64	65
+		66	67	68	69	70	71	72
+		73	74	75	76	77	78	79
+		80	81	82	83	84	85	86
+TİROL SAYI ÇEMBERİ - DOĞUM ÇARKI
+	KUZEY
+6 1	
+BATI
+9 4	MERKEZ
+0 5	DOĞU
+8 3
+	GÜNEY
+7 2	
+				
+TİROL SAYI ÇEMBERİ - DOĞUM ÇARKI DETAY
+RAKAMLAR	1 (1), 3 (3), 9 (9), 5 (5), 0 (10)
+EKSİK RAKAMLAR	6, 8, 2, 7, 4
+İŞARETLER	Kuzey (1), Doğu (3), Batı (9), Merkez (15)
+EKSİK İŞARETLER	Güney
+ÇEKİM MERKEZİ	Merkez
+RENKLER	Siyah/Mavi, Yeşil, Beyaz, Sarı
+EKSİK RENKLER	Kırmızı
+DİŞİL/ERİL	2/3
+Devfreco © 2026 | Çerez Tercihleri

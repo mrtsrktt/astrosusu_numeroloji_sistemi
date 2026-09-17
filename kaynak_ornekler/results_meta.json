@@ -1,0 +1,77 @@
+{
+ "Numerology/FullNameAnalysis": {
+  "url": "https://kaynak-site/Numerology/FullNameAnalysis",
+  "run": "ok",
+  "len": 1127
+ },
+ "Numerology/BirthdayAnalysis": {
+  "url": "https://kaynak-site/Numerology/BirthdayAnalysis",
+  "run": "ok",
+  "len": 2956
+ },
+ "Karmic/Analysis": {
+  "url": "https://kaynak-site/Karmic/Analysis",
+  "run": "ok",
+  "len": 1659
+ },
+ "DestinyMatrix/Analysis": {
+  "url": "https://kaynak-site/DestinyMatrix/Analysis",
+  "run": "ok",
+  "len": 3414
+ },
+ "Numerology/IdentityNumberAnalysis": {
+  "url": "https://kaynak-site/Numerology/IdentityNumberAnalysis",
+  "run": "ok",
+  "len": 121
+ },
+ "Numerology/PhoneNumberAnalysis": {
+  "url": "https://kaynak-site/Numerology/PhoneNumberAnalysis",
+  "run": "ok",
+  "len": 123
+ },
+ "Numerology/CarPlateAnalysis": {
+  "url": "https://kaynak-site/Numerology/CarPlateAnalysis",
+  "run": "ok",
+  "len": 115
+ },
+ "Numerology/MotorcyclePlateAnalysis": {
+  "url": "https://kaynak-site/Numerology/MotorcyclePlateAnalysis",
+  "run": "ok",
+  "len": 125
+ },
+ "Tool/NameCompatibility": {
+  "url": "https://kaynak-site/Numerology/Tool/NameCompatibility",
+  "run": "ok",
+  "len": 269
+ },
+ "Personal/Date": {
+  "url": "https://kaynak-site/Numerology/Personal/Date",
+  "run": "ok",
+  "len": 1439
+ },
+ "Personal/Week": {
+  "url": "https://kaynak-site/Numerology/Personal/Week",
+  "run": "ok",
+  "len": 3158
+ },
+ "Personal/Cycles": {
+  "url": "https://kaynak-site/Numerology/Personal/Cycles",
+  "run": "ok",
+  "len": 6398
+ },
+ "Personal/Transformation": {
+  "url": "https://kaynak-site/Numerology/Personal/Transformation",
+  "run": "ok",
+  "len": 458
+ },
+ "Universal/Date": {
+  "url": "https://kaynak-site/Numerology/Universal/Date",
+  "run": "ok",
+  "len": 1272
+ },
+ "Universal/Wheel": {
+  "url": "https://kaynak-site/Numerology/Universal/Wheel",
+  "run": "ok",
+  "len": 1111
+ }
+}

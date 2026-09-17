@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Astro Şuşu Numeroloji Sistemi — Numeroloji</title>
+<style>
+:root{
+  --bg:#f5f7fb; --panel:#ffffff; --ink:#1f2733; --muted:#6b7686;
+  --brand:#2f5597; --brand2:#4a7bc8; --line:#e3e8f0; --ok:#1e8e5a;
+  --warn:#b8860b; --bad:#c0392b; --radius:12px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+button{font-family:inherit;cursor:pointer}
+.hidden{display:none !important}
+
+/* ---------- Giriş ---------- */
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2f5597,#4a7bc8)}
+.login-card{background:#fff;border-radius:16px;padding:34px 30px;width:360px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.login-card h1{margin:0 0 4px;font-size:22px;color:var(--brand)}
+.login-card p.sub{margin:0 0 22px;color:var(--muted);font-size:13px}
+.login-card label{display:block;font-size:12px;color:var(--muted);margin:12px 0 4px}
+.login-card input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px}
+.btn-primary{width:100%;margin-top:18px;padding:11px;background:var(--brand);color:#fff;border:0;border-radius:8px;font-size:15px;font-weight:600}
+.btn-primary:hover{background:var(--brand2)}
+.login-msg{margin-top:12px;font-size:13px;min-height:18px}
+
+/* ---------- Layout ---------- */
+#app{display:flex;min-height:100vh}
+#sidebar{width:262px;background:#1d2b45;color:#cfd8e6;flex-shrink:0;padding:14px 0;overflow-y:auto;height:100vh;position:sticky;top:0}
+#sidebar .brand{padding:6px 18px 14px;font-size:19px;font-weight:700;color:#fff;border-bottom:1px solid #2b3c5c;margin-bottom:8px}
+#sidebar .brand small{display:block;font-weight:400;font-size:11px;color:#8fa2c0;margin-top:3px}
+.nav-group{margin:10px 0}
+.nav-group h4{margin:0;padding:6px 18px;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:#7f92b1}
+.nav-item{display:block;padding:8px 18px 8px 22px;color:#cfd8e6;text-decoration:none;font-size:13px;border-left:3px solid transparent}
+.nav-item:hover{background:#25344f;color:#fff}
+.nav-item.active{background:#25344f;color:#fff;border-left-color:var(--brand2)}
+.nav-item .badge{float:right;font-size:10px;background:#2b3c5c;color:#9fb2d0;border-radius:9px;padding:1px 7px}
+
+#main{flex:1;display:flex;flex-direction:column;min-width:0}
+#topbar{background:#fff;border-bottom:1px solid var(--line);padding:12px 22px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:5}
+#topbar .crumb{font-size:13px;color:var(--muted)}
+#topbar .spacer{flex:1}
+#topbar .user{font-size:13px;color:var(--muted)}
+#topbar .user b{color:var(--ink)}
+.btn-sm{padding:7px 13px;border:1px solid var(--line);background:#fff;border-radius:8px;font-size:13px;color:var(--ink)}
+.btn-sm:hover{background:#f0f4fa}
+.btn-sm.danger{color:var(--bad);border-color:#eccac4}
+
+#content{padding:22px;max-width:1120px;width:100%}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-bottom:18px;box-shadow:0 1px 3px rgba(20,40,80,.04)}
+.card h2{margin:0 0 4px;font-size:18px;color:var(--brand)}
+.card h3{margin:18px 0 8px;font-size:14px;color:var(--ink);border-bottom:1px solid var(--line);padding-bottom:6px}
+.card .desc{color:var(--muted);font-size:13px;margin:0 0 16px}
+
+.grid{display:grid;gap:12px}
+.grid.c2{grid-template-columns:1fr 1fr}
+.grid.c3{grid-template-columns:1fr 1fr 1fr}
+.grid.c4{grid-template-columns:1fr 1fr 1fr 1fr}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-size:14px;font-family:inherit}
+.field input:focus,.field select:focus{outline:2px solid #cfe0ff;border-color:var(--brand2)}
+
+.actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+.btn{padding:10px 18px;border:0;border-radius:8px;font-size:14px;font-weight:600}
+.btn-go{background:var(--brand);color:#fff}
+.btn-go:hover{background:var(--brand2)}
+.btn-ghost{background:#eef2f8;color:var(--brand)}
+.btn-ghost:hover{background:#e0e8f4}
+
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13px}
+.kv .k{color:var(--muted)}
+.kv .v{font-weight:600}
+
+.num-badge{display:inline-block;min-width:34px;text-align:center;background:#eaf1fd;color:var(--brand);border-radius:8px;padding:3px 8px;font-weight:700}
+.num-badge.master{background:#fff3d6;color:#9a6b00}
+
+table.data{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+table.data th,table.data td{border:1px solid var(--line);padding:6px 9px;text-align:left}
+table.data th{background:#f2f6fd;color:var(--brand);font-weight:600}
+table.data tr:nth-child(even) td{background:#fafcff}
+
+.matrix{display:inline-grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,52px);gap:6px}
+.matrix div{background:#eef4ff;border:1px solid #d5e2f7;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px}
+.matrix div b{font-size:16px;color:var(--brand)}
+.matrix div span{font-size:11px;color:var(--muted)}
+
+.chip{display:inline-block;background:#eef4ff;border:1px solid #d5e2f7;border-radius:20px;padding:2px 10px;font-size:12px;margin:2px 3px;color:var(--brand)}
+.chip.warn{background:#fff6e0;border-color:#f0dfae;color:var(--warn)}
+.chip.ok{background:#e8f6ee;border-color:#c4e6d3;color:var(--ok)}
+
+.empty{color:var(--muted);font-size:13px;padding:14px 0;text-align:center}
+.history-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.history-item:last-child{border-bottom:0}
+.history-item .h-title{font-weight:600}
+.history-item .h-meta{font-size:12px;color:var(--muted)}
+.history-item .spacer{flex:1}
+
+.pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;background:#eef2f8;color:var(--muted)}
+.pill.free{background:#e8f6ee;color:var(--ok)}
+.pill.paid{background:#fff3d6;color:var(--warn)}
+
+/* ---------- Rapor ---------- */
+#reportView{background:#fff;padding:0}
+.report-head{border-bottom:3px solid var(--brand);padding-bottom:12px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:flex-end}
+.report-head h1{margin:0;font-size:22px;color:var(--brand)}
+.report-head .meta{font-size:12px;color:var(--muted);text-align:right}
+.report-section{margin-bottom:20px;page-break-inside:avoid}
+.report-section h3{font-size:14px;border-bottom:1px solid var(--line);padding-bottom:5px;color:var(--brand)}
+.report-foot{margin-top:26px;border-top:1px solid var(--line);padding-top:10px;font-size:11px;color:var(--muted);text-align:center}
+
+@media print{
+  #sidebar,#topbar,.no-print{display:none !important}
+  #content{padding:0;max-width:none}
+  body{background:#fff}
+  .card{box-shadow:none;border:0;padding:0}
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== GİRİŞ EKRANI ==================== -->
+<div id="loginScreen">
+  <div class="login-card">
+    <h1>Astro Şuşu <span style="font-size:12px;color:#8fa2c0">Numeroloji</span></h1>
+    <p class="sub">Yerel numeroloji analiz platformu</p>
+    <label for="luser">E-posta / Kullanıcı adı</label>
+    <input id="luser" type="text" autocomplete="username" placeholder="ornek@eposta.com">
+    <label for="lpass">Şifre</label>
+    <input id="lpass" type="password" autocomplete="current-password" placeholder="••••••••">
+    <button class="btn-primary" id="loginBtn">Giriş Yap</button>
+    <p class="login-msg" id="loginMsg"></p>
+    <p style="font-size:11px;color:#8fa2c0;margin-top:14px;line-height:1.5">
+      İlk girişte hesap bu tarayıcıda oluşturulur. Tüm veriler yalnızca sizin
+      cihazınızda (localStorage) saklanır; hiçbir sunucuya gönderilmez.
+    </p>
+  </div>
+</div>
+
+<!-- ==================== UYGULAMA ==================== -->
+<div id="app" class="hidden">
+  <aside id="sidebar">
+    <div class="brand">Astro Şuşu Numeroloji Sistemi<small>Numeroloji &amp; Analiz</small></div>
+    <div id="navRoot"></div>
+  </aside>
+
+  <div id="main">
+    <div id="topbar">
+      <span class="crumb" id="crumb">Çalışma Alanım</span>
+      <span class="spacer"></span>
+      <button class="btn-sm" id="btnWorkspace">Çalışma Alanım</button>
+      <button class="btn-sm" id="btnHistory">Geçmiş</button>
+      <span class="user" id="userBox"></span>
+      <button class="btn-sm danger" id="btnLogout">Çıkış</button>
+    </div>
+    <div id="content"></div>
+  </div>
+</div>
+
+<script src="astro_sushu_engine.js?v=3"></script>
+<script>
+/* ============================================================
+   UYGULAMA KATMANI
+   ============================================================ */
+const E = window.AstroSushuEngine;
+const LS = {
+  users:  "astrosushu_users",
+  session:"astrosushu_session",
+  people: "astrosushu_people",
+  hist:   "astrosushu_history",
+};
+const $ = (id)=>document.getElementById(id);
+const esc = (s)=>String(s==null?"":s).replace(/[&"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const store = {
+  get(k,d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d; }catch(e){ return d; } },
+  set(k,v){ localStorage.setItem(k, JSON.stringify(v)); },
+};
+
+/* ---------- Modül Tanımları ---------- */
+const MODULES = [
+  // --- Temel Analizler ---
+  {id:"holistic", cat:"Temel Analizler", name:"Bütünsel Numerolojik Analiz", free:true,
+   desc:"Ad, soyad ve doğum tarihinden tüm numerolojik katmanları tek ekranda inceler.",
+   fields:[{k:"name",label:"Tam Ad",type:"text",ph:"Ad Soyad"},{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderHolistic(f)},
+  {id:"fullname", cat:"Temel Analizler", name:"İsim Analizi", free:true,
+   desc:"İsmin harf yapısı ve temel sayısal göstergeleri.",
+   fields:[{k:"name",label:"Tam Ad",type:"text",ph:"Ad Soyad"}],
+   run:(f)=>renderFullName(f)},
+  {id:"birthday", cat:"Temel Analizler", name:"Doğum Tarihi Analizi", free:true,
+   desc:"Doğum tarihinden yaşam yolu, doğum günü ve yıllara göre dağılım.",
+   fields:[{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderBirthday(f)},
+  {id:"compare", cat:"Temel Analizler", name:"Karşılaştırma Analizi", free:true,
+   desc:"İki kişinin temel numerolojik göstergelerini karşılaştırır.",
+   fields:[{k:"n1",label:"1. Kişi — Ad Soyad",type:"text"},{k:"d1",label:"1. Gün",type:"number"},{k:"m1",label:"1. Ay",type:"number"},{k:"y1",label:"1. Yıl",type:"number"},
+           {k:"n2",label:"2. Kişi — Ad Soyad",type:"text"},{k:"d2",label:"2. Gün",type:"number"},{k:"m2",label:"2. Ay",type:"number"},{k:"y2",label:"2. Yıl",type:"number"}],
+   run:(f)=>renderCompare(f)},
+  {id:"comparenm", cat:"Temel Analizler", name:"İsim Karşılaştırma", free:true,
+   desc:"İki ismin sayısal göstergelerini karşılaştırır.",
+   fields:[{k:"n1",label:"1. İsim",type:"text"},{k:"n2",label:"2. İsim",type:"text"}],
+   run:(f)=>renderCompareName(f)},
+  {id:"location", cat:"Temel Analizler", name:"Adres / Lokasyon Analizi", free:true,
+   desc:"Adres bileşenlerinin sayısal değeri.",
+   fields:[{k:"ulke",label:"Ülke",type:"text"},{k:"eyalet",label:"Eyalet / Bölge",type:"text"},{k:"sehir",label:"Şehir",type:"text"},{k:"ilce",label:"İlçe",type:"text"},{k:"semt",label:"Semt",type:"text"}],
+   run:(f)=>renderLocation(f)},
+  {id:"identity", cat:"Temel Analizler", name:"Kimlik Numarası Analizi", free:true,
+   desc:"Kimlik numarasının rakam frekansı (yankı) tablosu.",
+   fields:[{k:"no",label:"Kimlik Numarası",type:"text"}],
+   run:(f)=>renderEcho(f.no,"Kimlik Numarası")},
+  {id:"phone", cat:"Temel Analizler", name:"Telefon Numarası Analizi", free:true,
+   desc:"Telefon numarasının rakam frekansı tablosu.",
+   fields:[{k:"no",label:"Telefon Numarası",type:"text"}],
+   run:(f)=>renderEcho(f.no,"Telefon Numarası")},
+  {id:"carplate", cat:"Temel Analizler", name:"Araba Plaka Analizi", free:true,
+   desc:"Plakanın rakam frekansı ve harf değeri.",
+   fields:[{k:"no",label:"Araba Plakası",type:"text"}],
+   run:(f)=>renderPlate(f.no,"Araba Plakası")},
+  {id:"motoplate", cat:"Temel Analizler", name:"Motosiklet Plaka Analizi", free:true,
+   desc:"Motosiklet plakasının rakam frekansı ve harf değeri.",
+   fields:[{k:"no",label:"Motosiklet Plakası",type:"text"}],
+   run:(f)=>renderPlate(f.no,"Motosiklet Plakası")},
+
+  // --- Kişisel Döngüler ---
+  {id:"pdate", cat:"Kişisel Döngüler", name:"Kişisel Tarih", free:true,
+   desc:"Belirli bir tarihin kişisel gün/ay/yıl titreşimi.",
+   fields:[{k:"d",label:"Doğum Gün",type:"number"},{k:"m",label:"Doğum Ay",type:"number"},{k:"y",label:"Doğum Yıl",type:"number"},
+           {k:"cd",label:"Hedef Gün",type:"number"},{k:"cm",label:"Hedef Ay",type:"number"},{k:"cy",label:"Hedef Yıl",type:"number"}],
+   run:(f)=>renderPersonalDate(f)},
+  {id:"pweek", cat:"Kişisel Döngüler", name:"Kişisel Hafta", free:true,
+   desc:"Kişisel hafta titreşimi.",
+   fields:[{k:"d",label:"Doğum Gün",type:"number"},{k:"m",label:"Doğum Ay",type:"number"},{k:"y",label:"Doğum Yıl",type:"number"},
+           {k:"cd",label:"Hedef Gün",type:"number"},{k:"cm",label:"Hedef Ay",type:"number"},{k:"cy",label:"Hedef Yıl",type:"number"}],
+   run:(f)=>renderPersonalWeek(f)},
+  {id:"pfib", cat:"Kişisel Döngüler", name:"Kişisel Fibonacci", free:true,
+   desc:"Yaşam yolundan Fibonacci dizilim modeli.",
+   fields:[{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderFibonacci(f,"Kişisel")},
+  {id:"pcycles", cat:"Kişisel Döngüler", name:"Kişisel Döngüler", free:true,
+   desc:"Zirve dönemler ve meydan okumalar.",
+   fields:[{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderPinnacles(f)},
+  {id:"pfateful", cat:"Kişisel Döngüler", name:"Kadersel Döngüler", free:true,
+   desc:"Yaşam yoluna göre kadersel dönemler.",
+   fields:[{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderPinnacles(f,"Kadersel Döngüler")},
+  {id:"ptrans", cat:"Kişisel Döngüler", name:"Dönüşüm Yılları", free:true,
+   desc:"Kişisel yıl döngüsünde dönüşüm yılları.",
+   fields:[{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"},{k:"cy",label:"Hedef Yıl",type:"number"}],
+   run:(f)=>renderTransformation(f)},
+
+  // --- Evrensel Döngüler ---
+  {id:"udate", cat:"Evrensel Döngüler", name:"Evrensel Tarih", free:true,
+   desc:"Bir tarihin evrensel yıl/ay/gün titreşimi.",
+   fields:[{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderUniversal(f,"Tarih")},
+  {id:"uweek", cat:"Evrensel Döngüler", name:"Evrensel Hafta", free:true,
+   desc:"Bir tarihin evrensel hafta titreşimi.",
+   fields:[{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderUniversal(f,"Hafta")},
+  {id:"ufib", cat:"Evrensel Döngüler", name:"Evrensel Fibonacci", free:true,
+   desc:"Evrensel yıldan Fibonacci dizilim modeli.",
+   fields:[{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderFibonacci({d:1,m:1,y:f.y},"Evrensel")},
+  {id:"ucycles", cat:"Evrensel Döngüler", name:"Evrensel Döngüler", free:true,
+   desc:"Evrensel sayı döngüleri.",
+   fields:[{k:"y",label:"Başlangıç Yılı",type:"number"},{k:"n",label:"Kaç Yıl",type:"number"}],
+   run:(f)=>renderUniversalCycles(f)},
+  {id:"uwheel", cat:"Evrensel Döngüler", name:"Evrensel Çark", free:true,
+   desc:"Evrensel çark hesaplaması (9 yıllık döngü çarkı).",
+   fields:[{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderWheel(f)},
+
+  // --- Ekoller ---
+  {id:"karmic", cat:"Ekoller", name:"Karma Analizi (Ladini)", free:true,
+   desc:"Karmik göstergeler ve eksik sayılar.",
+   fields:[{k:"name",label:"Tam Ad",type:"text"},{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderKarmic(f)},
+  {id:"destiny", cat:"Ekoller", name:"Kader Matrisi", free:true,
+   desc:"İsim + doğum tarihi sayı matrisi ve sentez.",
+   fields:[{k:"name",label:"Tam Ad",type:"text"},{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderDestinyMatrix(f)},
+
+  // --- Araçlar ---
+  {id:"compat", cat:"Araçlar", name:"İsim Uyumluluğu", free:true,
+   desc:"İki ismin kalp arzusu / kişilik / ifade uyumu.",
+   fields:[{k:"n1",label:"1. İsim",type:"text"},{k:"n2",label:"2. İsim",type:"text"}],
+   run:(f)=>renderCompatibility(f)},
+  {id:"calc", cat:"Araçlar", name:"Hesaplama Aracı", free:true,
+   desc:"Herhangi bir metin veya sayının numerolojik değeri.",
+   fields:[{k:"val",label:"Değer (metin veya sayı)",type:"text"}],
+   run:(f)=>renderCalculator(f)},
+  {id:"pin", cat:"Araçlar", name:"Pin Kodu Karşılaştırma", free:true,
+   desc:"İki pin kodunun rakam yapısını karşılaştırır.",
+   fields:[{k:"p1",label:"1. Pin Kodu",type:"text"},{k:"p2",label:"2. Pin Kodu",type:"text"}],
+   run:(f)=>renderPinCompare(f)},
+];
+
+const CAT_ORDER = ["Temel Analizler","Kişisel Döngüler","Evrensel Döngüler","Ekoller","Araçlar"];
+
+/* ---------- Yardımcı görünüm parçaları ---------- */
+function badge(n){
+  const master = E.MASTER_NUMBERS.has(Number(n));
+  return `<span class="num-badge${master?" master":""}">${n}</span>`;
+}
+function kvRows(pairs){
+  return `<div class="kv">${pairs.map(([k,v])=>`<span class="k">${esc(k)}</span><span class="v">${v}</span>`).join("")}</div>`;
+}
+function meaning(n){
+  return E.NUMBER_MEANINGS[n] ? `<div style="font-size:12px;color:#6b7686;margin-top:6px">${esc(E.NUMBER_MEANINGS[n])}</div>` : "";
+}
+function matrixHTML(m){
+  return `<div class="matrix">${m.grid.flat().map(c=>
+    `<div><b>${c.sayi}</b><span>${c.adet} adet</span></div>`).join("")}</div>`;
+}
+function tableHTML(headers, rows){
+  return `<table class="data"><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead>
+  <tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+}
+
+/* ---------- Analiz görünümleri ---------- */
+function renderHolistic(f){
+  const lp = E.lifePath(f.d,f.m,f.y), ex = E.expressionNumber(f.name),
+        su = E.soulUrgeNumber(f.name), pe = E.personalityNumber(f.name),
+        ma = E.maturityNumber(f.name,f.d,f.m,f.y), at = E.attitudeNumber(f.d,f.m),
+        ba = E.balanceNumber(f.name), co = E.cornerstone(f.name), ca = E.capstone(f.name),
+        fv = E.firstVowelValue(f.name), br = E.bridgeNumber(f.name,f.d,f.m,f.y);
+  const im = E.numberMatrix(f.name,false), dm = E.numberMatrix(`${f.d}${f.m}${f.y}`,true);
+  const synth = {}; for(let i=1;i<=9;i++) synth[i]=(im.counts[i]||0)+(dm.counts[i]||0);
+  const sm = { counts:synth, grid:[[3,6,9],[2,5,8],[1,4,7]].map(r=>r.map(v=>({sayi:v,adet:synth[v]}))) };
+  const lg = E.letterGroups(f.name), tc = E.transitionCycles(f.name, f.y);
+  const ep = E.expressionPlanes(f.name);
+
+  return `
+  <h3>Temel Göstergeler</h3>
+  ${kvRows([
+    ["Yaşam Yolu", badge(lp)+meaning(lp)],
+    ["İfade Sayısı", badge(ex)+meaning(ex)],
+    ["Kalp Arzusu (Ruh)", badge(su)+meaning(su)],
+    ["Kişilik Sayısı", badge(pe)+meaning(pe)],
+    ["Olgunluk Sayısı", badge(ma)],
+    ["Tutum Sayısı", badge(at)],
+    ["Denge Sayısı", badge(ba)],
+    ["Köşe Taşı", badge(co)],["Bitiş Taşı", badge(ca)],
+    ["İlk Sesli Harf", badge(fv)],["Köprü Sayısı", badge(br)],
+  ])}
+  <h3>İsim Rakamsal Matrisi</h3>${matrixHTML(im)}
+  <h3>Doğum Tarihi Rakamsal Matrisi</h3>${matrixHTML(dm)}
+  <h3>Sentez Rakamsal Matrisi</h3>${matrixHTML(sm)}
+  <h3>Harf Grupları</h3>
+  ${tableHTML(["Grup","Harfler","Toplam"],[
+    ["Düz Çizgili",lg.duz.join(", ")||"-",lg.duz.length],
+    ["Eğri Çizgili",lg.egri.join(", ")||"-",lg.egri.length],
+    ["Kavisli + Düz",lg.kavisli.join(", ")||"-",lg.kavisli.length],
+  ])}
+  <h3>İfade Düzlemleri</h3>
+  ${tableHTML(["Düzlem","Esinlenmiş","İkili","Dengeli"],[
+    ["Zihinsel",ep.zihinsel.esinlenmiş.join(", ")||"-",ep.zihinsel.ikili.join(", ")||"-",ep.zihinsel.dengeli.join(", ")||"-"],
+    ["Fiziksel",ep.fiziksel.esinlenmiş.join(", ")||"-",ep.fiziksel.ikili.join(", ")||"-",ep.fiziksel.dengeli.join(", ")||"-"],
+    ["Duygusal",ep.duygusal.esinlenmiş.join(", ")||"-",ep.duygusal.ikili.join(", ")||"-",ep.duygusal.dengeli.join(", ")||"-"],
+    ["Sezgisel",ep.sezgisel.esinlenmiş.join(", ")||"-",ep.sezgisel.ikili.join(", ")||"-",ep.sezgisel.dengeli.join(", ")||"-"],
+  ])}
+  <h3>Geçiş Döngüleri</h3>
+  ${tableHTML(["Harf","Sayı","Başlangıç","Bitiş"], tc.slice(0,18).map(t=>[t.harf,badge(t.sayi),t.baslangic,t.bitis]))}
+  ${tc.length>18?`<div class="empty">… toplam ${tc.length} geçiş döngüsü</div>`:""}
+  `;
+}
+function renderFullName(f){
+  const ex=E.expressionNumber(f.name), su=E.soulUrgeNumber(f.name), pe=E.personalityNumber(f.name),
+        ba=E.balanceNumber(f.name), co=E.cornerstone(f.name), ca=E.capstone(f.name), fv=E.firstVowelValue(f.name);
+  const im=E.numberMatrix(f.name,false), lg=E.letterGroups(f.name);
+  return `
+  <h3>İsim Göstergeleri</h3>
+  ${kvRows([["İfade Sayısı",badge(ex)+meaning(ex)],["Kalp Arzusu",badge(su)+meaning(su)],
+    ["Kişilik",badge(pe)+meaning(pe)],["Denge",badge(ba)],["Köşe Taşı",badge(co)],
+    ["Bitiş Taşı",badge(ca)],["İlk Sesli Harf",badge(fv)]])}
+  <h3>İsim Rakamsal Matrisi</h3>${matrixHTML(im)}
+  <h3>Harf Grupları</h3>
+  ${tableHTML(["Grup","Harfler","Toplam"],[
+    ["Düz Çizgili",lg.duz.join(", ")||"-",lg.duz.length],
+    ["Eğri Çizgili",lg.egri.join(", ")||"-",lg.egri.length],
+    ["Kavisli + Düz",lg.kavisli.join(", ")||"-",lg.kavisli.length]])}
+  `;
+}
+function renderBirthday(f){
+  const lp=E.lifePath(f.d,f.m,f.y), bn=E.birthdayNumber(f.d), at=E.attitudeNumber(f.d,f.m);
+  const start=Number(f.y), rows=[];
+  for(let yr=start, age=0; yr<=start+100; yr++, age++){
+    const kab = E.reduceNumber((f.d+f.m) + yr);
+    const en  = E.reduceNumber(yr);
+    rows.push([yr,age, E.reduceDetailed(f.d+f.m+yr).steps.join("→"), badge(en)]);
+  }
+  return `
+  <h3>Temel Göstergeler</h3>
+  ${kvRows([["Yaşam Yolu",badge(lp)+meaning(lp)],["Doğum Günü Sayısı",badge(bn)],
+    ["Tutum Sayısı",badge(at)]])}
+  <h3>Yıllara Göre Dağılım</h3>
+  ${tableHTML(["Yıl","Yaş","Kabala","Enerji"], rows)}
+  `;
+}
+function renderCompare(f){
+  const a={name:f.n1,lp:E.lifePath(f.d1,f.m1,f.y1),ex:E.expressionNumber(f.n1),su:E.soulUrgeNumber(f.n1),pe:E.personalityNumber(f.n1)};
+  const b={name:f.n2,lp:E.lifePath(f.d2,f.m2,f.y2),ex:E.expressionNumber(f.n2),su:E.soulUrgeNumber(f.n2),pe:E.personalityNumber(f.n2)};
+  const rows=[["Yaşam Yolu",a.lp,b.lp,a.lp===b.lp?"Uyumlu":"Farklı"],
+    ["İfade",a.ex,b.ex,a.ex===b.ex?"Uyumlu":"Farklı"],
+    ["Kalp Arzusu",a.su,b.su,a.su===b.su?"Uyumlu":"Farklı"],
+    ["Kişilik",a.pe,b.pe,a.pe===b.pe?"Uyumlu":"Farklı"]];
+  return `<h3>${esc(a.name||"1. Kişi")} &amp; ${esc(b.name||"2. Kişi")}</h3>
+  ${tableHTML(["Gösterge","1. Kişi","2. Kişi","Durum"],rows.map(r=>[r[0],badge(r[1]),badge(r[2]),r[3]]))}`;
+}
+function renderCompareName(f){
+  const a=E.expressionNumber(f.n1), b=E.expressionNumber(f.n2);
+  return `<h3>İsim Karşılaştırma</h3>
+  ${tableHTML(["İsim","İfade","Kalp Arzusu","Kişilik"],[
+    [esc(f.n1),badge(a),badge(E.soulUrgeNumber(f.n1)),badge(E.personalityNumber(f.n1))],
+    [esc(f.n2),badge(b),badge(E.soulUrgeNumber(f.n2)),badge(E.personalityNumber(f.n2))]])}
+  <p style="margin-top:12px">İfade sayıları ${a===b?"<b>aynı</b> — güçlü sayısal rezonans.":"<b>farklı</b> — tamamlayıcı enerjiler."}</p>`;
+}
+function renderLocation(f){
+  const parts=[f.ulke,f.eyalet,f.sehir,f.ilce,f.semt].filter(Boolean);
+  const full=parts.join(" ");
+  const ex=E.reduceNumber(E.letterSum(full));
+  return `<h3>Adres Değeri</h3>
+  ${kvRows([["Tam Adres",esc(full)||"-"],["Harf Toplamı",E.letterSum(full)],["Sayısal Değer",badge(ex)+meaning(ex)]])}
+  ${tableHTML(["Bileşen","Değer"],parts.map((p,i)=>[esc(p),badge(E.reduceNumber(E.letterSum(p)))]))}`;
+}
+function renderEcho(no,title){
+  const rows=E.echoTable(no);
+  return `<h3>${esc(title)} — Yankı Tablosu</h3>
+  ${rows.length?tableHTML(["Sayı","Yankı"],rows.map(r=>[r.sayi,r.yanki])):'<div class="empty">Rakam bulunamadı.</div>'}
+  <p style="margin-top:10px">Girilen: <b>${esc(no)}</b> — rakam toplamı: ${badge(E.reduceNumber(String(no).replace(/\D/g,"")))}</p>`;
+}
+function renderPlate(no,title){
+  const digits=String(no).replace(/\D/g,"");
+  const letters=String(no).replace(/[^A-Za-zÇĞİÖŞÜçğıöşü]/g,"");
+  const ex=E.reduceNumber(E.letterSum(letters));
+  const dsum=E.reduceNumber(digits);
+  const total=E.reduceNumber(ex+dsum);
+  return `<h3>${esc(title)}</h3>
+  ${kvRows([["Plaka",esc(no)],["Harfler",esc(letters)||"-"],["Harf Değeri",badge(ex)],
+    ["Rakam Toplamı",badge(dsum)],["Genel Değer",badge(total)+meaning(total)]])}
+  ${tableHTML(["Rakam","Adet"],E.echoTable(digits).map(r=>[r.sayi,r.yanki]))}`;
+}
+function renderPersonalDate(f){
+  const py=E.personalYear(f.d,f.m,f.y,f.cy), pm=E.personalMonth(f.d,f.m,f.y,f.cy,f.cm),
+        pd=E.personalDay(f.d,f.m,f.y,f.cy,f.cm,f.cd);
+  return `<h3>Kişisel Tarih — ${esc(f.cd)}.${esc(f.cm)}.${esc(f.cy)}</h3>
+  ${kvRows([["Kişisel Yıl",badge(py)+meaning(py)],["Kişisel Ay",badge(pm)+meaning(pm)],["Kişisel Gün",badge(pd)+meaning(pd)]])}`;
+}
+function renderPersonalWeek(f){
+  const pw=E.personalWeek(f.d,f.m,f.y,f.cy,f.cm,f.cd);
+  const pd=E.personalDay(f.d,f.m,f.y,f.cy,f.cm,f.cd);
+  return `<h3>Kişisel Hafta</h3>
+  ${kvRows([["Kişisel Gün",badge(pd)],["Kişisel Hafta",badge(pw)+meaning(pw)]])}`;
+}
+function renderFibonacci(f,scope){
+  const lp=E.lifePath(f.d||1,f.m||1,f.y||2026);
+  const seq=E.fibonacciSequence(12).map(n=>E.reduceNumber(n));
+  return `<h3>${scope} Fibonacci Dizilimi</h3>
+  ${kvRows([["Temel Sayı",badge(lp)]])}
+  <div style="margin-top:10px">${seq.map(n=>badge(n)).join(" ")}</div>
+  <p style="margin-top:10px;font-size:13px;color:#6b7686">Dizilim, temel sayı ile başlar ve Fibonacci toplamlarına göre ilerler.</p>`;
+}
+function renderPinnacles(f,title){
+  const p=E.pinnaclesAndChallenges(f.d,f.m,f.y);
+  const zir=p.zirveler||[];
+  const zor=p.zorluklar||[];
+  const rows=zir.map((z,i)=>[
+    (z.yas!==undefined? z.yas : ("Dönem "+(z.no||i+1))),
+    badge(z.deger),
+    badge((zor[i]||{}).deger)
+  ]);
+  return `<h3>${esc(title||"Kişisel Döngüler")}</h3>
+  ${tableHTML(["Dönem","Zirve (Pinnacle)","Meydan Okuma"],rows)}
+  <p style="margin-top:10px;font-size:13px;color:#6b7686">Zirveler 36 − Yaşam Yolu yaşına göre sıralanır; meydan okumalar ilgili dönemin zorluk sayısıdır.</p>`;
+}
+function renderTransformation(f){
+  const cy=Number(f.cy)||new Date().getFullYear();
+  const lp=E.lifePath(f.d,f.m,f.y);
+  const rows=[];
+  for(let yr=cy-3; yr<=cy+6; yr++){
+    const py=E.personalYear(f.d,f.m,f.y,yr);
+    rows.push([yr,py,(py===lp?"⭐ Dönüşüm":"")]);
+  }
+  return `<h3>Dönüşüm Yılları (${cy})</h3>
+  ${tableHTML(["Yıl","Kişisel Yıl","Not"],rows.map(r=>[r[0],badge(r[1]),r[2]]))}`;
+}
+function renderUniversal(f,mode){
+  const uy=E.universalYear(f.y), um=E.universalMonth(f.y,f.m), ud=E.universalDay(f.y,f.m,f.d),
+        uw=E.universalWeek(f.y,f.m,f.d);
+  return `<h3>Evrensel ${esc(mode)} — ${esc(f.d)}.${esc(f.m)}.${esc(f.y)}</h3>
+  ${kvRows([["Evrensel Yıl",badge(uy)+meaning(uy)],["Evrensel Ay",badge(um)+meaning(um)],
+    ["Evrensel Gün",badge(ud)+meaning(ud)],["Evrensel Hafta",badge(uw)]])}`;
+}
+function renderUniversalCycles(f){
+  const start=Number(f.y)||new Date().getFullYear();
+  const n=Math.min(Number(f.n)||9, 30);
+  const rows=[];
+  for(let i=0;i<n;i++){
+    const yr=start+i;
+    rows.push([yr, badge(E.universalYear(yr)), E.NUMBER_MEANINGS[E.universalYear(yr)]||""]);
+  }
+  return `<h3>Evrensel Döngüler (${start} – ${start+n-1})</h3>
+  ${tableHTML(["Yıl","Evrensel Yıl","Anlam"],rows)}`;
+}
+function renderWheel(f){
+  const y=Number(f.y)||new Date().getFullYear();
+  const rows=[];
+  for(let i=0;i<9;i++){
+    const yr=y+i;
+    rows.push([yr, badge(E.universalYear(yr)), badge(E.reduceNumber(E.universalYear(yr)+1))]);
+  }
+  return `<h3>Evrensel Çark (${y})</h3>
+  ${tableHTML(["Yıl","Çark Sayısı","Sonraki"],rows)}`;
+}
+function renderKarmic(f){
+  const im=E.numberMatrix(f.name,false), dm=E.numberMatrix(`${f.d}${f.m}${f.y}`,true);
+  const missingName=Object.entries(im.counts).filter(([k,v])=>v===0).map(([k])=>k);
+  const missingDate=Object.entries(dm.counts).filter(([k,v])=>v===0).map(([k])=>k);
+  const lp=E.lifePath(f.d,f.m,f.y);
+  return `<h3>Karma Analizi</h3>
+  ${kvRows([["Yaşam Yolu",badge(lp)],["Karmik Eksik (İsim)",missingName.join(", ")||"Yok"],
+    ["Karmik Eksik (Tarih)",missingDate.join(", ")||"Yok"]])}
+  <h3>İsim Matrisi</h3>${matrixHTML(im)}
+  <h3>Doğum Tarihi Matrisi</h3>${matrixHTML(dm)}`;
+}
+function renderDestinyMatrix(f){
+  const im=E.numberMatrix(f.name,false), dm=E.numberMatrix(`${f.d}${f.m}${f.y}`,true);
+  const synth={}; for(let i=1;i<=9;i++) synth[i]=(im.counts[i]||0)+(dm.counts[i]||0);
+  const sm={counts:synth,grid:[[3,6,9],[2,5,8],[1,4,7]].map(r=>r.map(v=>({sayi:v,adet:synth[v]})))};
+  const lp=E.lifePath(f.d,f.m,f.y), ex=E.expressionNumber(f.name);
+  return `<h3>Kader Matrisi</h3>
+  ${kvRows([["Yaşam Yolu",badge(lp)+meaning(lp)],["İfade",badge(ex)+meaning(ex)]])}
+  <h3>İsim Matrisi</h3>${matrixHTML(im)}
+  <h3>Doğum Tarihi Matrisi</h3>${matrixHTML(dm)}
+  <h3>Sentez Matrisi</h3>${matrixHTML(sm)}`;
+}
+function renderCompatibility(f){
+  const a={su:E.soulUrgeNumber(f.n1),pe:E.personalityNumber(f.n1),ex:E.expressionNumber(f.n1)};
+  const b={su:E.soulUrgeNumber(f.n2),pe:E.personalityNumber(f.n2),ex:E.expressionNumber(f.n2)};
+  const pct=(x,y)=>{ const d=Math.abs(x-y); return Math.max(0,100-d*11); };
+  const su=pct(a.su,b.su), pe=pct(a.pe,b.pe), ex=pct(a.ex,b.ex);
+  const gen=Math.round((su+pe+ex)/3);
+  return `<h3>${esc(f.n1)} &amp; ${esc(f.n2)} — Uyumluluk</h3>
+  ${tableHTML(["Alan","1.","2.","Uyum"],
+    [["Kalp Arzusu",badge(a.su),badge(b.su),su+"%"],
+     ["Kişilik",badge(a.pe),badge(b.pe),pe+"%"],
+     ["İfade",badge(a.ex),badge(b.ex),ex+"%"]])}
+  <h3>Genel Uyum</h3>
+  <div style="font-size:30px;font-weight:700;color:#2f5597">${gen}%</div>`;
+}
+function renderCalculator(f){
+  const v=String(f.val||"");
+  const letters=v.replace(/[^A-Za-zÇĞİÖŞÜçğıöşü]/g,"");
+  const digits=v.replace(/\D/g,"");
+  const lsum=E.letterSum(letters), dsum=digits?E.reduceNumber(digits):0;
+  return `<h3>Hesaplama Aracı</h3>
+  ${kvRows([["Girilen",esc(v)],["Harf Toplamı",lsum||"-"],["Harf Değeri",letters?badge(E.reduceNumber(lsum)):"-"],
+    ["Rakam Toplamı",dsum||"-"]])}
+  ${letters?`<h3>Harf Değerleri</h3><div>${[...letters.toUpperCase()].map(c=>`<span class="chip">${esc(c)} = ${E.LETTER_VALUES[c]||"-"}</span>`).join("")}</div>`:""}`;
+}
+function renderPinCompare(f){
+  const echo1=E.echoTable(f.p1), echo2=E.echoTable(f.p2);
+  const set1=new Set(echo1.map(r=>r.sayi)), set2=new Set(echo2.map(r=>r.sayi));
+  const ortak=[...set1].filter(x=>set2.has(x));
+  const all=Array.from({length:10},(_,i)=>String(i));
+  const rows=all.map(d=>[d, (echo1.find(r=>r.sayi===d)?.yanki||0), (echo2.find(r=>r.sayi===d)?.yanki||0)]);
+  return `<h3>Pin Kodu Karşılaştırma</h3>
+  ${tableHTML(["Rakam","1. Kod","2. Kod"],rows)}
+  <h3>Ortak Rakamlar</h3>
+  <div>${ortak.length?ortak.map(d=>`<span class="chip ok">${d}</span>`).join(""):'<span class="empty">Ortak rakam yok</span>'}</div>`;
+}
+
+/* ============================================================
+   ÇALIŞMA ALANI
+   ============================================================ */
+function renderWorkspace(){
+  const people = store.get(LS.people, []);
+  const rows = people.map((p,i)=>`<tr>
+    <td>${esc(p.name)}</td><td>${esc(p.d)}.${esc(p.m)}.${esc(p.y)}</td>
+    <td>${esc(p.time||"-")}</td><td>${esc(p.place||"-")}</td>
+    <td><button class="btn-sm" onclick="analyzePerson(${i})">Analiz</button>
+        <button class="btn-sm danger" onclick="removePerson(${i})">Sil</button></td>
+  </tr>`).join("");
+  return `
+  <div class="card">
+    <h2>Çalışma Alanım</h2>
+    <p class="desc">Analiz edeceğiniz kişileri kaydedin; kayıtlı çalışmalardan tek tıkla analize ulaşın.</p>
+    <div class="grid c4">
+      <div class="field"><label>Çalışma Adı</label><input id="ws_name" type="text" placeholder="Ad Soyad"></div>
+      <div class="field"><label>Doğum Günü</label><input id="ws_d" type="number" placeholder="Gün"></div>
+      <div class="field"><label>Doğum Ayı</label><input id="ws_m" type="number" placeholder="Ay"></div>
+      <div class="field"><label>Doğum Yılı</label><input id="ws_y" type="number" placeholder="Yıl"></div>
+      <div class="field"><label>Doğum Saati</label><input id="ws_time" type="text" placeholder="SS:DD"></div>
+      <div class="field" style="grid-column:span 3"><label>Doğum Yeri</label><input id="ws_place" type="text" placeholder="Şehir, Ülke"></div>
+    </div>
+    <div class="actions"><button class="btn btn-go" onclick="addPerson()">Kaydet</button></div>
+  </div>
+  <div class="card">
+    <h2>Kayıtlı Çalışmalar (${people.length})</h2>
+    ${people.length?`<table class="data"><thead><tr><th>Çalışma</th><th>Tarih</th><th>Saat</th><th>Yer</th><th>İşlem</th></tr></thead><tbody>${rows}</tbody></table>`
+      :'<div class="empty">Henüz kayıt yok. Yukarıdaki formu doldurup Kaydet\'e basın.</div>'}
+  </div>`;
+}
+function addPerson(){
+  const p={ name:$("ws_name").value.trim(), d:$("ws_d").value.trim(), m:$("ws_m").value.trim(),
+            y:$("ws_y").value.trim(), time:$("ws_time").value.trim(), place:$("ws_place").value.trim() };
+  if(!p.name||!p.d||!p.m||!p.y){ alert("Ad ve doğum tarihi (gün/ay/yıl) zorunludur."); return; }
+  const people=store.get(LS.people,[]); people.push(p); store.set(LS.people,people);
+  renderWorkspaceView();
+}
+function removePerson(i){
+  const people=store.get(LS.people,[]); people.splice(i,1); store.set(LS.people,people); renderWorkspaceView();
+}
+function analyzePerson(i){
+  const p=store.get(LS.people,[])[i];
+  window._prefill = {name:p.name,d:p.d,m:p.m,y:p.y};
+  openModule("holistic");
+}
+
+/* ============================================================
+   GEÇMİŞ
+   ============================================================ */
+function addHistory(moduleName, inputs, resultHTML){
+  const h=store.get(LS.hist,[]);
+  h.unshift({id:Date.now(), module:moduleName, inputs, html:resultHTML, at:new Date().toLocaleString("tr-TR")});
+  store.set(LS.hist, h.slice(0,200));
+}
+function renderHistory(){
+  const h=store.get(LS.hist,[]);
+  if(!h.length) return `<div class="card"><h2>Geçmiş Analizler</h2><div class="empty">Henüz analiz çalıştırılmadı.</div></div>`;
+  return `<div class="card"><h2>Geçmiş Analizler (${h.length})</h2>
+    ${h.map(item=>`<div class="history-item">
+      <div><div class="h-title">${esc(item.module)}</div>
+      <div class="h-meta">${esc(item.at)} · ${esc(JSON.stringify(item.inputs)).slice(0,80)}</div></div>
+      <span class="spacer"></span>
+      <button class="btn-sm" onclick="viewHistory(${item.id})">Görüntüle</button>
+      <button class="btn-sm danger" onclick="delHistory(${item.id})">Sil</button>
+    </div>`).join("")}
+    <div class="actions"><button class="btn btn-ghost" onclick="clearHistory()">Tümünü Temizle</button></div>
+  </div>`;
+}
+function viewHistory(id){
+  const item=store.get(LS.hist,[]).find(x=>x.id===id); if(!item) return;
+  $("crumb").textContent = "Geçmiş / " + item.module;
+  $("content").innerHTML = `<div class="card no-print"><button class="btn-sm" onclick="renderHistoryView()">← Geçmişe dön</button>
+    <button class="btn-sm" onclick="printReport()">🖨 PDF / Yazdır</button></div>
+    <div class="card" id="reportView">
+      <div class="report-head"><div><h1>${esc(item.module)}</h1>
+      <div style="font-size:12px;color:#6b7686">Astro Şuşu Numeroloji Sistemi — Numeroloji Raporu</div></div>
+      <div class="meta">${esc(item.at)}</div></div>
+      <div class="report-section">${item.html}</div>
+      <div class="report-foot">Astro Şuşu Numeroloji Sistemi · Yerel numeroloji analizi · ${esc(item.at)}</div>
+    </div>`;
+}
+function delHistory(id){ store.set(LS.hist, store.get(LS.hist,[]).filter(x=>x.id!==id)); renderHistoryView(); }
+function clearHistory(){ if(confirm("Tüm geçmiş silinsin mi?")){ store.set(LS.hist,[]); renderHistoryView(); } }
+function renderHistoryView(){ $("crumb").textContent="Geçmiş"; $("content").innerHTML=renderHistory(); }
+function printReport(){ window.print(); }
+
+/* ============================================================
+   NAVİGASYON / YÖNLENDİRME
+   ============================================================ */
+function renderNav(activeId){
+  const root=$("navRoot");
+  let html="";
+  CAT_ORDER.forEach(cat=>{
+    const mods=MODULES.filter(m=>m.cat===cat);
+    if(!mods.length) return;
+    html+=`<div class="nav-group"><h4>${esc(cat)}</h4>`;
+    mods.forEach(m=>{
+      html+=`<a class="nav-item${m.id===activeId?" active":""}" href="#" onclick="openModule('${m.id}');return false;">${esc(m.name)}</a>`;
+    });
+    html+="</div>";
+  });
+  root.innerHTML=html;
+}
+
+function openModule(id){
+  const m=MODULES.find(x=>x.id===id); if(!m) return;
+  renderNav(id);
+  $("crumb").textContent = m.cat + " / " + m.name;
+  const pre=window._prefill||{};
+  const fields=m.fields.map(fd=>{
+    const val = pre[fd.k]!==undefined ? pre[fd.k] : "";
+    return `<div class="field"><label>${esc(fd.label)}</label>
+      <input id="fld_${fd.k}" type="${fd.type}" placeholder="${esc(fd.ph||"")}" value="${esc(val)}"></div>`;
+  }).join("");
+  $("content").innerHTML = `
+  <div class="card no-print">
+    <h2>${esc(m.name)} ${m.free?'<span class="pill free">Ücretsiz</span>':'<span class="pill paid">Abonelik</span>'}</h2>
+    <p class="desc">${esc(m.desc)}</p>
+    <div class="grid c4">${fields}</div>
+    <div class="actions">
+      <button class="btn btn-go" onclick="runModule('${m.id}')">Analiz Et</button>
+      <button class="btn btn-ghost" onclick="clearFields('${m.id}')">Temizle</button>
+    </div>
+  </div>
+  <div id="resultArea"></div>`;
+  window._prefill=null;
+}
+
+function clearFields(id){
+  const m=MODULES.find(x=>x.id===id);
+  m.fields.forEach(fd=>{ const el=$("fld_"+fd.k); if(el) el.value=""; });
+  $("resultArea").innerHTML="";
+}
+
+function runModule(id){
+  const m=MODULES.find(x=>x.id===id); if(!m) return;
+  const f={};
+  m.fields.forEach(fd=>{ f[fd.k]=($("fld_"+fd.k)?.value||"").trim(); });
+  // Basit zorunluluk kontrolü
+  const req=m.fields.filter(fd=>!f[fd.k]);
+  const optional = ["time","place","eyalet","semt","cd","cm","cy","cy"];
+  if(req.length && !req.every(r=>optional.includes(r.k))){
+    // sadece tamamen boşsa uyar
+    const allEmpty = m.fields.every(fd=>!f[fd.k]);
+    if(allEmpty){ alert("Lütfen alanları doldurun."); return; }
+  }
+  let html="";
+  try{
+    html = m.run(f);
+  }catch(err){
+    html = `<div class="card"><h2>Hata</h2><p>${esc(err.message)}</p></div>`;
+    console.error(err);
+  }
+  const summary = m.fields.map(fd=>`${fd.label}: ${f[fd.k]}`).join(" · ");
+  addHistory(m.name, f, html);
+  $("resultArea").innerHTML = `
+  <div class="card no-print"><button class="btn-sm" onclick="printReport()">🖨 PDF / Yazdır</button>
+    <button class="btn-sm" onclick="openModule('${m.id}')">↺ Yeni Analiz</button></div>
+  <div class="card" id="reportView">
+    <div class="report-head">
+      <div><h1>${esc(m.name)}</h1>
+        <div style="font-size:12px;color:#6b7686">Astro Şuşu Numeroloji Sistemi — Numeroloji Raporu</div></div>
+      <div class="meta">${new Date().toLocaleString("tr-TR")}</div>
+    </div>
+    <div class="report-section">${html}</div>
+    <div class="report-foot">Astro Şuşu Numeroloji Sistemi · Yerel numeroloji analizi · Bu rapor matematiksel/sembolik hesaplama amaçlıdır.</div>
+  </div>`;
+}
+
+/* ============================================================
+   GİRİŞ / OTURUM
+   ============================================================ */
+function hash(s){ // basit yerel hash (güvenlik amaçlı değil, sadece gizleme)
+  let h=0; for(let i=0;i<s.length;i++){ h=(h<<5)-h+s.charCodeAt(i); h|=0; } return String(h);
+}
+/* Tanımlı kullanıcılar — ikisi de tam yetkili. Şifreler burada tutulmaz,
+   yalnızca hash karşılıkları bellekte üretilir. */
+function fixedUsers(){
+  return {
+    "murat": hash("123456"),
+    "gizem": hash("112233")
+  };
+}
+function doLogin(){
+  const u=$("luser").value.trim().toLowerCase(), p=$("lpass").value;
+  const msg=$("loginMsg");
+  if(!u||!p){ msg.style.color="#c0392b"; msg.textContent="Kullanıcı adı ve şifre gerekli."; return; }
+  const users=fixedUsers();
+  if(!(u in users)){
+    msg.style.color="#c0392b"; msg.textContent="Böyle bir kullanıcı yok."; return;
+  }
+  if(users[u]!==hash(p)){
+    msg.style.color="#c0392b"; msg.textContent="Şifre hatalı."; return;
+  }
+  msg.style.color="#1e8e5a"; msg.textContent="Giriş yapılıyor…";
+  store.set(LS.session,{user:u});
+  startApp(u);
+}
+function startApp(user){
+  $("loginScreen").classList.add("hidden");
+  $("app").classList.remove("hidden");
+  $("userBox").innerHTML = "👤 <b>"+esc(user)+"</b>";
+  renderWorkspaceView();
+  renderNav(null);
+}
+function logout(){
+  localStorage.removeItem(LS.session);
+  location.reload();
+}
+function renderWorkspaceView(){ $("crumb").textContent="Çalışma Alanım"; $("content").innerHTML=renderWorkspace(); }
+
+/* ---------- Başlat ---------- */
+$("loginBtn").addEventListener("click", doLogin);
+$("lpass").addEventListener("keydown", e=>{ if(e.key==="Enter") doLogin(); });
+$("luser").addEventListener("keydown", e=>{ if(e.key==="Enter") $("lpass").focus(); });
+$("btnLogout").addEventListener("click", logout);
+$("btnWorkspace").addEventListener("click", renderWorkspaceView);
+$("btnHistory").addEventListener("click", renderHistoryView);
+
+(function boot(){
+  const s=store.get(LS.session,null);
+  if(s && s.user) startApp(s.user);
+})();
+
+/* global fonksiyonlar (inline onclick için) */
+window.openModule=openModule; window.runModule=runModule; window.clearFields=clearFields;
+window.addPerson=addPerson; window.removePerson=removePerson; window.analyzePerson=analyzePerson;
+window.viewHistory=viewHistory; window.delHistory=delHistory; window.clearHistory=clearHistory;
+window.renderHistoryView=renderHistoryView; window.printReport=printReport;
+</script>
+</body>
+</html>

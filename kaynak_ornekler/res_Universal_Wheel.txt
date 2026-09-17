@@ -1,0 +1,36 @@
+ Astro Şuşu
+Evrensel / Evrensel Çark	
+Tarih
+X
+Saat
+X
+ Analiz
+TARİH	İŞARETLER	RENKLER
+2026	Güney, Kuzey	Kırmızı, Siyah/Mavi
+9.2026	Batı	Beyaz
+17.9.2026	Kuzey, Güney	Siyah/Mavi, Kırmızı
+17.9.2026 00:00	Merkez	Sarı
+17.9.2026 01:00	Kuzey	Siyah/Mavi
+17.9.2026 02:00	Güney	Kırmızı
+17.9.2026 03:00	Doğu	Yeşil
+17.9.2026 04:00	Batı	Beyaz
+17.9.2026 05:00	Merkez	Sarı
+17.9.2026 06:00	Kuzey	Siyah/Mavi
+17.9.2026 07:00	Güney	Kırmızı
+17.9.2026 08:00	Doğu	Yeşil
+17.9.2026 09:00	Batı	Beyaz
+17.9.2026 10:00	Kuzey, Merkez	Siyah/Mavi, Sarı
+17.9.2026 11:00	Kuzey	Siyah/Mavi
+17.9.2026 12:00	Kuzey, Güney	Siyah/Mavi, Kırmızı
+17.9.2026 13:00	Kuzey, Doğu	Siyah/Mavi, Yeşil
+17.9.2026 14:00	Kuzey, Batı	Siyah/Mavi, Beyaz
+17.9.2026 15:00	Kuzey, Merkez	Siyah/Mavi, Sarı
+17.9.2026 16:00	Kuzey	Siyah/Mavi
+17.9.2026 17:00	Kuzey, Güney	Siyah/Mavi, Kırmızı
+17.9.2026 18:00	Kuzey, Doğu	Siyah/Mavi, Yeşil
+17.9.2026 19:00	Kuzey, Batı	Siyah/Mavi, Beyaz
+17.9.2026 20:00	Güney, Merkez	Kırmızı, Sarı
+17.9.2026 21:00	Güney, Kuzey	Kırmızı, Siyah/Mavi
+17.9.2026 22:00	Güney	Kırmızı
+17.9.2026 23:00	Güney, Doğu	Kırmızı, Yeşil
+Devfreco © 2026 | Çerez Tercihleri

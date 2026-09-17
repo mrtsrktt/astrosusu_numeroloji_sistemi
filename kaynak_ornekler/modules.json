@@ -1,0 +1,910 @@
+{
+ "https://kaynak-site/Numerology/HolisticAnalysis": {
+  "url": "https://kaynak-site/Numerology/HolisticAnalysis",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Tam adı giriniz.",
+    "type": "text",
+    "id": "e07b8f1f00374891ba45f289f97186e9"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Gün",
+    "type": "number",
+    "id": "81f5e6aaef6542609cf054dde2ab52d5"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Ay",
+    "type": "number",
+    "id": "4b775e4c64c84432aa542385a71993d6"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "0efc990aab7a464fbdf8445356c12add"
+   }
+  ],
+  "btns": [
+   "X",
+   "X",
+   "Analiz",
+   "Rapor",
+   "NUMEROLOJİK OMURGA HARİTASI",
+   "Tümü",
+   "Sesli",
+   "Sessiz",
+   "Üstat",
+   "Pin Kodu Karşılaştır",
+   "Dönüşüm Yılları",
+   "Tarih",
+   "Hafta",
+   "Fibonacci",
+   "Döngüler"
+  ],
+  "pay": false,
+  "len": 3277,
+  "key": "HolisticAnalysis"
+ },
+ "https://kaynak-site/Numerology/FullNameAnalysis": {
+  "url": "https://kaynak-site/Numerology/FullNameAnalysis",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Tam adı giriniz.",
+    "type": "text",
+    "id": "2797d0e7c47c4fd0808e97187247d5d6"
+   }
+  ],
+  "btns": [
+   "Astro Şuşu'ye 300₺ Destek Ol",
+   "|",
+   "X",
+   "Analiz",
+   "Rapor",
+   "Kart",
+   "Tümü",
+   "Sesli",
+   "Sessiz",
+   "Üstat",
+   "Çerez Tercihleri"
+  ],
+  "pay": true,
+  "len": 1071,
+  "key": "FullNameAnalysis"
+ },
+ "https://kaynak-site/Numerology/BirthdayAnalysis": {
+  "url": "https://kaynak-site/Numerology/BirthdayAnalysis",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Gün",
+    "type": "number",
+    "id": "c46da702d079473cbe8c62b178916ca6"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Ay",
+    "type": "number",
+    "id": "00910e58f4844653b90fb58f913e232e"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "64b765dbd9a64055a11c710e04b41f74"
+   }
+  ],
+  "btns": [
+   "X",
+   "Analiz",
+   "Rapor",
+   "NUMEROLOJİK OMURGA HARİTASI",
+   "Pin Kodu Karşılaştır",
+   "Dönüşüm Yılları",
+   "Tarih",
+   "Hafta",
+   "Fibonacci",
+   "Döngüler",
+   "Kadersel",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 1914,
+  "key": "BirthdayAnalysis"
+ },
+ "https://kaynak-site/Numerology/CompareAnalysis": {
+  "url": "https://kaynak-site/Numerology/CompareAnalysis",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Tam adı giriniz.",
+    "type": "text",
+    "id": "37881e37118747bb9af5b6b41af87ac0"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Gün",
+    "type": "number",
+    "id": "ebbdc511975946a0b0ac4fd329eea8c2"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Ay",
+    "type": "number",
+    "id": "d4f703cfbc9048a98eda498a19d8a3f1"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "d2ee6243393f4213abbd3f162a5a87d5"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Tam adı giriniz.",
+    "type": "text",
+    "id": "cda4fa8a91614cb0bdb39438ee249272"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Gün",
+    "type": "number",
+    "id": "97e723f8f82b455c9fedbf60150df7a7"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Ay",
+    "type": "number",
+    "id": "c72dfccc47c542bbbf2b09debd911a13"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "79e322b6563245609ee9d4e0dd3a872e"
+   }
+  ],
+  "btns": [
+   "X",
+   "X",
+   "X",
+   "X",
+   "Analiz",
+   "Tümü",
+   "Sesli",
+   "Sessiz",
+   "Üstat",
+   "Tümü",
+   "Sesli",
+   "Sessiz",
+   "Üstat",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 2689,
+  "key": "CompareAnalysis"
+ },
+ "https://kaynak-site/Numerology/CompareNameAnalysis": {
+  "url": "https://kaynak-site/Numerology/CompareNameAnalysis",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Tam adı giriniz.",
+    "type": "text",
+    "id": "331cd5f4968c4a27b363ee7041c9ca68"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Tam adı giriniz.",
+    "type": "text",
+    "id": "a3843dd52f0b4b3aabc4d406ca8879db"
+   }
+  ],
+  "btns": [
+   "X",
+   "X",
+   "Analiz",
+   "Tümü",
+   "Sesli",
+   "Sessiz",
+   "Üstat",
+   "Tümü",
+   "Sesli",
+   "Sessiz",
+   "Üstat",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 1684,
+  "key": "CompareNameAnalysis"
+ },
+ "https://kaynak-site/Numerology/LocationAnalysis": {
+  "url": "https://kaynak-site/Numerology/LocationAnalysis",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Ülke",
+    "type": "text",
+    "id": "efe027a47f594e788eb097310e07758d"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Eyalet / Bölge (Varsa)",
+    "type": "text",
+    "id": "f40d8528c8e348309d03601ce00c4a6f"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Şehir",
+    "type": "text",
+    "id": "a1d9d8aa5b3149029ead024f2cf02085"
+   },
+   {
+    "t": "INPUT",
+    "ph": "İlçe",
+    "type": "text",
+    "id": "64be6235ae214c468fb69a78dc7f3016"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Semt (Varsa)",
+    "type": "text",
+    "id": "0e775dab1c57449a94273bbd19add72f"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Mahalle (Varsa)",
+    "type": "text",
+    "id": "efe65c30472e437aa5218a76ffa36467"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Cadde / Sokak",
+    "type": "text",
+    "id": "540bc3ba12534b0d93c454dc30032edb"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Site (Varsa)",
+    "type": "text",
+    "id": "69eda3234251494b828fcebd3e9155d3"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Bina",
+    "type": "text",
+    "id": "cfa906eab9894ce0b27c0329bbfaf41e"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Kat (Varsa)",
+    "type": "text",
+    "id": "f2603eb7a4244829b46a1b8faa53d27f"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Daire / Kapı",
+    "type": "text",
+    "id": "c1d39d00e8b64fdfa6059958657f2fcc"
+   }
+  ],
+  "btns": [
+   "Analiz",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 147,
+  "key": "LocationAnalysis"
+ },
+ "https://kaynak-site/Numerology/IdentityNumberAnalysis": {
+  "url": "https://kaynak-site/Numerology/IdentityNumberAnalysis",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Kimlik Numarasını girin.",
+    "type": "text",
+    "id": "ba8b6144d66a475bbece312d023d4133"
+   }
+  ],
+  "btns": [
+   "X",
+   "Analiz",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 120,
+  "key": "IdentityNumberAnalysis"
+ },
+ "https://kaynak-site/Numerology/PhoneNumberAnalysis": {
+  "url": "https://kaynak-site/Numerology/PhoneNumberAnalysis",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Telefon numarasını girin.",
+    "type": "text",
+    "id": "8fd3583f00e34febb1524e5a891435f0"
+   }
+  ],
+  "btns": [
+   "X",
+   "Analiz",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 122,
+  "key": "PhoneNumberAnalysis"
+ },
+ "https://kaynak-site/Numerology/CarPlateAnalysis": {
+  "url": "https://kaynak-site/Numerology/CarPlateAnalysis",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Araba plakasını girin.",
+    "type": "text",
+    "id": "59455b559df545efa6ca37db70277ccc"
+   }
+  ],
+  "btns": [
+   "X",
+   "Analiz",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 114,
+  "key": "CarPlateAnalysis"
+ },
+ "https://kaynak-site/Numerology/MotorcyclePlateAnalysis": {
+  "url": "https://kaynak-site/Numerology/MotorcyclePlateAnalysis",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Motosiklet plakasını girin.",
+    "type": "text",
+    "id": "afe94fa5d8db438299ea72ec1eb7e6bb"
+   }
+  ],
+  "btns": [
+   "X",
+   "Analiz",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 124,
+  "key": "MotorcyclePlateAnalysis"
+ },
+ "https://kaynak-site/Numerology/Personal/Date": {
+  "url": "https://kaynak-site/Numerology/Personal/Date",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Gün",
+    "type": "number",
+    "id": "c1c44c58edb549e4a441235fadca8e1e"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Ay",
+    "type": "number",
+    "id": "6dda34da510d435ea5987ee3730f46f9"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "63dabe8fb32f4e7d89be20b703568da5"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "67e2c351f24e45c28a195eedd35c77b1"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Ay",
+    "type": "number",
+    "id": "45b22fc9f3cc471db8ab18f452560a19"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Gün",
+    "type": "number",
+    "id": "fa4f424fcc9d41e780a5de521d8db508"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Saat",
+    "type": "number",
+    "id": "3f0dfa60680d42929989bd78a240fb9f"
+   }
+  ],
+  "btns": [
+   "X",
+   "X",
+   "X",
+   "Analiz",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 273,
+  "key": "Personal/Date"
+ },
+ "https://kaynak-site/Numerology/Personal/Week": {
+  "url": "https://kaynak-site/Numerology/Personal/Week",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Gün",
+    "type": "number",
+    "id": "af833d0a28944217a901ba7e3d578a42"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Ay",
+    "type": "number",
+    "id": "6e53cc70254a4b89a5936aa9b1f37f2b"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "c25e3d90ddd4428c95fcc2e4f4dcc67f"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "5d16ece0f51340b38c647d604342c73b"
+   }
+  ],
+  "btns": [
+   "X",
+   "X",
+   "Analiz",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 221,
+  "key": "Personal/Week"
+ },
+ "https://kaynak-site/Numerology/Personal/Fibonacci": {
+  "url": "https://kaynak-site/Numerology/Personal/Fibonacci",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Gün",
+    "type": "number",
+    "id": "a8519d4f0b594e0581fba7f6c7f9f6fb"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Ay",
+    "type": "number",
+    "id": "3c79a092621246d99c5ea407d541dd76"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "3a2dfe3a678d4f81ac968b0aad9ca113"
+   }
+  ],
+  "btns": [
+   "X",
+   "Analiz",
+   "Kişisel Tarih",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 159,
+  "key": "Personal/Fibonacci"
+ },
+ "https://kaynak-site/Numerology/Personal/Cycles": {
+  "url": "https://kaynak-site/Numerology/Personal/Cycles",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Gün",
+    "type": "number",
+    "id": "fbfdbc4d7cac4b90a054b3ffae172198"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Ay",
+    "type": "number",
+    "id": "c1be745fae7741bb8177c8b4fc54bb66"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "505bdc351d7b45e4be262146dc5e5155"
+   }
+  ],
+  "btns": [
+   "X",
+   "Analiz",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 185,
+  "key": "Personal/Cycles"
+ },
+ "https://kaynak-site/Numerology/Personal/FatefulCycles": {
+  "url": "https://kaynak-site/Numerology/Personal/FatefulCycles",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Gün",
+    "type": "number",
+    "id": "f2b97283d7414c17a980553e4f27686c"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Ay",
+    "type": "number",
+    "id": "41262238f29d4c1c9fd54a0c27d61478"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "f51c8133234c4b169b4b104440bdf8a6"
+   }
+  ],
+  "btns": [
+   "X",
+   "Analiz",
+   "Kişisel Tarih",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 181,
+  "key": "Personal/FatefulCycles"
+ },
+ "https://kaynak-site/Numerology/Personal/Transformation": {
+  "url": "https://kaynak-site/Numerology/Personal/Transformation",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Gün",
+    "type": "number",
+    "id": "dba0208705644d918696430588ff2749"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Ay",
+    "type": "number",
+    "id": "109fd987470a4c5090f2bc3c58e4913a"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "d6d0daed3e5e47b1aafe7ff787c51ee8"
+   }
+  ],
+  "btns": [
+   "X",
+   "Analiz",
+   "Kişisel Tarih",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 158,
+  "key": "Personal/Transformation"
+ },
+ "https://kaynak-site/Numerology/Universal/Date": {
+  "url": "https://kaynak-site/Numerology/Universal/Date",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "05fa4e5787ac4e818cee17995acdcf7c"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Ay",
+    "type": "number",
+    "id": "8e33aff6183d496086aefd3592ea0c27"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Gün",
+    "type": "number",
+    "id": "181db013efb34a6d834a40b653f4bd37"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Saat",
+    "type": "number",
+    "id": "a11735a8808a494d81102a8589fb8feb"
+   }
+  ],
+  "btns": [
+   "X",
+   "X",
+   "Analiz",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 1325,
+  "key": "Universal/Date"
+ },
+ "https://kaynak-site/Numerology/Universal/Week": {
+  "url": "https://kaynak-site/Numerology/Universal/Week",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "2afd8478b0664ab192a93cc0b829df71"
+   }
+  ],
+  "btns": [
+   "X",
+   "Analiz",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 2649,
+  "key": "Universal/Week"
+ },
+ "https://kaynak-site/Numerology/Universal/Fibonacci": {
+  "url": "https://kaynak-site/Numerology/Universal/Fibonacci",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "ac2f1bef15cd418bb9738e2a0c0425c2"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "18da5425d73f41c9bd7f8086b208fe85"
+   }
+  ],
+  "btns": [
+   "X",
+   "X",
+   "Analiz",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 1011,
+  "key": "Universal/Fibonacci"
+ },
+ "https://kaynak-site/Numerology/Universal/Cycles": {
+  "url": "https://kaynak-site/Numerology/Universal/Cycles",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "55f2300ddc054e9ebf7fd5435eda1265"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "8848223921384a31a226c410117373bc"
+   }
+  ],
+  "btns": [
+   "X",
+   "X",
+   "Analiz",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 2271,
+  "key": "Universal/Cycles"
+ },
+ "https://kaynak-site/Numerology/Universal/Wheel": {
+  "url": "https://kaynak-site/Numerology/Universal/Wheel",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "468e7d34d8574cd198a58e4624b63433"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Ay",
+    "type": "number",
+    "id": "1ee988d9aaf34568ab438eed8aa97daa"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Gün",
+    "type": "number",
+    "id": "8ec51d4fce2c45f1a8fd44631550f96b"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Saat",
+    "type": "number",
+    "id": "70130b5569864da6a8b6a821b9a7b426"
+   }
+  ],
+  "btns": [
+   "X",
+   "X",
+   "Analiz",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 1144,
+  "key": "Universal/Wheel"
+ },
+ "https://kaynak-site/Karmic/Analysis": {
+  "url": "https://kaynak-site/Karmic/Analysis",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Gün",
+    "type": "number",
+    "id": "b9d13c0b9e6f415c97241156fbf81c34"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Ay",
+    "type": "number",
+    "id": "4b2d1f2a9d6a4d1c85ce1e26e7232172"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "86a2c7b44c2b40698197d2b8fd42e9cc"
+   }
+  ],
+  "btns": [
+   "X",
+   "Analiz",
+   "Kart",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 268,
+  "key": "Karmic/Analysis"
+ },
+ "https://kaynak-site/DestinyMatrix/Analysis": {
+  "url": "https://kaynak-site/DestinyMatrix/Analysis",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Gün",
+    "type": "number",
+    "id": "04ecbe45fdb64855a9f5c075401f927e"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Ay",
+    "type": "number",
+    "id": "8f1b76a9ebda490c85f665f969389ebf"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "b899e5688060487cbc9166b2f32e4469"
+   }
+  ],
+  "btns": [
+   "X",
+   "Analiz",
+   "Kart",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 772,
+  "key": "DestinyMatrix/Analysis"
+ },
+ "https://kaynak-site/Numerology/Tool/NameCompatibility": {
+  "url": "https://kaynak-site/Numerology/Tool/NameCompatibility",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "1. Kişinin İsmi",
+    "type": "text",
+    "id": "dc308b326db0474182f90767896355ca"
+   },
+   {
+    "t": "INPUT",
+    "ph": "2. Kişinin İsmi",
+    "type": "text",
+    "id": "d6ff5a824a9c495590adb48dbd15453a"
+   }
+  ],
+  "btns": [
+   "X",
+   "X",
+   "Analiz",
+   "Rapor",
+   "Kart",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 269,
+  "key": "Tool/NameCompatibility"
+ },
+ "https://kaynak-site/Numerology/Tool/Calculator": {
+  "url": "https://kaynak-site/Numerology/Tool/Calculator",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Hesaplamak istediğiniz değeri girin.",
+    "type": "text",
+    "id": "47634b8d29ac401ab78465dd23913fa0"
+   }
+  ],
+  "btns": [
+   "Astro Şuşu'ye 300₺ Destek Ol",
+   "|",
+   "X",
+   "Analiz",
+   "Çerez Tercihleri"
+  ],
+  "pay": true,
+  "len": 287,
+  "key": "Tool/Calculator"
+ },
+ "https://kaynak-site/Numerology/Tool/PinCodeCompare": {
+  "url": "https://kaynak-site/Numerology/Tool/PinCodeCompare",
+  "inputs": [
+   {
+    "t": "INPUT",
+    "ph": "Gün",
+    "type": "number",
+    "id": "28d84ecee2344f5ebf132082472fbcf1"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Ay",
+    "type": "number",
+    "id": "6d8242c608ec4335988a89ac14dfd133"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "09c96dc3e66c4d2fac94f04ad40d87c9"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Gün",
+    "type": "number",
+    "id": "c32faf91ebaa4bb4aa5459167a07326f"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Ay",
+    "type": "number",
+    "id": "f3c859b995304d418ef4d54a36689a4f"
+   },
+   {
+    "t": "INPUT",
+    "ph": "Yıl",
+    "type": "number",
+    "id": "f5aaf608cd2c49d58b8a48e9138d988a"
+   }
+  ],
+  "btns": [
+   "X",
+   "X",
+   "Analiz",
+   "Çerez Tercihleri"
+  ],
+  "pay": false,
+  "len": 595,
+  "key": "Tool/PinCodeCompare"
+ }
+}

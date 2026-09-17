@@ -1,0 +1,129 @@
+ Astro Şuşu
+Kader Matrisi / Analiz	
+Doğum Tarihi
+X
+ Analiz
+15
+3
+19
+10
+19
+7
+18
+22
+11
+7
+11
+13
+6
+5
+8
+17
+14
+22
+3
+4
+21
+22
+4
+3
+8
+17
+6
+9
+20
+9
+6
+9
+
+
+ Kart
+KİŞİSEL AMAÇ
+GÖKYÜZÜ	TOPRAK	KİŞİSEL
+13	7	20
+AİLE KADERİ
+BABA	ANNE	AİLE
+11	11	22
+MANEVİ AMAÇ
+KİŞİSEL	AİLE	MANEVİ
+20	22	6
+GEZEGENSEL AMAÇ
+AİLE	MANEVİ	GEZEGENSEL
+22	6	10
+ÇAKRALAR
+	ÇAKRA	GÖKYÜZÜ	TOPRAK	SAĞLIĞIN ANAHTARI
+	Taç Çakra (Sahasrara)	3	15	3, 15, 18
+	Üçüncü Göz Çakrası (Ajna)	17	5	17, 5, 22
+	Boğaz Çakrası (Vishuddha)	14	8	14, 8, 22
+	Kalp Çakrası (Anahata)	7	19	7, 19, 8
+	Solar Pleksus Çakrası (Manipura)	11	11	11, 11, 22
+	Sakral Çakra (Svadhisthana)	21	3	21, 3, 6
+	Kök Çakra (Muladhara)	10	19	10, 19, 11
+	ÇÖZÜM	11	8	11, 8, 10
+YAŞ ARALIKLARINA GÖRE DAĞILIM
+YAŞ	SAYI	ARKANA	GEZEGEN	BURÇ	ELEMENT
+0	15	ŞEYTAN	Satürn	Oğlak	Toprak
+1 - 2.5	(36) 9	ERMİŞ	Merkür	Başak	Toprak
+2.5 - 3.5	21	DÜNYA	Satürn	Kova, Oğlak	Toprak
+3.5 - 4	(27) 9	ERMİŞ	Merkür	Başak	Toprak
+4 - 6	(33) 6	AŞIKLAR	Venüs, Jüpiter	İkizler	Hava
+6 - 7.5	12	ASILAN ADAM	Neptün	Balık	Su
+7.5 - 8.5	(24) 6	AŞIKLAR	Venüs, Jüpiter	İkizler	Hava
+8.5 - 9	(24) 6	AŞIKLAR	Venüs, Jüpiter	İkizler	Hava
+10	18	AY	Neptün, Jüpiter	Balık	Su
+11 - 12.5	(30) 3	İMPARATORİÇE	Venüs	Boğa	Toprak
+12.5 - 13.5	(39) 12	ASILAN ADAM	Neptün	Balık	Su
+13.5 - 14	(33) 6	AŞIKLAR	Venüs, Jüpiter	İkizler	Hava
+14 - 16	21	DÜNYA	Satürn	Kova, Oğlak	Toprak
+16 - 17.5	(27) 9	ERMİŞ	Merkür	Başak	Toprak
+17.5 - 18.5	(24) 6	AŞIKLAR	Venüs, Jüpiter	İkizler	Hava
+18.5 - 19	9	ERMİŞ	Merkür	Başak	Toprak
+20	3	İMPARATORİÇE	Venüs	Boğa	Toprak
+21 - 22.5	13	ÖLÜM	Mars, Plüton	Akrep	Su
+22.5 - 23.5	10	KADER ÇARKI	Jüpiter	Balık, Yay	Ateş
+23.5 - 24	17	YILDIZ	Jüpiter	Kova	Hava
+24 - 26	(25) 7	ARABA	Ay	Yengeç	Su
+26 - 27.5	18	AY	Neptün, Jüpiter	Balık	Su
+27.5 - 28.5	(29) 11	GÜÇ	Güneş	Aslan	Ateş
+28.5 - 29	(33) 6	AŞIKLAR	Venüs, Jüpiter	İkizler	Hava
+30	22	JOKER	Uranüs	Kova	Hava
+31 - 32.5	(31) 4	İMPARATOR	Mars	Koç	Ateş
+32.5 - 33.5	(27) 9	ERMİŞ	Merkür	Başak	Toprak
+33.5 - 34	14	DENGE	Jüpiter	Yay	Ateş
+34 - 36	(41) 5	AZİZ	Venüs	Boğa	Toprak
+36 - 37.5	11	GÜÇ	Güneş	Aslan	Ateş
+37.5 - 38.5	(24) 6	AŞIKLAR	Venüs, Jüpiter	İkizler	Hava
+38.5 - 39	(25) 7	ARABA	Ay	Yengeç	Su
+40	19	GÜNEŞ	Güneş	Aslan	Ateş
+41 - 42.5	(41) 5	AZİZ	Venüs	Boğa	Toprak
+42.5 - 43.5	22	JOKER	Uranüs	Kova	Hava
+43.5 - 44	(25) 7	ARABA	Ay	Yengeç	Su
+44 - 46	(30) 3	İMPARATORİÇE	Venüs	Boğa	Toprak
+46 - 47.5	17	YILDIZ	Jüpiter	Kova	Hava
+47.5 - 48.5	14	DENGE	Jüpiter	Yay	Ateş
+48.5 - 49	(25) 7	ARABA	Ay	Yengeç	Su
+50	(29) 11	GÜÇ	Güneş	Aslan	Ateş
+51 - 52.5	16	KULE	Mars	Koç	Ateş
+52.5 - 53.5	(32) 5	AZİZ	Venüs	Boğa	Toprak
+53.5 - 54	(26) 8	ADALET	Venüs	Terazi	Hava
+54 - 56	21	DÜNYA	Satürn	Kova, Oğlak	Toprak
+56 - 57.5	(25) 7	ARABA	Ay	Yengeç	Su
+57.5 - 58.5	(31) 4	İMPARATOR	Mars	Koç	Ateş
+58.5 - 59	14	DENGE	Jüpiter	Yay	Ateş
+60	(37) 10	KADER ÇARKI	Jüpiter	Balık, Yay	Ateş
+61 - 62.5	19	GÜNEŞ	Güneş	Aslan	Ateş
+62.5 - 63.5	(27) 9	ERMİŞ	Merkür	Başak	Toprak
+63.5 - 64	(26) 8	ADALET	Venüs	Terazi	Hava
+64 - 66	17	YILDIZ	Jüpiter	Kova	Hava
+66 - 67.5	(23) 5	AZİZ	Venüs	Boğa	Toprak
+67.5 - 68.5	(24) 6	AŞIKLAR	Venüs, Jüpiter	İkizler	Hava
+68.5 - 69	13	ÖLÜM	Mars, Plüton	Akrep	Su
+70	(25) 7	ARABA	Ay	Yengeç	Su
+71 - 72.5	18	AY	Neptün, Jüpiter	Balık	Su
+72.5 - 73.5	(29) 11	GÜÇ	Güneş	Aslan	Ateş
+73.5 - 74	(33) 6	AŞIKLAR	Venüs, Jüpiter	İkizler	Hava
+74 - 76	22	JOKER	Uranüs	Kova	Hava
+76 - 77.5	(32) 5	AZİZ	Venüs	Boğa	Toprak
+77.5 - 78.5	(37) 10	KADER ÇARKI	Jüpiter	Balık, Yay	Ateş
+78.5 - 79	(25) 7	ARABA	Ay	Yengeç	Su
+Devfreco © 2026 | Çerez Tercihleri
