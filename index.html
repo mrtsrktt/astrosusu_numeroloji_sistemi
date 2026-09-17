@@ -576,6 +576,16 @@ function renderPinCompare(f){
 /* ============================================================
    ÇALIŞMA ALANI
    ============================================================ */
+const TR_ILLER = ["Adana","Adıyaman","Afyonkarahisar","Ağrı","Aksaray","Amasya","Ankara","Antalya","Ardahan","Artvin","Aydın","Balıkesir","Bartın","Batman","Bayburt","Bilecik","Bingöl","Bitlis","Bolu","Burdur","Bursa","Çanakkale","Çankırı","Çorum","Denizli","Diyarbakır","Düzce","Edirne","Elazığ","Erzincan","Erzurum","Eskişehir","Gaziantep","Giresun","Gümüşhane","Hakkâri","Hatay","Iğdır","Isparta","İstanbul","İzmir","Kahramanmaraş","Karabük","Karaman","Kars","Kastamonu","Kayseri","Kırıkkale","Kırklareli","Kırşehir","Kilis","Kocaeli","Konya","Kütahya","Malatya","Manisa","Mardin","Mersin","Muğla","Muş","Nevşehir","Niğde","Ordu","Osmaniye","Rize","Sakarya","Samsun","Siirt","Sinop","Sivas","Şanlıurfa","Şırnak","Tekirdağ","Tokat","Trabzon","Tunceli","Uşak","Van","Yalova","Yozgat","Zonguldak"];
+const TR_ULKELER = ["Türkiye","KKTC","Almanya","Hollanda","Fransa","İngiltere","ABD","Avusturya","Belçika","İsviçre","İsveç","Kanada","Avustralya","Diğer"];
+
+function dayOptions(sel){ let o='<option value="">Gün</option>'; for(let i=1;i<=31;i++) o+='<option value="'+i+'"'+(sel==String(i)?' selected':'')+'>'+i+'</option>'; return o; }
+function monthOptions(sel){ const A=["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"]; let o='<option value="">Ay</option>'; A.forEach(function(a,i){ const v=i+1; o+='<option value="'+v+'"'+(sel==String(v)?' selected':'')+'>'+a+' ('+v+')</option>'; }); return o; }
+function yearOptions(sel){ let o='<option value="">Yıl</option>'; const now=new Date().getFullYear(); for(let y=now;y>=1920;y--) o+='<option value="'+y+'"'+(sel==String(y)?' selected':'')+'>'+y+'</option>'; return o; }
+function hourOptions(sel){ let o='<option value="">Saat</option>'; for(let h=0;h<24;h++){ const v=(h<10?'0'+h:''+h); o+='<option value="'+v+'"'+(sel===v?' selected':'')+'>'+v+'</option>'; } return o; }
+function minuteOptions(sel){ let o='<option value="">Dk</option>'; for(let mn=0;mn<60;mn++){ const v=(mn<10?'0'+mn:''+mn); o+='<option value="'+v+'"'+(sel===v?' selected':'')+'>'+v+'</option>'; } return o; }
+function countryOptions(sel){ let o='<option value="">Ülke</option>'; TR_ULKELER.forEach(function(u){ o+='<option value="'+u+'"'+(sel===u?' selected':'')+'>'+u+'</option>'; }); return o; }
+
 function renderWorkspace(){
   const people = store.get(LS.people, []);
   const rows = people.map((p,i)=>`<tr>
@@ -587,14 +597,15 @@ function renderWorkspace(){
   return `
   <div class="card">
     <h2>Çalışma Alanım</h2>
-    <p class="desc">Analiz edeceğiniz kişileri kaydedin; kayıtlı çalışmalardan tek tıkla analize ulaşın.</p>
+    <p class="desc">Analiz edeceğiniz kişileri kaydedin; kayıtlı çalışmalardan tek tıkla analize ulaşın. Tüm alanlar listeden seçilebilir.</p>
     <div class="grid c4">
       <div class="field"><label>Çalışma Adı</label><input id="ws_name" type="text" placeholder="Ad Soyad"></div>
-      <div class="field"><label>Doğum Günü</label><input id="ws_d" type="number" placeholder="Gün"></div>
-      <div class="field"><label>Doğum Ayı</label><input id="ws_m" type="number" placeholder="Ay"></div>
-      <div class="field"><label>Doğum Yılı</label><input id="ws_y" type="number" placeholder="Yıl"></div>
-      <div class="field"><label>Doğum Saati</label><input id="ws_time" type="text" placeholder="SS:DD"></div>
-      <div class="field" style="grid-column:span 3"><label>Doğum Yeri</label><input id="ws_place" type="text" placeholder="Şehir, Ülke"></div>
+      <div class="field"><label>Doğum Günü</label><select id="ws_d">${dayOptions()}</select></div>
+      <div class="field"><label>Doğum Ayı</label><select id="ws_m">${monthOptions()}</select></div>
+      <div class="field"><label>Doğum Yılı</label><select id="ws_y">${yearOptions()}</select></div>
+      <div class="field"><label>Doğum Saati</label><div style="display:flex;gap:6px"><select id="ws_hh" style="flex:1">${hourOptions()}</select><select id="ws_mm" style="flex:1">${minuteOptions()}</select></div></div>
+      <div class="field"><label>Ülke</label><select id="ws_country">${countryOptions("Türkiye")}</select></div>
+      <div class="field" style="grid-column:span 2"><label>Doğum Yeri (Şehir)</label><input id="ws_place" type="text" list="ws_iller" placeholder="İl seçin veya yazın"><datalist id="ws_iller">${TR_ILLER.map(x=>`<option value="${x}">`).join("")}</datalist></div>
     </div>
     <div class="actions"><button class="btn btn-go" onclick="addPerson()">Kaydet</button></div>
   </div>
@@ -605,8 +616,13 @@ function renderWorkspace(){
   </div>`;
 }
 function addPerson(){
+  const city=($("ws_place")?$("ws_place").value.trim():"");
+  const country=($("ws_country")?$("ws_country").value:"")||"";
+  const place=[city,country].filter(Boolean).join(", ");
+  const hh=($("ws_hh")?$("ws_hh").value:""), mm=($("ws_mm")?$("ws_mm").value:"");
+  const time=(hh&&mm)?(hh+":"+mm):"";
   const p={ name:$("ws_name").value.trim(), d:$("ws_d").value.trim(), m:$("ws_m").value.trim(),
-            y:$("ws_y").value.trim(), time:$("ws_time").value.trim(), place:$("ws_place").value.trim() };
+            y:$("ws_y").value.trim(), time:time, place:place };
   if(!p.name||!p.d||!p.m||!p.y){ alert("Ad ve doğum tarihi (gün/ay/yıl) zorunludur."); return; }
   const people=store.get(LS.people,[]); people.push(p); store.set(LS.people,people);
   renderWorkspaceView();
@@ -688,6 +704,19 @@ function openModule(id){
     return `<div class="field"><label>${esc(fd.label)}</label>
       <input id="fld_${fd.k}" type="${fd.type}" placeholder="${esc(fd.ph||"")}" value="${esc(val)}"></div>`;
   }).join("");
+  const people=store.get(LS.people,[]);
+  const picker = people.length ? `
+    <div class="card no-print" style="background:#f2f7ff;border-color:#cfe0ff">
+      <h2 style="font-size:15px">👤 Kayıtlı Müşteri Seç</h2>
+      <p class="desc" style="margin-bottom:10px">Kayıtlı bir müşteriyi seçin, alanlar otomatik dolsun.</p>
+      <div class="grid c2">
+        <div class="field"><select id="custPick" onchange="fillFromSaved(this.value)">
+          <option value="">— Müşteri seçin —</option>
+          ${people.map((p,i)=>`<option value="${i}">${esc(p.name)} · ${esc(p.d)}.${esc(p.m)}.${esc(p.y)}</option>`).join("")}
+        </select></div>
+        <div class="field" style="align-self:end"><button class="btn-sm" onclick="fillFromSaved($('custPick').value)">Alanları Doldur</button></div>
+      </div>
+    </div>` : "";
   $("content").innerHTML = `
   <div class="card no-print">
     <h2>${esc(m.name)} ${m.free?'<span class="pill free">Ücretsiz</span>':'<span class="pill paid">Abonelik</span>'}</h2>
@@ -698,8 +727,25 @@ function openModule(id){
       <button class="btn btn-ghost" onclick="clearFields('${m.id}')">Temizle</button>
     </div>
   </div>
+  ${picker}
   <div id="resultArea"></div>`;
   window._prefill=null;
+}
+
+/* Kayıtlı müşteriyi mevcut modülün alanlarına akıllıca doldur */
+function fillFromSaved(i){
+  if(i===""||i===null||i===undefined) return;
+  const p=store.get(LS.people,[])[Number(i)]; if(!p) return;
+  const set=(k,v)=>{ const el=$("fld_"+k); if(el && v!==undefined && v!==null && v!=="") el.value=v; };
+  // Temel kişisel alanlar
+  set("name", p.name);
+  set("n1", p.name);
+  ["d","m","y"].forEach(k=>set(k, p[k]));
+  ["d1","m1","y1"].forEach(k=>set(k, p[k[0]]));  // 1. kişi
+  set("time", p.time);
+  set("place", p.place);
+  set("sehir", (p.place||"").split(",")[0].trim());
+  set("ulke", (p.place||"").split(",").slice(-1)[0].trim());
 }
 
 function clearFields(id){
