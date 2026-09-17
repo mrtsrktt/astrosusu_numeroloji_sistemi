@@ -230,6 +230,168 @@
     return { first: l[0], last: l[l.length - 1] };
   }
 
+  /* Dikey Sütunlu Numerolojik Omurga Tablosu (Bütünsel / İsim / Doğum Tarihi)
+     Referans görsel ve çıktı yapısına birebir uygun 6 sütunlu dikey mimari:
+     [İşaretçi (Yeşil Nokta)] | R (Rakam Frekansı) | [Sayı] | H (Harfler) | E (Evrensel Harfler) | A (Pin Kodu Hane Açılımı) */
+  function omurgaTable(name, day, month, year) {
+    name = name || '';
+    const d = parseInt(day, 10) || 0;
+    const m = parseInt(month, 10) || 0;
+    const y = parseInt(year, 10) || 0;
+    const hasDate = (d > 0 && m > 0 && y > 0);
+    const hasName = Boolean(name && name.trim());
+
+    // 1. Üst Başlık Şeridi (BAŞLANGIÇ, BİTİŞ, İLK SESLİ, ANAHTAR, DENGE)
+    const parts = nameParts(name);
+    const ltrs = letters(name);
+
+    const csChar = parts.length ? parts[0][0] : '-';
+    const csVal = parts.length ? (LETTER_VALUES[csChar] || 0) : 0;
+
+    const cpChar = parts.length ? parts[parts.length - 1].slice(-1) : '-';
+    const cpVal = parts.length ? (LETTER_VALUES[cpChar] || 0) : 0;
+
+    let fvChar = '-';
+    let fvVal = 0;
+    for (const ch of up(name)) {
+      if (VOWELS.has(ch) && LETTER_VALUES[ch] !== undefined) {
+        fvChar = ch;
+        fvVal = LETTER_VALUES[ch];
+        break;
+      }
+    }
+
+    const keyVal = ltrs.length ? reduce(LETTER_VALUES[ltrs[0]] + LETTER_VALUES[ltrs[ltrs.length - 1]]) : 0;
+
+    let initials = '';
+    parts.forEach(p => { if (p) initials += p[0]; });
+    const balVal = balanceNumber(name);
+
+    const top = {
+      cornerstone: { char: csChar, val: csVal, text: csChar !== '-' ? `${csChar}=${csVal}` : '-' },
+      capstone: { char: cpChar, val: cpVal, text: cpChar !== '-' ? `${cpChar}=${cpVal}` : '-' },
+      firstVowel: { char: fvChar, val: fvVal, text: fvChar !== '-' ? `${fvChar}=${fvVal}` : '-' },
+      key: { val: keyVal, text: String(keyVal || '-') },
+      balance: { initials: initials, val: balVal, text: initials ? `${initials}=${balVal}` : '-' }
+    };
+
+    // 2. Harflerin 1-9 sayılarına göre dağılımı (H Sütunu)
+    const nameLetters = {};
+    for (let i = 1; i <= 9; i++) nameLetters[i] = [];
+    if (hasName) {
+      ltrs.forEach(ch => {
+        const v = LETTER_VALUES[ch];
+        if (v >= 1 && v <= 9) nameLetters[v].push(ch);
+      });
+    }
+
+    // 3. Pin Kodu ve Göstergeler (A ve R Sütunları)
+    const pc = hasDate ? pinCode(d, m, y) : null;
+    const lp = hasDate ? lifePath(d, m, y) : null;
+    const bn = hasDate ? birthdayNumber(d) : null;
+    const at = hasDate ? attitudeNumber(d, m) : null;
+    const ex = hasName ? expressionNumber(name) : null;
+
+    // Evrensel Pisagor Harfleri (E Sütunu)
+    const E_CHARS = {
+      9: 'İÍÎ',
+      8: 'HZQ',
+      7: 'GĞP',
+      6: 'FOÖXÓÔØŒ',
+      5: 'WŇƏÑÉÈÊË',
+      4: 'DV',
+      3: 'ÇLUÜŬÚÛ',
+      2: 'B',
+      1: 'JSŞÄßÀÁÂÃÅÆ'
+    };
+
+    // Satır Pastel Arka Plan Renkleri (Görsel referans ile birebir)
+    const ROW_BG = {
+      9: '#fef9c3', // Krem / Sarı
+      8: '#fee2e2', // Açık Pembe
+      7: '#dcfce7', // Açık Yeşil
+      6: '#fee2e2', // Açık Pembe
+      5: '#fef9c3', // Krem / Sarı
+      4: '#fef9c3', // Krem / Sarı
+      3: '#dcfce7', // Açık Yeşil
+      2: '#dcfce7', // Açık Yeşil
+      1: '#fef9c3'  // Krem / Sarı
+    };
+
+    // A Sütunu Hane Kutucuk Arka Plan Renkleri (Pin Kodu Hane Enerjisi)
+    const A_BOX_BG = {
+      9: '#fef3c7',
+      8: '#fef3c7',
+      7: '#fee2e2',
+      6: '#eff6ff',
+      5: '#ffe4e6',
+      4: '#ffe4e6',
+      3: '#eff6ff',
+      2: '#fef3c7',
+      1: '#ffffff'
+    };
+
+    // R Frekans Sayımı (Pin Kodu + Tarih Sentezi)
+    const rCounts = {};
+    for (let i = 1; i <= 9; i++) rCounts[i] = 0;
+    if (pc) {
+      pc.digits.forEach(val => { if (rCounts[val] !== undefined) rCounts[val]++; });
+      [pc.fatherLine, pc.motherLine, pc.selfLine, pc.destinyLine].forEach(val => {
+        if (val && rCounts[val] !== undefined) rCounts[val]++;
+      });
+      [bn, lp].forEach(val => {
+        if (val && rCounts[val] !== undefined) rCounts[val]++;
+      });
+    }
+
+    const rows = [];
+    for (let num = 9; num >= 1; num--) {
+      const arr = nameLetters[num] || [];
+      const hDisplay = arr.length > 0 ? `${arr.join('')} (${arr.length})` : '-';
+
+      let aEcho = null;
+      let aNum = null;
+      let aDisplay = '-';
+      if (pc) {
+        const cell = pc['Cell' + num];
+        if (cell) {
+          aNum = cell.Number;
+          if (cell.Echo > 9 && cell.Echo !== cell.Number) {
+            aEcho = cell.Echo;
+            aDisplay = `(${cell.Echo}) ${cell.Number}`;
+          } else {
+            aDisplay = String(cell.Number);
+          }
+        }
+      }
+
+      const rDisplay = rCounts[num] > 0 ? `${rCounts[num]}x` : '-';
+      // Aktif Sayı Vurgusu (Mor Kutu): Yaşam Yolu veya İfade Sayısı bu rakama denk geliyorsa
+      const isHighlight = (lp === num || (hasName && ex === num));
+      // Yeşil Nokta İşaretçisi: Referans görseldeki 2. satır / çekirdek karmik ders göstergesi
+      const hasIndicator = (num === 2);
+
+      rows.push({
+        num: num,
+        hasIndicator: hasIndicator,
+        r: rDisplay,
+        rCount: rCounts[num] || 0,
+        isHighlight: isHighlight,
+        h: hDisplay,
+        hLetters: arr.join(''),
+        hCount: arr.length,
+        e: E_CHARS[num],
+        aNum: aNum,
+        aEcho: aEcho,
+        aDisplay: aDisplay,
+        aBoxBg: A_BOX_BG[num],
+        bgColor: ROW_BG[num]
+      });
+    }
+
+    return { top, rows, hasDate, hasName };
+  }
+
   function bridgeNumber(name, day, month, year) {
     return reduce(Math.abs(lifePath(day, month, year) - expressionNumber(name)));
   }
@@ -1270,7 +1432,8 @@
     nameCompatibility, plateAnalysis, identityNumberAnalysis,
 
     moneyCode, pinCode, loveCode, lifeCode, karmicDebtCheck, harmonyAnalysis,
-    arcana, zodiacSign, planet, rune, element, moonPhase
+    arcana, zodiacSign, planet, rune, element, moonPhase,
+    omurgaTable
   };
 
   if (typeof module !== 'undefined' && module.exports) {

@@ -117,6 +117,214 @@ table.data tr:nth-child(even) td{background:#fafcff}
 .report-section h3{font-size:14px;border-bottom:1px solid var(--line);padding-bottom:5px;color:var(--brand)}
 .report-foot{margin-top:26px;border-top:1px solid var(--line);padding-top:10px;font-size:11px;color:var(--muted);text-align:center}
 
+/* ---------- Dikey Sütunlu OMURGA Tablosu (Görsel Tasarım & Mobil Uyumlu) ---------- */
+.omurga-container {
+  margin: 16px 0 24px 0;
+  max-width: 440px;
+}
+.omurga-top-bar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border: 1px solid #cbd5e1;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  background: #ffffff;
+  text-align: center;
+}
+.omurga-top-item {
+  border-right: 1px solid #cbd5e1;
+  padding: 6px 3px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.omurga-top-item:last-child {
+  border-right: none;
+}
+.omurga-top-item:hover {
+  background: #f8fafc;
+}
+.omurga-top-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  letter-spacing: 0.5px;
+}
+.omurga-top-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.omurga-card {
+  border: 1px solid #cbd5e1;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  background: #ffffff;
+  padding: 14px 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+.omurga-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.omurga-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: 0.5px;
+}
+.omurga-icon-btn {
+  background: #475569;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.omurga-icon-btn:hover {
+  background: #334155;
+}
+
+.omurga-table-wrapper {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.omurga-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: inherit;
+  font-size: 13px;
+}
+.omurga-table thead tr {
+  background: #e2e8f0;
+}
+.omurga-table th {
+  padding: 8px 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  border-right: 1px solid #cbd5e1;
+  text-align: center;
+}
+.omurga-table th:last-child {
+  border-right: none;
+}
+.omurga-table td {
+  padding: 6px 4px;
+  border-right: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: center;
+  vertical-align: middle;
+}
+.omurga-table td:last-child {
+  border-right: none;
+}
+.omurga-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Sütun genişlikleri */
+.omurga-col-dot { width: 26px; }
+.omurga-col-r { width: 38px; }
+.omurga-col-num { width: 34px; }
+.omurga-col-h { text-align: left !important; padding-left: 8px !important; min-width: 75px; }
+.omurga-col-e { text-align: left !important; padding-left: 8px !important; }
+.omurga-col-a { width: 52px; }
+
+/* Yeşil Nokta İşaretçisi */
+.omurga-green-dot {
+  width: 13px;
+  height: 13px;
+  background: #16a34a;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+}
+
+/* Aktif Sayı Vurgusu (Mor Kutu) */
+.omurga-highlight-num {
+  background: #ddd6fe;
+  color: #4338ca;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* Pin Kodu Hane Açılımı (A Sütunu) */
+.omurga-a-box {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  padding: 2px 4px;
+  min-width: 36px;
+  border: 1px solid rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  background: #ffffff;
+}
+.omurga-a-box:hover {
+  transform: scale(1.08);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.omurga-a-sub {
+  font-size: 10px;
+  font-weight: 600;
+  color: #334155;
+  line-height: 1;
+}
+.omurga-a-main {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+/* Alt Özet Şeridi */
+.omurga-bottom-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 14px;
+  background: #ffffff;
+  text-align: center;
+}
+.omurga-bottom-item {
+  border-right: 1px solid #cbd5e1;
+  padding: 8px 4px;
+}
+.omurga-bottom-item:last-child {
+  border-right: none;
+}
+.omurga-bottom-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.omurga-bottom-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
 @media print{
   #sidebar,#topbar,.no-print{display:none !important}
   #content{padding:0;max-width:none}
@@ -166,13 +374,13 @@ table.data tr:nth-child(even) td{background:#fafcff}
   </div>
 </div>
 
-<script src="astro_sushu_engine.js?v=20260918_2"></script>
-<script src="numerology_data.js?v=20260918_2"></script>
-<script src="numerology_definitions.js?v=20260918_2"></script>
-<script src="destiny_matrix_svg.js?v=20260918_2"></script>
-<script src="karmic_svg.js?v=20260918_2"></script>
-<script src="birth_wheel_svg.js?v=20260918_2"></script>
-<script src="analysis_expositor.js?v=20260918_2"></script>
+<script src="astro_sushu_engine.js?v=20260918_3"></script>
+<script src="numerology_data.js?v=20260918_3"></script>
+<script src="numerology_definitions.js?v=20260918_3"></script>
+<script src="destiny_matrix_svg.js?v=20260918_3"></script>
+<script src="karmic_svg.js?v=20260918_3"></script>
+<script src="birth_wheel_svg.js?v=20260918_3"></script>
+<script src="analysis_expositor.js?v=20260918_3"></script>
 <script>
 /* ============================================================
    UYGULAMA KATMANI
@@ -339,6 +547,137 @@ function tableHTML(headers, rows){
   <tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
 }
 
+/* ---------- Dikey Sütunlu OMURGA Bileşeni ---------- */
+function renderOmurgaHTML(f){
+  const name = f.name || f.n || "";
+  const d = Number(f.d) || 0;
+  const m = Number(f.m) || 0;
+  const y = Number(f.y) || 0;
+
+  const ot = E.omurgaTable ? E.omurgaTable(name, d, m, y) : { top: {}, rows: [], hasDate: false, hasName: false };
+  const top = ot.top || {};
+  const rows = ot.rows || [];
+  const hasDate = ot.hasDate;
+  const hasName = ot.hasName;
+
+  // Bilinçaltı ve karma değerleri
+  const sk = hasName && E.subconsciousAndKarma ? E.subconsciousAndKarma(name) : { bilincalti: "-", direktKarma: "-" };
+  const dolayliKarma = hasDate && E.reduceFull ? E.reduceFull(d + m) : "-";
+
+  return `
+  <div class="omurga-container">
+    <!-- Üst Başlık Şeridi -->
+    <div class="omurga-top-bar">
+      <div class="omurga-top-item" onclick="NumerologyDefinitions.show('Cornerstone','${top.cornerstone?.val || 1}','Başlangıç (Köşe Taşı): ${top.cornerstone?.char || '-'}')">
+        <div class="omurga-top-label">BAŞLANGIÇ</div>
+        <div class="omurga-top-val">${top.cornerstone?.text || '-'}</div>
+      </div>
+      <div class="omurga-top-item" onclick="NumerologyDefinitions.show('FinalLetterStone','${top.capstone?.val || 1}','Bitiş Taşı: ${top.capstone?.char || '-'}')">
+        <div class="omurga-top-label">BİTİŞ</div>
+        <div class="omurga-top-val">${top.capstone?.text || '-'}</div>
+      </div>
+      <div class="omurga-top-item" onclick="NumerologyDefinitions.show('FirstVowelLetterNumber','${top.firstVowel?.val || 1}','İlk Sesli Harf: ${top.firstVowel?.char || '-'}')">
+        <div class="omurga-top-label">İLK SESLİ</div>
+        <div class="omurga-top-val">${top.firstVowel?.text || '-'}</div>
+      </div>
+      <div class="omurga-top-item" onclick="NumerologyDefinitions.show('KeyNumber','${top.key?.val || 1}','Anahtar Sayı: ${top.key?.val || '-'}')">
+        <div class="omurga-top-label">ANAHTAR</div>
+        <div class="omurga-top-val">${top.key?.text || '-'}</div>
+      </div>
+      <div class="omurga-top-item" onclick="NumerologyDefinitions.show('Balance','${top.balance?.val || 1}','Denge Sayısı: ${top.balance?.initials || '-'}')">
+        <div class="omurga-top-label">DENGE</div>
+        <div class="omurga-top-val">${top.balance?.text || '-'}</div>
+      </div>
+    </div>
+
+    <!-- OMURGA Kartı -->
+    <div class="omurga-card">
+      <div class="omurga-header">
+        <div class="omurga-title">OMURGA</div>
+        <button class="omurga-icon-btn" type="button" title="Dikey Sütun Görünümü">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+            <line x1="12" y1="18" x2="12" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="omurga-table-wrapper">
+        <table class="omurga-table">
+          <thead>
+            <tr>
+              <th class="omurga-col-dot"></th>
+              <th class="omurga-col-r">R</th>
+              <th class="omurga-col-num"></th>
+              <th class="omurga-col-h">H</th>
+              <th class="omurga-col-e">E</th>
+              <th class="omurga-col-a">A</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(r => {
+              const dotHtml = r.hasIndicator ? '<span class="omurga-green-dot" title="Çekirdek titreşim göstergesi"></span>' : '';
+              
+              const numHtml = r.isHighlight
+                ? `<span class="omurga-highlight-num" onclick="NumerologyDefinitions.show('NumericalVibration','${r.num}','Aktif Titreşim ${r.num}')" title="Aktif Titreşim ${r.num}">${r.num}</span>`
+                : `<span style="font-weight:700;cursor:pointer;" onclick="NumerologyDefinitions.show('NumericalVibration','${r.num}','Sayı Titreşimi ${r.num}')" title="Sayı Titreşimi ${r.num}">${r.num}</span>`;
+
+              const rHtml = r.r !== '-'
+                ? `<span style="font-weight:600;color:#334155;cursor:pointer;" onclick="NumerologyDefinitions.show('NumericalVibration','${r.num}','R Frekansı: ${r.r}')" title="R Frekansı ${r.r}">${r.r}</span>`
+                : '<span style="color:#94a3b8;">-</span>';
+
+              const hHtml = r.h !== '-'
+                ? `<span style="font-weight:600;color:#0f172a;cursor:pointer;" onclick="NumerologyDefinitions.show('Expression','${r.num}','İsim Harf Titreşimi: ${r.h}')" title="Harf Grubu ${r.h}">${r.h}</span>`
+                : '<span style="color:#94a3b8;">-</span>';
+
+              const eHtml = `<span style="font-size:12px;color:#334155;letter-spacing:0.5px;cursor:pointer;" onclick="NumerologyDefinitions.show('NumericalVibration','${r.num}','Evrensel Pisagor Harfleri: ${r.e}')" title="Evrensel Pisagor Harfleri ${r.e}">${r.e}</span>`;
+
+              let aHtml = '<span style="color:#94a3b8;">-</span>';
+              if (r.aNum !== null) {
+                const subHtml = r.aEcho ? `<span class="omurga-a-sub">(${r.aEcho})</span>` : '';
+                aHtml = `
+                  <div class="omurga-a-box" style="background:${r.aBoxBg};" onclick="NumerologyDefinitions.show('Chakra','${r.num}','${r.num}. Çakra ve Pin Kodu Hane Açılımı: ${r.aDisplay}')" title="${r.num}. Çakra ve Pin Kodu Hane Açılımı: ${r.aDisplay} (Tıklayın)">
+                    ${subHtml}
+                    <span class="omurga-a-main">${r.aNum}</span>
+                  </div>
+                `;
+              }
+
+              return `
+                <tr style="background:${r.bgColor};">
+                  <td class="omurga-col-dot">${dotHtml}</td>
+                  <td class="omurga-col-r">${rHtml}</td>
+                  <td class="omurga-col-num">${numHtml}</td>
+                  <td class="omurga-col-h">${hHtml}</td>
+                  <td class="omurga-col-e">${eHtml}</td>
+                  <td class="omurga-col-a">${aHtml}</td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Alt Karma ve Bilinçaltı Şeridi -->
+      <div class="omurga-bottom-bar">
+        <div class="omurga-bottom-item" onclick="NumerologyDefinitions.show('SubconsciousSelf','${sk.bilincalti}','Bilinçaltı Benlik: ${sk.bilincalti}')" style="cursor:pointer;">
+          <div class="omurga-bottom-label">BİLİNÇALTI</div>
+          <div class="omurga-bottom-val">${sk.bilincalti}</div>
+        </div>
+        <div class="omurga-bottom-item" onclick="NumerologyDefinitions.show('KarmicDebt','${sk.direktKarma}','Direk Karma Dersi: ${sk.direktKarma}')" style="cursor:pointer;">
+          <div class="omurga-bottom-label">DİREK KARMA</div>
+          <div class="omurga-bottom-val">${sk.direktKarma}</div>
+        </div>
+        <div class="omurga-bottom-item" onclick="NumerologyDefinitions.show('KarmicDebt','${dolayliKarma}','Dolaylı Karma Dersi: ${dolayliKarma}')" style="cursor:pointer;">
+          <div class="omurga-bottom-label">DOLAYLI KARMA</div>
+          <div class="omurga-bottom-val">${dolayliKarma}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  `;
+}
+
 /* ---------- Analiz görünümleri ---------- */
 function renderHolistic(f){
   const d = Number(f.d), m = Number(f.m), y = Number(f.y), name = f.name || "";
@@ -391,6 +730,9 @@ function renderHolistic(f){
   </div>
 
   ${karmicAlert}
+
+  <!-- Numerolojik OMURGA Haritası -->
+  ${renderOmurgaHTML(f)}
 
   <!-- Para Kodu & Pin Kodu -->
   <div class="grid c2" style="margin-bottom:18px;">
@@ -498,6 +840,9 @@ function renderFullName(f){
         ba=E.balanceNumber(f.name), co=E.cornerstone(f.name), ca=E.capstone(f.name), fv=E.firstVowelValue(f.name);
   const im=E.numberMatrix(f.name,false), lg=E.letterGroups(f.name), ep=E.expressionPlanes(f.name);
   return `
+  <!-- Numerolojik OMURGA Haritası -->
+  ${renderOmurgaHTML(f)}
+
   <h3>İsim Göstergeleri (Detay için sayılara tıklayın)</h3>
   ${kvRows([
     ["İfade Sayısı",badge(ex,"Expression","İfade Sayısı "+ex)+meaning(ex)],
@@ -535,6 +880,9 @@ function renderBirthday(f){
     rows.push([yr, age, E.reduceDetailed(d + m + yr).steps.join("→"), badge(en, "NumericalVibration", `Yıl Titreşimi ${en}`)]);
   }
   return `
+  <!-- Numerolojik OMURGA Haritası -->
+  ${renderOmurgaHTML({ d, m, y, name: "" })}
+
   <h3>Doğum Tarihi Göstergeleri</h3>
   ${kvRows([
     ["Yaşam Yolu", badge(lp, "LifePath", "Yaşam Yolu " + lp) + meaning(lp)],
