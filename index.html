@@ -74,8 +74,10 @@ button{font-family:inherit;cursor:pointer}
 .kv .k{color:var(--muted)}
 .kv .v{font-weight:600}
 
-.num-badge{display:inline-block;min-width:34px;text-align:center;background:#eaf1fd;color:var(--brand);border-radius:8px;padding:3px 8px;font-weight:700}
-.num-badge.master{background:#fff3d6;color:#9a6b00}
+.num-badge{display:inline-block;min-width:34px;text-align:center;background:#eaf1fd;color:var(--brand);border-radius:8px;padding:3px 8px;font-weight:700;cursor:pointer;transition:all 0.15s ease}
+.num-badge:hover{transform:translateY(-2px);box-shadow:0 3px 8px rgba(47,85,151,0.25)}
+.num-badge.master{background:#fff3d6;color:#9a6b00;border:1px solid #f6d899}
+.num-badge.karmic{background:#fee2e2;color:#b91c1c;border:1px solid #f87171}
 
 table.data{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
 table.data th,table.data td{border:1px solid var(--line);padding:6px 9px;text-align:left}
@@ -159,7 +161,13 @@ table.data tr:nth-child(even) td{background:#fafcff}
   </div>
 </div>
 
-<script src="astro_sushu_engine.js?v=3"></script>
+<script src="astro_sushu_engine.js?v=4"></script>
+<script src="numerology_data.js"></script>
+<script src="numerology_definitions.js"></script>
+<script src="destiny_matrix_svg.js"></script>
+<script src="karmic_svg.js"></script>
+<script src="birth_wheel_svg.js"></script>
+<script src="analysis_expositor.js"></script>
 <script>
 /* ============================================================
    UYGULAMA KATMANI
@@ -301,9 +309,16 @@ const MODULES = [
 const CAT_ORDER = ["Temel Analizler","Kişisel Döngüler","Evrensel Döngüler","Ekoller","Araçlar"];
 
 /* ---------- Yardımcı görünüm parçaları ---------- */
-function badge(n){
-  const master = E.MASTER_NUMBERS.has(Number(n));
-  return `<span class="num-badge${master?" master":""}">${n}</span>`;
+function badge(n, cat, title){
+  const num = Number(n);
+  const master = E.MASTER_NUMBERS.has(num);
+  const isKarmic = [13, 14, 16, 19].includes(num);
+  const cls = "num-badge" + (master ? " master" : "") + (isKarmic ? " karmic" : "");
+  if (cat) {
+    const safeTitle = String(title || cat).replace(/'/g, "\\'");
+    return `<span class="${cls}" onclick="NumerologyDefinitions.show('${cat}','${n}','${safeTitle}')" style="cursor:pointer;" title="${safeTitle} — Detay için tıklayın">${n}</span>`;
+  }
+  return `<span class="${cls}">${n}</span>`;
 }
 function kvRows(pairs){
   return `<div class="kv">${pairs.map(([k,v])=>`<span class="k">${esc(k)}</span><span class="v">${v}</span>`).join("")}</div>`;
@@ -322,39 +337,138 @@ function tableHTML(headers, rows){
 
 /* ---------- Analiz görünümleri ---------- */
 function renderHolistic(f){
-  const lp = E.lifePath(f.d,f.m,f.y), ex = E.expressionNumber(f.name),
-        su = E.soulUrgeNumber(f.name), pe = E.personalityNumber(f.name),
-        ma = E.maturityNumber(f.name,f.d,f.m,f.y), at = E.attitudeNumber(f.d,f.m),
-        ba = E.balanceNumber(f.name), co = E.cornerstone(f.name), ca = E.capstone(f.name),
-        fv = E.firstVowelValue(f.name), br = E.bridgeNumber(f.name,f.d,f.m,f.y);
-  const im = E.numberMatrix(f.name,false), dm = E.numberMatrix(`${f.d}${f.m}${f.y}`,true);
+  const d = Number(f.d), m = Number(f.m), y = Number(f.y), name = f.name || "";
+  const lp = E.lifePath(d, m, y), ex = E.expressionNumber(name),
+        su = E.soulUrgeNumber(name), pe = E.personalityNumber(name),
+        ma = E.maturityNumber(name, d, m, y), at = E.attitudeNumber(d, m),
+        ba = E.balanceNumber(name), co = E.cornerstone(name), ca = E.capstone(name),
+        fv = E.firstVowelValue(name), br = E.bridgeNumber(name, d, m, y);
+  const im = E.numberMatrix(name, false), dm = E.numberMatrix(`${d}${m}${y}`, true);
   const synth = {}; for(let i=1;i<=9;i++) synth[i]=(im.counts[i]||0)+(dm.counts[i]||0);
   const sm = { counts:synth, grid:[[3,6,9],[2,5,8],[1,4,7]].map(r=>r.map(v=>({sayi:v,adet:synth[v]}))) };
-  const lg = E.letterGroups(f.name), tc = E.transitionCycles(f.name, f.y);
-  const ep = E.expressionPlanes(f.name);
+  const lg = E.letterGroups(name), tc = E.transitionCycles(name, y);
+  const ep = E.expressionPlanes(name);
+
+  // Ezoterik & Ek Hesaplamalar
+  const mc = E.moneyCode(d, m, y);
+  const pc = E.pinCode(d, m, y);
+  const kDebts = E.karmicDebtCheck(d, m, y, name);
+  const zSign = E.zodiacSign(d, m);
+  const pl = E.planet(lp);
+  const rn = E.rune(lp);
+  const el = E.element(d, m, y);
+  const mp = E.moonPhase(d, m, y);
+  const pnc = E.pinnaclesAndChallenges(d, m, y);
+
+  window._lastHolisticAnalysis = { lp, ex, su, pe, ma, at, ba, co, ca, fv, br, mc, pc, kDebts, im, dm, sm, lg, tc, ep, p: pnc, zSign, pl, rn, el, mp };
+
+  const karmicAlert = kDebts.length ? `
+    <div style="margin-bottom:18px;padding:14px 18px;background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;display:flex;align-items:center;gap:14px;">
+      <span style="font-size:26px;">⚠️</span>
+      <div>
+        <strong style="color:#991b1b;font-size:14px;">Karmik Borç Uyarısı:</strong>
+        <div style="margin-top:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          ${kDebts.map(kd => badge(kd.code, 'KarmicDebt', `Karmik Borç ${kd.code}`)).join(' ')}
+          <span style="font-size:12px;color:#7f1d1d;">Ruhsal sınav ve arınma reçetesi için sayılara tıklayın.</span>
+        </div>
+      </div>
+    </div>` : '';
 
   return `
-  <h3>Temel Göstergeler</h3>
-  ${kvRows([
-    ["Yaşam Yolu", badge(lp)+meaning(lp)],
-    ["İfade Sayısı", badge(ex)+meaning(ex)],
-    ["Kalp Arzusu (Ruh)", badge(su)+meaning(su)],
-    ["Kişilik Sayısı", badge(pe)+meaning(pe)],
-    ["Olgunluk Sayısı", badge(ma)],
-    ["Tutum Sayısı", badge(at)],
-    ["Denge Sayısı", badge(ba)],
-    ["Köşe Taşı", badge(co)],["Bitiş Taşı", badge(ca)],
-    ["İlk Sesli Harf", badge(fv)],["Köprü Sayısı", badge(br)],
+  <!-- Altın Rapor Butonu -->
+  <div style="margin-bottom:20px;padding:16px 20px;background:linear-gradient(135deg,#fcf8ec,#f7edd0);border:1px solid #e8d08c;border-radius:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;box-shadow:0 2px 6px rgba(203,161,53,0.15);">
+    <div>
+      <h4 style="margin:0 0 4px;color:#784d00;font-size:16px;">📜 24 Bölümlük Bütünsel Danışan Dosyası</h4>
+      <p style="margin:0;font-size:12px;color:#8f650e">A4 PDF baskıya ve danışan sunumuna hazır profesyonel numeroloji dosyası.</p>
+    </div>
+    <button class="btn" onclick="AnalysisExpositor.openReportWindow({name:'${esc(name)}',d:${d},m:${m},y:${y}}, window._lastHolisticAnalysis)" style="background:linear-gradient(135deg,#cba135,#9d7618);color:#fff;border:0;padding:10px 22px;border-radius:8px;font-weight:700;box-shadow:0 4px 12px rgba(203,161,53,0.3);cursor:pointer;font-size:13px;">
+      Dosyayı Yeni Pencerede Aç (A4 PDF)
+    </button>
+  </div>
+
+  ${karmicAlert}
+
+  <!-- Para Kodu & Pin Kodu -->
+  <div class="grid c2" style="margin-bottom:18px;">
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <h4 style="margin:0;color:#1e293b;font-size:14px;">💰 Para Kodu</h4>
+        <span style="font-size:18px;font-weight:800;color:#1e8e5a;letter-spacing:1px;">${mc.code}</span>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:10px;">
+        ${mc.digits.map((num, i) => badge(num, 'MoneyCode', `Para Kodu Hane ${i+1}: ${num}`)).join(' ')}
+      </div>
+      <div style="font-size:12px;color:#64748b;">
+        <b>Yankı (Echo):</b> ${mc.echo} &nbsp;|&nbsp; <b>Sayı Titreşimi:</b> ${badge(mc.number, 'NumericalVibration', 'Para Kodu Sayı Titreşimi')}
+      </div>
+    </div>
+
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <h4 style="margin:0;color:#1e293b;font-size:14px;">🔢 Pin Kodu</h4>
+        <span style="font-size:15px;font-weight:700;color:#2f5597;">${pc.pinStr}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px;font-size:12px;text-align:center;">
+        <div style="background:#fff;padding:4px;border-radius:6px;border:1px solid #e2e8f0;">H1: <b>${pc.c1}</b></div>
+        <div style="background:#fff;padding:4px;border-radius:6px;border:1px solid #e2e8f0;">H2: <b>${pc.c2}</b></div>
+        <div style="background:#fff;padding:4px;border-radius:6px;border:1px solid #e2e8f0;">H3: <b>${pc.c3}</b></div>
+        <div style="background:#fff;padding:4px;border-radius:6px;border:1px solid #e2e8f0;">H4: <b>${pc.c4}</b></div>
+        <div style="background:#fff;padding:4px;border-radius:6px;border:1px solid #e2e8f0;">H5: <b>${pc.c5}</b></div>
+        <div style="background:#fff;padding:4px;border-radius:6px;border:1px solid #e2e8f0;">H6: <b>${pc.c6}</b></div>
+        <div style="background:#fff;padding:4px;border-radius:6px;border:1px solid #e2e8f0;">H7: <b>${pc.c7}</b></div>
+        <div style="background:#fff;padding:4px;border-radius:6px;border:1px solid #e2e8f0;">H8: <b>${pc.c8}</b></div>
+        <div style="background:#fff;padding:4px;border-radius:6px;border:1px solid #e2e8f0;">H9: <b>${pc.c9}</b></div>
+      </div>
+      <div style="font-size:11px;color:#64748b;line-height:1.5;">
+        <b>Baba Çizgisi:</b> ${pc.fatherLine} | <b>Anne Çizgisi:</b> ${pc.motherLine}<br>
+        <b>Ben Çizgisi:</b> ${pc.selfLine} | <b>Kader Çizgisi:</b> ${pc.destinyLine}
+      </div>
+    </div>
+  </div>
+
+  <!-- Astroloji ve Ezoterik Omurga -->
+  <h3>Ezoterik &amp; Kozmik Omurga</h3>
+  ${tableHTML(["Gösterge","Değer","Sembol / Bilgi"],[
+    ["Güneş Burcu", zSign.name, zSign.symbol + " (" + zSign.dates + ")"],
+    ["Yönetici Gezegen", pl.name, pl.symbol + " · " + pl.description],
+    ["Futhark Rünü", rn.name, `<span style="font-size:18px;font-weight:700;color:#2f5597">${rn.symbol}</span> · ${rn.meaning}`],
+    ["Baskın Element", el.name, `<span style="color:${el.color};font-weight:700;">${el.symbol} ${el.name}</span> · ${el.description}`],
+    ["Ay Fazı", mp.phase, mp.meaning]
   ])}
+
+  <!-- Tirol Çarkı (5 Yön & Element Dağılımı) -->
+  <h3>Tirol Doğum Çarkı</h3>
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin:10px 0 20px;text-align:center;">
+    <div id="holisticTirolBox"></div>
+    <div style="font-size:12px;color:#64748b;margin-top:8px;">Kuzey (Su 1,6), Güney (Ateş 2,7), Doğu (Ağaç 3,8), Batı (Metal 4,9), Merkez (Toprak 0,5)</div>
+  </div>
+
+  <h3>Temel Göstergeler (Detay için sayılara tıklayın)</h3>
+  ${kvRows([
+    ["Yaşam Yolu", badge(lp, "LifePath", "Yaşam Yolu " + lp) + meaning(lp)],
+    ["İfade Sayısı", badge(ex, "Expression", "İfade Sayısı " + ex) + meaning(ex)],
+    ["Kalp Arzusu (Ruh)", badge(su, "HeartDesire", "Kalp Arzusu " + su) + meaning(su)],
+    ["Kişilik Sayısı", badge(pe, "Personality", "Kişilik Sayısı " + pe) + meaning(pe)],
+    ["Olgunluk Sayısı", badge(ma, "Maturity", "Olgunluk Sayısı " + ma)],
+    ["Tutum Sayısı", badge(at, "Attitude", "Tutum Sayısı " + at)],
+    ["Denge Sayısı", badge(ba, "Balance", "Denge Sayısı " + ba)],
+    ["Köşe Taşı", badge(co, "Cornerstone", "Köşe Taşı")],
+    ["Bitiş Taşı", badge(ca, "FinalLetterStone", "Bitiş Taşı")],
+    ["İlk Sesli Harf", badge(fv, "FirstVowelLetterNumber", "İlk Sesli Harf")],
+    ["Köprü Sayısı", badge(br, "Bridge", "Köprü Sayısı " + br)],
+  ])}
+
   <h3>İsim Rakamsal Matrisi</h3>${matrixHTML(im)}
   <h3>Doğum Tarihi Rakamsal Matrisi</h3>${matrixHTML(dm)}
   <h3>Sentez Rakamsal Matrisi</h3>${matrixHTML(sm)}
+
   <h3>Harf Grupları</h3>
   ${tableHTML(["Grup","Harfler","Toplam"],[
     ["Düz Çizgili",lg.duz.join(", ")||"-",lg.duz.length],
     ["Eğri Çizgili",lg.egri.join(", ")||"-",lg.egri.length],
     ["Kavisli + Düz",lg.kavisli.join(", ")||"-",lg.kavisli.length],
   ])}
+
   <h3>İfade Düzlemleri</h3>
   ${tableHTML(["Düzlem","Esinlenmiş","İkili","Dengeli"],[
     ["Zihinsel",ep.zihinsel.esinlenmiş.join(", ")||"-",ep.zihinsel.ikili.join(", ")||"-",ep.zihinsel.dengeli.join(", ")||"-"],
@@ -362,6 +476,14 @@ function renderHolistic(f){
     ["Duygusal",ep.duygusal.esinlenmiş.join(", ")||"-",ep.duygusal.ikili.join(", ")||"-",ep.duygusal.dengeli.join(", ")||"-"],
     ["Sezgisel",ep.sezgisel.esinlenmiş.join(", ")||"-",ep.sezgisel.ikili.join(", ")||"-",ep.sezgisel.dengeli.join(", ")||"-"],
   ])}
+
+  <h3>Zirveler (Pinnacles) ve Meydan Okumalar</h3>
+  ${tableHTML(["Dönem","Zirve","Meydan Okuma"], (pnc.zirveler||[]).map((z,i)=>[
+    z.yas!==undefined ? z.yas : ("Dönem "+(i+1)),
+    badge(z.deger, "Attitude", "Zirve " + z.deger),
+    badge((pnc.zorluklar[i]||{}).deger, "EarlyLesson", "Meydan Okuma")
+  ]))}
+
   <h3>Geçiş Döngüleri</h3>
   ${tableHTML(["Harf","Sayı","Başlangıç","Bitiş"], tc.slice(0,18).map(t=>[t.harf,badge(t.sayi),t.baslangic,t.bitis]))}
   ${tc.length>18?`<div class="empty">… toplam ${tc.length} geçiş döngüsü</div>`:""}
@@ -370,45 +492,96 @@ function renderHolistic(f){
 function renderFullName(f){
   const ex=E.expressionNumber(f.name), su=E.soulUrgeNumber(f.name), pe=E.personalityNumber(f.name),
         ba=E.balanceNumber(f.name), co=E.cornerstone(f.name), ca=E.capstone(f.name), fv=E.firstVowelValue(f.name);
-  const im=E.numberMatrix(f.name,false), lg=E.letterGroups(f.name);
+  const im=E.numberMatrix(f.name,false), lg=E.letterGroups(f.name), ep=E.expressionPlanes(f.name);
   return `
-  <h3>İsim Göstergeleri</h3>
-  ${kvRows([["İfade Sayısı",badge(ex)+meaning(ex)],["Kalp Arzusu",badge(su)+meaning(su)],
-    ["Kişilik",badge(pe)+meaning(pe)],["Denge",badge(ba)],["Köşe Taşı",badge(co)],
-    ["Bitiş Taşı",badge(ca)],["İlk Sesli Harf",badge(fv)]])}
+  <h3>İsim Göstergeleri (Detay için sayılara tıklayın)</h3>
+  ${kvRows([
+    ["İfade Sayısı",badge(ex,"Expression","İfade Sayısı "+ex)+meaning(ex)],
+    ["Kalp Arzusu",badge(su,"HeartDesire","Kalp Arzusu "+su)+meaning(su)],
+    ["Kişilik",badge(pe,"Personality","Kişilik "+pe)+meaning(pe)],
+    ["Denge",badge(ba,"Balance","Denge "+ba)],
+    ["Köşe Taşı",badge(co,"Cornerstone","Köşe Taşı")],
+    ["Bitiş Taşı",badge(ca,"FinalLetterStone","Bitiş Taşı")],
+    ["İlk Sesli Harf",badge(fv,"FirstVowelLetterNumber","İlk Sesli Harf")]
+  ])}
   <h3>İsim Rakamsal Matrisi</h3>${matrixHTML(im)}
   <h3>Harf Grupları</h3>
   ${tableHTML(["Grup","Harfler","Toplam"],[
     ["Düz Çizgili",lg.duz.join(", ")||"-",lg.duz.length],
     ["Eğri Çizgili",lg.egri.join(", ")||"-",lg.egri.length],
     ["Kavisli + Düz",lg.kavisli.join(", ")||"-",lg.kavisli.length]])}
+  <h3>İfade Düzlemleri</h3>
+  ${tableHTML(["Düzlem","Esinlenmiş","İkili","Dengeli"],[
+    ["Zihinsel",ep.zihinsel.esinlenmiş.join(", ")||"-",ep.zihinsel.ikili.join(", ")||"-",ep.zihinsel.dengeli.join(", ")||"-"],
+    ["Fiziksel",ep.fiziksel.esinlenmiş.join(", ")||"-",ep.fiziksel.ikili.join(", ")||"-",ep.fiziksel.dengeli.join(", ")||"-"],
+    ["Duygusal",ep.duygusal.esinlenmiş.join(", ")||"-",ep.duygusal.ikili.join(", ")||"-",ep.duygusal.dengeli.join(", ")||"-"],
+    ["Sezgisel",ep.sezgisel.esinlenmiş.join(", ")||"-",ep.sezgisel.ikili.join(", ")||"-",ep.sezgisel.dengeli.join(", ")||"-"],
+  ])}
   `;
 }
 function renderBirthday(f){
-  const lp=E.lifePath(f.d,f.m,f.y), bn=E.birthdayNumber(f.d), at=E.attitudeNumber(f.d,f.m);
-  const start=Number(f.y), rows=[];
-  for(let yr=start, age=0; yr<=start+100; yr++, age++){
-    const kab = E.reduceNumber((f.d+f.m) + yr);
-    const en  = E.reduceNumber(yr);
-    rows.push([yr,age, E.reduceDetailed(f.d+f.m+yr).steps.join("→"), badge(en)]);
+  const d = Number(f.d), m = Number(f.m), y = Number(f.y);
+  const lp = E.lifePath(d, m, y), bn = E.birthdayNumber(d), at = E.attitudeNumber(d, m);
+  const mc = E.moneyCode(d, m, y);
+  const pc = E.pinCode(d, m, y);
+  const start = y, rows = [];
+  for(let yr = start, age = 0; yr <= start + 100; yr++, age++){
+    const kab = E.reduceNumber((d + m) + yr);
+    const en = E.reduceNumber(yr);
+    rows.push([yr, age, E.reduceDetailed(d + m + yr).steps.join("→"), badge(en, "NumericalVibration", `Yıl Titreşimi ${en}`)]);
   }
   return `
-  <h3>Temel Göstergeler</h3>
-  ${kvRows([["Yaşam Yolu",badge(lp)+meaning(lp)],["Doğum Günü Sayısı",badge(bn)],
-    ["Tutum Sayısı",badge(at)]])}
+  <h3>Doğum Tarihi Göstergeleri</h3>
+  ${kvRows([
+    ["Yaşam Yolu", badge(lp, "LifePath", "Yaşam Yolu " + lp) + meaning(lp)],
+    ["Doğum Günü Sayısı", badge(bn, "Attitude", "Doğum Günü " + bn)],
+    ["Tutum Sayısı", badge(at, "Attitude", "Tutum Sayısı " + at)],
+    ["Doğum Günü Arkanası", badge(E.arcana(d), "Arcana", `Arkana ${E.arcana(d)}`)],
+    ["Para Kodu", `<span style="font-weight:700;color:#1e8e5a">${mc.code}</span> (Yankı: ${mc.echo})`],
+    ["Pin Kodu", `<span style="font-weight:700;color:#2f5597">${pc.pinStr}</span>`]
+  ])}
   <h3>Yıllara Göre Dağılım</h3>
   ${tableHTML(["Yıl","Yaş","Kabala","Enerji"], rows)}
   `;
 }
 function renderCompare(f){
-  const a={name:f.n1,lp:E.lifePath(f.d1,f.m1,f.y1),ex:E.expressionNumber(f.n1),su:E.soulUrgeNumber(f.n1),pe:E.personalityNumber(f.n1)};
-  const b={name:f.n2,lp:E.lifePath(f.d2,f.m2,f.y2),ex:E.expressionNumber(f.n2),su:E.soulUrgeNumber(f.n2),pe:E.personalityNumber(f.n2)};
-  const rows=[["Yaşam Yolu",a.lp,b.lp,a.lp===b.lp?"Uyumlu":"Farklı"],
-    ["İfade",a.ex,b.ex,a.ex===b.ex?"Uyumlu":"Farklı"],
-    ["Kalp Arzusu",a.su,b.su,a.su===b.su?"Uyumlu":"Farklı"],
-    ["Kişilik",a.pe,b.pe,a.pe===b.pe?"Uyumlu":"Farklı"]];
-  return `<h3>${esc(a.name||"1. Kişi")} &amp; ${esc(b.name||"2. Kişi")}</h3>
-  ${tableHTML(["Gösterge","1. Kişi","2. Kişi","Durum"],rows.map(r=>[r[0],badge(r[1]),badge(r[2]),r[3]]))}`;
+  const a = { d: f.d1, m: f.m1, y: f.y1, name: f.n1 };
+  const b = { d: f.d2, m: f.m2, y: f.y2, name: f.n2 };
+  const h = E.harmonyAnalysis(a, b);
+  const aLp = E.lifePath(f.d1, f.m1, f.y1), bLp = E.lifePath(f.d2, f.m2, f.y2);
+  const aEx = E.expressionNumber(f.n1), bEx = E.expressionNumber(f.n2);
+  const aSu = E.soulUrgeNumber(f.n1), bSu = E.soulUrgeNumber(f.n2);
+  const aPe = E.personalityNumber(f.n1), bPe = E.personalityNumber(f.n2);
+  const aMc = E.moneyCode(f.d1, f.m1, f.y1), bMc = E.moneyCode(f.d2, f.m2, f.y2);
+  const aPc = E.pinCode(f.d1, f.m1, f.y1), bPc = E.pinCode(f.d2, f.m2, f.y2);
+
+  const rows = [
+    ["Yaşam Yolu", badge(aLp, "LifePath"), badge(bLp, "LifePath"), aLp === bLp ? "Tam Rezonans" : "Farklı"],
+    ["İfade", badge(aEx, "Expression"), badge(bEx, "Expression"), aEx === bEx ? "Aynı Enerji" : "Tamamlayıcı"],
+    ["Kalp Arzusu", badge(aSu, "HeartDesire"), badge(bSu, "HeartDesire"), aSu === bSu ? "Ortak Ruh" : "Farklı"],
+    ["Kişilik", badge(aPe, "Personality"), badge(bPe, "Personality"), aPe === bPe ? "Benzer Algı" : "Farklı"],
+    ["Para Kodu", aMc.code, bMc.code, aMc.code === bMc.code ? "Aynı Kod" : "Bireysel"],
+    ["Pin Kodu", aPc.pinStr, bPc.pinStr, "-"]
+  ];
+
+  return `
+  <h3>${esc(f.n1 || "1. Kişi")} &amp; ${esc(f.n2 || "2. Kişi")} — İlişki &amp; Sinerji Analizi</h3>
+  
+  <!-- Uyum Kartı -->
+  <div style="background:${h.bgcolor};color:${h.color};border:1px solid rgba(0,0,0,0.08);border-radius:12px;padding:20px;margin-bottom:20px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+      <h3 style="margin:0;color:inherit;border:0;padding:0;font-size:18px;">Uyum Tipi: ${h.type}</h3>
+      <div style="font-size:24px;font-weight:800;">%${h.score}</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.6);border-radius:20px;height:10px;overflow:hidden;margin-bottom:12px;">
+      <div style="background:currentColor;height:100%;width:${h.score}%;border-radius:20px;"></div>
+    </div>
+    <p style="margin:0;font-size:14px;line-height:1.7;">${h.analysis}</p>
+  </div>
+
+  <h3>Detaylı Gösterge Karşılaştırması</h3>
+  ${tableHTML(["Gösterge", esc(f.n1 || "1. Kişi"), esc(f.n2 || "2. Kişi"), "Dinamik"], rows)}
+  `;
 }
 function renderCompareName(f){
   const a=E.expressionNumber(f.n1), b=E.expressionNumber(f.n2);
@@ -516,26 +689,90 @@ function renderWheel(f){
   ${tableHTML(["Yıl","Çark Sayısı","Sonraki"],rows)}`;
 }
 function renderKarmic(f){
-  const im=E.numberMatrix(f.name,false), dm=E.numberMatrix(`${f.d}${f.m}${f.y}`,true);
-  const missingName=Object.entries(im.counts).filter(([k,v])=>v===0).map(([k])=>k);
-  const missingDate=Object.entries(dm.counts).filter(([k,v])=>v===0).map(([k])=>k);
-  const lp=E.lifePath(f.d,f.m,f.y);
-  return `<h3>Karma Analizi</h3>
-  ${kvRows([["Yaşam Yolu",badge(lp)],["Karmik Eksik (İsim)",missingName.join(", ")||"Yok"],
-    ["Karmik Eksik (Tarih)",missingDate.join(", ")||"Yok"]])}
-  <h3>İsim Matrisi</h3>${matrixHTML(im)}
-  <h3>Doğum Tarihi Matrisi</h3>${matrixHTML(dm)}`;
-}
-function renderDestinyMatrix(f){
-  const im=E.numberMatrix(f.name,false), dm=E.numberMatrix(`${f.d}${f.m}${f.y}`,true);
-  const synth={}; for(let i=1;i<=9;i++) synth[i]=(im.counts[i]||0)+(dm.counts[i]||0);
-  const sm={counts:synth,grid:[[3,6,9],[2,5,8],[1,4,7]].map(r=>r.map(v=>({sayi:v,adet:synth[v]})))};
-  const lp=E.lifePath(f.d,f.m,f.y), ex=E.expressionNumber(f.name);
-  return `<h3>Kader Matrisi</h3>
-  ${kvRows([["Yaşam Yolu",badge(lp)+meaning(lp)],["İfade",badge(ex)+meaning(ex)]])}
+  const d = Number(f.d), m = Number(f.m), y = Number(f.y), name = f.name || "";
+  const karmicData = E.karmicAnalysis(d, m, y, name);
+  const im = E.numberMatrix(name, false), dm = E.numberMatrix(`${d}${m}${y}`, true);
+  const missingName = Object.entries(im.counts).filter(([k,v])=>v===0).map(([k])=>k);
+  const missingDate = Object.entries(dm.counts).filter(([k,v])=>v===0).map(([k])=>k);
+  const lp = E.lifePath(d, m, y);
+  const kDebts = E.karmicDebtCheck(d, m, y, name);
+
+  return `
+  <h3>Ladini Karma Analizi (Çift-Üçgen Haritası)</h3>
+  <p class="desc">Kişilik ve Halef üçgenleri ile karmik düğüm noktaları. Düğümlere tıklayarak detaylı bilgi kartlarını inceleyebilirsiniz.</p>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin-bottom:20px;text-align:center;">
+    <div id="karmicSvgBox"></div>
+  </div>
+
+  <h3>Karmik Göstergeler &amp; Yollar</h3>
+  ${tableHTML(["Gösterge","Arkana","Açıklama"],[
+    ["Ruhsal Yol (Aks)", badge(karmicData.spiritualPath, "Arcana", "Ruhsal Yol"), "Ruhun bu yaşamda ilerlemesi gereken temel evrimsel hat."],
+    ["Başarı Yolu", badge(karmicData.successPath, "Arcana", "Başarı Yolu"), "Maddi ve manevi hedeflere ulaşmada açıcı anahtar arketip."],
+    ["Karmik Düğüm Noktası (Merkez)", badge(karmicData.karmicKnot, "Arcana", "Karmik Düğüm"), "Geçmişten taşınan ve bu yaşamda çözülmesi gereken kilit sınav."],
+    ["Kuyruk Karması (Geçmiş Yaşam)", karmicData.tailKarma.map(n => badge(n, "Arcana", "Kuyruk Arkanası")).join(" "), "Geçmiş enkarnasyonlardan getirilen alışkanlıklar ve gölge yanlar."],
+    ["Enkarnasyon Görevi", "-", karmicData.incarnationMission]
+  ])}
+
+  <h3>Karmik Borçlar</h3>
+  <div style="margin-bottom:16px;">
+    ${kDebts.length ? kDebts.map(kd => badge(kd.code, "KarmicDebt", `Karmik Borç ${kd.code}`)).join(" ") + " <span style='font-size:12px;color:#b91c1c;margin-left:8px;'>(Aktif borç var — detay için tıklayın)</span>" : "<span class='chip ok'>Karmik borç tespit edilmedi (Dengeli)</span>"}
+  </div>
+
+  <h3>Karmik Eksik Sayılar</h3>
+  ${kvRows([
+    ["İsimde Eksik Sayılar", missingName.length ? missingName.map(n => badge(n, "NumericalVibration")).join(" ") : "Tüm sayılar mevcut"],
+    ["Doğum Tarihinde Eksik", missingDate.length ? missingDate.map(n => badge(n, "NumericalVibration")).join(" ") : "Tüm sayılar mevcut"]
+  ])}
+
   <h3>İsim Matrisi</h3>${matrixHTML(im)}
   <h3>Doğum Tarihi Matrisi</h3>${matrixHTML(dm)}
-  <h3>Sentez Matrisi</h3>${matrixHTML(sm)}`;
+  `;
+}
+
+function renderDestinyMatrix(f){
+  const d = Number(f.d), m = Number(f.m), y = Number(f.y), name = f.name || "";
+  const dmData = E.destinyMatrix(d, m, y, name);
+  const im = E.numberMatrix(name, false), dm = E.numberMatrix(`${d}${m}${y}`, true);
+  const synth = {}; for(let i=1;i<=9;i++) synth[i]=(im.counts[i]||0)+(dm.counts[i]||0);
+  const sm = { counts:synth, grid:[[3,6,9],[2,5,8],[1,4,7]].map(r=>r.map(v=>({sayi:v,adet:synth[v]}))) };
+  const lp = E.lifePath(d, m, y), ex = E.expressionNumber(name);
+
+  const chakras = dmData.chakras || [];
+  const dest = dmData.destinations || {};
+
+  return `
+  <h3>22 Arcana Kader Matrisi (Oktagram Haritası)</h3>
+  <p class="desc">Natalia Ladini ekolü 22 Arkana oktagram haritası. Düğümlere tıklayarak ezoterik bilgi kartlarını açabilirsiniz.</p>
+  
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin-bottom:20px;text-align:center;">
+    <div id="destinyMatrixSvgBox"></div>
+  </div>
+
+  <h3>4 Temel Kadersel Yönelim (Destinations)</h3>
+  ${tableHTML(["Kader Seviyesi","Değer","Anlam &amp; Açılım"],[
+    ["Kişisel Kader (1. Dönem / 20-40 Yaş)", badge(dest.personal, "Arcana", "Kişisel Kader"), "Kendini keşfetme, ego ve ruh dengesini kurma arketipi."],
+    ["Sosyal Kader (2. Dönem / 40-60 Yaş)", badge(dest.social, "Arcana", "Sosyal Kader"), "Topluma ve soyuna aktarılan değer, sosyal rol."],
+    ["Ruhsal Kader (3. Dönem / 60+ Yaş)", badge(dest.spiritual, "Arcana", "Ruhsal Kader"), "Kişisel ve sosyal kaderin ilahi sentezi, ruhsal olgunluk."],
+    ["Gezegensel Kader (Genel Sentez)", badge(dest.planetary, "Arcana", "Gezegensel Kader"), "Evrensel planla hizalanma ve kolektif görevin arketipi."]
+  ])}
+
+  <h3>7 Çakra Enerji Matrisi</h3>
+  ${tableHTML(["Çakra","Fiziksel","Enerji","Duygusal"],[
+    ["7. Sahasrara (Taç)", badge(chakras[6]?.fiziksel, "Arcana"), badge(chakras[6]?.enerji, "Arcana"), badge(chakras[6]?.duygusal, "Arcana")],
+    ["6. Ajna (Üçüncü Göz)", badge(chakras[5]?.fiziksel, "Arcana"), badge(chakras[5]?.enerji, "Arcana"), badge(chakras[5]?.duygusal, "Arcana")],
+    ["5. Vishuddha (Boğaz)", badge(chakras[4]?.fiziksel, "Arcana"), badge(chakras[4]?.enerji, "Arcana"), badge(chakras[4]?.duygusal, "Arcana")],
+    ["4. Anahata (Kalp)", badge(chakras[3]?.fiziksel, "Arcana"), badge(chakras[3]?.enerji, "Arcana"), badge(chakras[3]?.duygusal, "Arcana")],
+    ["3. Manipura (Solar)", badge(chakras[2]?.fiziksel, "Arcana"), badge(chakras[2]?.enerji, "Arcana"), badge(chakras[2]?.duygusal, "Arcana")],
+    ["2. Svadhisthana (Sakral)", badge(chakras[1]?.fiziksel, "Arcana"), badge(chakras[1]?.enerji, "Arcana"), badge(chakras[1]?.duygusal, "Arcana")],
+    ["1. Muladhara (Kök)", badge(chakras[0]?.fiziksel, "Arcana"), badge(chakras[0]?.enerji, "Arcana"), badge(chakras[0]?.duygusal, "Arcana")]
+  ])}
+
+  <h3>Klasik Matrisler</h3>
+  <h3>İsim Matrisi</h3>${matrixHTML(im)}
+  <h3>Doğum Tarihi Matrisi</h3>${matrixHTML(dm)}
+  <h3>Sentez Matrisi</h3>${matrixHTML(sm)}
+  `;
 }
 function renderCompatibility(f){
   const a={su:E.soulUrgeNumber(f.n1),pe:E.personalityNumber(f.n1),ex:E.expressionNumber(f.n1)};
@@ -670,6 +907,7 @@ function viewHistory(id){
       <div class="report-section">${item.html}</div>
       <div class="report-foot">Astro Şuşu Numeroloji Sistemi · Yerel numeroloji analizi · ${esc(item.at)}</div>
     </div>`;
+  triggerPostRender(item.module, item.inputs);
 }
 function delHistory(id){ store.set(LS.hist, store.get(LS.hist,[]).filter(x=>x.id!==id)); renderHistoryView(); }
 function clearHistory(){ if(confirm("Tüm geçmiş silinsin mi?")){ store.set(LS.hist,[]); renderHistoryView(); } }
@@ -754,6 +992,25 @@ function clearFields(id){
   $("resultArea").innerHTML="";
 }
 
+function triggerPostRender(idOrName, f) {
+  if (!f) return;
+  setTimeout(() => {
+    const isHolistic = idOrName === 'holistic' || idOrName === 'Bütünsel Numerolojik Analiz';
+    const isDestiny = idOrName === 'destiny' || idOrName === 'Kader Matrisi';
+    const isKarmic = idOrName === 'karmic' || idOrName === 'Karma Analizi (Ladini)';
+
+    if (isHolistic && window.BirthWheelSVG && $('holisticTirolBox')) {
+      BirthWheelSVG.render('holisticTirolBox', f.d, f.m, f.y);
+    }
+    if (isDestiny && window.DestinyMatrixSVG && $('destinyMatrixSvgBox')) {
+      DestinyMatrixSVG.render('destinyMatrixSvgBox', { d: f.d, m: f.m, y: f.y, name: f.name });
+    }
+    if (isKarmic && window.KarmicSVG && $('karmicSvgBox')) {
+      KarmicSVG.render('karmicSvgBox', { d: f.d, m: f.m, y: f.y, name: f.name });
+    }
+  }, 20);
+}
+
 function runModule(id){
   const m=MODULES.find(x=>x.id===id); if(!m) return;
   const f={};
@@ -787,6 +1044,7 @@ function runModule(id){
     <div class="report-section">${html}</div>
     <div class="report-foot">Astro Şuşu Numeroloji Sistemi · Yerel numeroloji analizi · Bu rapor matematiksel/sembolik hesaplama amaçlıdır.</div>
   </div>`;
+  triggerPostRender(m.id, f);
 }
 
 /* ============================================================

@@ -887,6 +887,198 @@
     return { steps: steps, sonuc: cur };
   }
 
+  /* -------------------------------------------------------- Para Kodu (Money Code) */
+  function moneyCode(day, month, year) {
+    const d = parseInt(day, 10) || 0;
+    const m = parseInt(month, 10) || 0;
+    const y = parseInt(year, 10) || 0;
+    const d1 = reduceFull(digitSum(y));
+    const d2 = reduceFull(m);
+    const d3 = reduceFull(d);
+    const d4 = reduceFull(d1 + d2 + d3);
+    const code = `${d1}${d2}${d3}${d4}`;
+    const echo = d1 + d2 + d3 + d4;
+    const num = reduce(echo);
+    return {
+      Code: code, code: code,
+      Echo: echo, echo: echo,
+      Number: num, number: num,
+      digits: [d1, d2, d3, d4]
+    };
+  }
+
+  /* ----------------------------------------------------------- Pin Kodu (Pin Code) */
+  function pinCode(day, month, year) {
+    const d = parseInt(day, 10) || 0;
+    const m = parseInt(month, 10) || 0;
+    const y = parseInt(year, 10) || 0;
+    const ySum = digitSum(y);
+
+    const c1Num = reduceFull(d);
+    const c2Num = reduceFull(m);
+    const c3Num = reduceFull(ySum);
+
+    const c4Echo = c1Num + c2Num + c3Num;
+    const c4Num = reduceFull(c4Echo);
+
+    const c5Echo = c1Num + c4Num;
+    const c5Num = reduceFull(c5Echo);
+
+    const c6Echo = c2Num + c1Num;
+    const c6Num = reduceFull(c6Echo);
+
+    const c7Echo = c3Num + c2Num;
+    const c7Num = reduceFull(c7Echo);
+
+    const c8Echo = c6Num + c7Num;
+    const c8Num = reduceFull(c8Echo);
+
+    const c9Echo = c1Num + c2Num + c3Num + c4Num + c5Num + c6Num + c7Num + c8Num;
+    const c9Num = reduceFull(c9Echo);
+
+    const fatherEcho = c1Num + c3Num;
+    const fatherNum = reduceFull(fatherEcho);
+
+    const motherEcho = c2Num + c4Num;
+    const motherNum = reduceFull(motherEcho);
+
+    const selfEcho = c5Num + c6Num + c7Num;
+    const selfNum = reduceFull(selfEcho);
+
+    const destinyEcho = c8Num + c9Num;
+    const destinyNum = reduceFull(destinyEcho);
+
+    return {
+      Cell1: { Number: c1Num, Echo: d },
+      Cell2: { Number: c2Num, Echo: m },
+      Cell3: { Number: c3Num, Echo: ySum },
+      Cell4: { Number: c4Num, Echo: c4Echo },
+      Cell5: { Number: c5Num, Echo: c5Echo },
+      Cell6: { Number: c6Num, Echo: c6Echo },
+      Cell7: { Number: c7Num, Echo: c7Echo },
+      Cell8: { Number: c8Num, Echo: c8Echo },
+      Cell9: { Number: c9Num, Echo: c9Echo },
+      FatherLine: { Number: fatherNum, Echo: fatherEcho },
+      MotherLine: { Number: motherNum, Echo: motherEcho },
+      SelfLine: { Number: selfNum, Echo: selfEcho },
+      DestinyLine: { Number: destinyNum, Echo: destinyEcho },
+      pinStr: `${c1Num}${c2Num}${c3Num}${c4Num}${c5Num}${c6Num}${c7Num}${c8Num}${c9Num}`,
+      c1: c1Num, c2: c2Num, c3: c3Num, c4: c4Num, c5: c5Num, c6: c6Num, c7: c7Num, c8: c8Num, c9: c9Num,
+      fatherLine: fatherNum, motherLine: motherNum, selfLine: selfNum, destinyLine: destinyNum
+    };
+  }
+
+  /* ------------------------------------------------------------- Aşk Kodu & Yaşam Kodu */
+  function loveCode(name, day, month, year) {
+    const su = soulUrgeNumber(name);
+    const lp = lifePath(day, month, year);
+    const major = reduce(su);
+    const minor = reduce(lp);
+    const effect = reduce(major + minor);
+    const stress = Math.abs(major - minor);
+    return {
+      Number: effect,
+      Echo: major + minor,
+      MajorEnergy: major,
+      MinorEnergy: minor,
+      Effect: effect,
+      EffectEcho: major + minor,
+      Stress: stress
+    };
+  }
+
+  function lifeCode(day, month, year) {
+    const lp = lifePath(day, month, year);
+    const d = parseInt(day, 10) || 0;
+    const m = parseInt(month, 10) || 0;
+    const num = reduce(d + m + lp);
+    return { Number: num, Echo: d + m + lp, IsKarmicDebt: [13, 14, 16, 19].includes(d + m + lp) };
+  }
+
+  /* ---------------------------------------------------- Karmik Borç Kontrolü */
+  function karmicDebtCheck(...args) {
+    const titles = { 13: 'Disiplin Borcu', 14: 'Özgürlük Borcu', 16: 'Ego / İlişki Borcu', 19: 'Bireysellik Borcu' };
+    const debts = [13, 14, 16, 19];
+
+    if (args.length === 1 && typeof args[0] === 'number') {
+      const num = args[0];
+      return debts.includes(num) ? { isKarmic: true, id: num, code: num, title: titles[num] } : { isKarmic: false, id: num, code: num };
+    }
+
+    let numbersToCheck = [];
+    if (args.length >= 3) {
+      const [d, m, y, name] = args;
+      if (debts.includes(Number(d))) numbersToCheck.push({ code: Number(d), source: 'Doğum Günü' });
+      const sumDMY = (Number(d) || 0) + (Number(m) || 0) + (Number(y) || 0);
+      if (debts.includes(sumDMY)) numbersToCheck.push({ code: sumDMY, source: 'Yaşam Yolu Ara Toplamı' });
+      const lpSteps = reduceDetailed((Number(d) || 0) + (Number(m) || 0) + (Number(y) || 0)).steps;
+      lpSteps.forEach(s => { if (debts.includes(s)) numbersToCheck.push({ code: s, source: 'Yaşam Yolu Basamağı' }); });
+      if (name) {
+        const lsum = letterSum(name);
+        if (debts.includes(lsum)) numbersToCheck.push({ code: lsum, source: 'İfade Sayısı Ara Toplamı' });
+      }
+    } else if (Array.isArray(args[0])) {
+      args[0].forEach(n => {
+        if (debts.includes(Number(n))) numbersToCheck.push({ code: Number(n), source: 'Gösterge' });
+      });
+    }
+
+    const unique = [];
+    const seen = new Set();
+    numbersToCheck.forEach(item => {
+      if (!seen.has(item.code)) {
+        seen.add(item.code);
+        unique.push({ isKarmic: true, id: item.code, code: item.code, title: titles[item.code], source: item.source });
+      }
+    });
+    return unique;
+  }
+
+  /* ------------------------------------------------- 5 Seviyeli İlişki Uyumu Motoru */
+  function harmonyAnalysis(person1, person2) {
+    const p1 = typeof person1 === 'string' ? { name: person1 } : person1;
+    const p2 = typeof person2 === 'string' ? { name: person2 } : person2;
+
+    const lp1 = p1.d ? lifePath(p1.d, p1.m, p1.y) : expressionNumber(p1.name);
+    const lp2 = p2.d ? lifePath(p2.d, p2.m, p2.y) : expressionNumber(p2.name);
+    const ex1 = expressionNumber(p1.name);
+    const ex2 = expressionNumber(p2.name);
+    const su1 = soulUrgeNumber(p1.name);
+    const su2 = soulUrgeNumber(p2.name);
+
+    const diff = Math.abs(reduce(lp1) - reduce(lp2));
+    let hIdx = 2; // Doğal Akış
+    if (diff === 0) hIdx = 1; // Ayna
+    else if ([1, 8].includes(diff)) hIdx = 3; // Tamamlayıcı
+    else if ([2, 4, 7].includes(diff)) hIdx = 4; // Gelişimsel
+    else hIdx = 5; // Zorlu
+
+    const harmonyTypes = (global.NumerologyData && global.NumerologyData.harmonyTypes) || [
+      { index: 0, title: 'Nötr', bgcolor: '#ffffff', color: '#000000' },
+      { index: 1, title: 'Ayna / Kutuplu', bgcolor: '#efe4f3', color: '#4a154b', des: 'Ruhsal ayna, güçlü benzerlik ve manyetik çekim.' },
+      { index: 2, title: 'Doğal Akış', bgcolor: '#e4f1e8', color: '#155724', des: 'Zahmetsiz uyum, kendiliğinden gelişen anlayış ve rahatlık.' },
+      { index: 3, title: 'Tamamlayıcı', bgcolor: '#e4edf5', color: '#004085', des: 'Birbirinin eksik yönlerini dengeleyen ve güçlendiren birliktelik.' },
+      { index: 4, title: 'Gelişimsel', bgcolor: '#f8edd8', color: '#856404', des: 'Karşılıklı öğrenme, olgunlaşma ve dönüştürücü ruhsal dersler.' },
+      { index: 5, title: 'Zorlu / Mücadeleci', bgcolor: '#fde8e8', color: '#9b1c1c', des: 'Farklı dünya görüşleri, emek isteyen ve sabırla aşılacak sınavlar.' }
+    ];
+
+    const hInfo = harmonyTypes.find(h => h.index === hIdx) || harmonyTypes[2];
+    const score = hIdx === 1 ? 95 : hIdx === 2 ? 90 : hIdx === 3 ? 85 : hIdx === 4 ? 75 : 60;
+
+    return {
+      p1: { lp: lp1, ex: ex1, su: su1 },
+      p2: { lp: lp2, ex: ex2, su: su2 },
+      harmonyIndex: hIdx,
+      harmonyTitle: hInfo.title,
+      type: hInfo.title,
+      description: hInfo.des,
+      analysis: hInfo.des,
+      bgcolor: hInfo.bgcolor || '#e4edf5',
+      color: hInfo.color || '#004085',
+      score: score
+    };
+  }
+
   /* Arayüzün kullandığı kısa ad: klasik Pisagor indirgemesi. */
   const reduceNumber = reduce;
 
@@ -911,7 +1103,9 @@
     pinnaclesAndChallenges, lifeCycles, numberMatrix, transitionCycles,
     tirolWheel, karmaAnalysis, destinyMatrix, personalCycles,
     transformationYears, universalDate, universalWheel, personalWeekTable,
-    nameCompatibility, plateAnalysis, identityNumberAnalysis
+    nameCompatibility, plateAnalysis, identityNumberAnalysis,
+
+    moneyCode, pinCode, loveCode, lifeCode, karmicDebtCheck, harmonyAnalysis
   };
 
   if (typeof module !== 'undefined' && module.exports) {
