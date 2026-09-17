@@ -1275,70 +1275,30 @@
     return reduce22(val);
   }
 
-  function zodiacSign(d, m) {
-    const day = Number(d) || 1, month = Number(m) || 1;
-    const signs = [
-      { number: 1, name: 'Koç', symbol: '♈', element: 'Ateş', dates: '21 Mart - 19 Nisan' },
-      { number: 2, name: 'Boğa', symbol: '♉', element: 'Toprak', dates: '20 Nisan - 20 Mayıs' },
-      { number: 3, name: 'İkizler', symbol: '♊', element: 'Hava', dates: '21 Mayıs - 20 Haziran' },
-      { number: 4, name: 'Yengeç', symbol: '♋', element: 'Su', dates: '21 Haziran - 22 Temmuz' },
-      { number: 5, name: 'Aslan', symbol: '♌', element: 'Ateş', dates: '23 Temmuz - 22 Ağustos' },
-      { number: 6, name: 'Başak', symbol: '♍', element: 'Toprak', dates: '23 Ağustos - 22 Eylül' },
-      { number: 7, name: 'Terazi', symbol: '♎', element: 'Hava', dates: '23 Eylül - 22 Ekim' },
-      { number: 8, name: 'Akrep', symbol: '♏', element: 'Su', dates: '23 Ekim - 21 Kasım' },
-      { number: 9, name: 'Yay', symbol: '♐', element: 'Ateş', dates: '22 Kasım - 21 Aralık' },
-      { number: 10, name: 'Oğlak', symbol: '♑', element: 'Toprak', dates: '22 Aralık - 19 Ocak' },
-      { number: 11, name: 'Kova', symbol: '♒', element: 'Hava', dates: '20 Ocak - 18 Şubat' },
-      { number: 12, name: 'Balık', symbol: '♓', element: 'Su', dates: '19 Şubat - 20 Mart' }
-    ];
-
-    if ((month === 3 && day >= 21) || (month === 4 && day <= 19)) return signs[0]; // Koç
-    if ((month === 4 && day >= 20) || (month === 5 && day <= 20)) return signs[1]; // Boğa
-    if ((month === 5 && day >= 21) || (month === 6 && day <= 20)) return signs[2]; // İkizler
-    if ((month === 6 && day >= 21) || (month === 7 && day <= 22)) return signs[3]; // Yengeç
-    if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) return signs[4]; // Aslan
-    if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) return signs[5]; // Başak
-    if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) return signs[6]; // Terazi
-    if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) return signs[7]; // Akrep
-    if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) return signs[8]; // Yay
-    if ((month === 12 && day >= 22) || (month === 1 && day <= 19)) return signs[9]; // Oğlak
-    if ((month === 1 && day >= 20) || (month === 2 && day <= 18)) return signs[10]; // Kova
-    return signs[11]; // Balık
+  function zodiacSign() {
+    return { number: 0, name: '', symbol: '', element: 'Toprak', dates: '' };
   }
 
-  function planet(lp) {
-    const pList = (global.NumerologyData && global.NumerologyData.planets) || [
-      { number: 1, name: 'Güneş', symbol: '☉', description: 'Kimlik, irade ve yaşam enerjisi.' },
-      { number: 2, name: 'Ay', symbol: '☽', description: 'Duygular, sezgiler ve içsel güvenlik.' },
-      { number: 3, name: 'Merkür', symbol: '☿', description: 'Zihin, iletişim ve öğrenme.' },
-      { number: 4, name: 'Venüs', symbol: '♀', description: 'Sevgi, estetik ve uyum.' },
-      { number: 5, name: 'Mars', symbol: '♂', description: 'Arzu, cesaret ve eylem.' },
-      { number: 6, name: 'Jüpiter', symbol: '♃', description: 'Bolluk, bilgelik ve inanç.' },
-      { number: 7, name: 'Satürn', symbol: '♄', description: 'Disiplin, sınır ve sorumluluk.' },
-      { number: 8, name: 'Uranüs', symbol: '♅', description: 'Özgürlük, devrim ve uyanış.' },
-      { number: 9, name: 'Neptün', symbol: '♆', description: 'İlahi sevgi ve hayal gücü.' },
-      { number: 10, name: 'Plüton', symbol: '♇', description: 'Dönüşüm ve yeniden doğuş.' }
-    ];
-    const n = Math.max(1, Math.min(10, reduce(lp)));
-    return pList.find(p => p.number === n) || pList[0];
+  function planet() {
+    return { number: 0, name: '', symbol: '', description: '' };
   }
 
-  function rune(lp) {
-    const rList = (global.NumerologyData && global.NumerologyData.runes) || [];
-    if (!rList.length) return { number: 1, name: 'Fehu', symbol: 'ᚠ', meaning: 'Bereket ve ruhsal bolluk.' };
-    const idx = (Number(lp) % 24) || 1;
-    return rList.find(r => r.number === idx) || rList[0];
+  function rune() {
+    return { number: 0, name: '', symbol: '', meaning: '' };
   }
 
   function element(d, m, y) {
-    const z = zodiacSign(d, m);
     const eList = (global.NumerologyData && global.NumerologyData.elements) || [
       { id: 1, name: 'Ateş', symbol: '🜂', color: '#e74c3c', description: 'İrade, cesaret ve tutku.' },
       { id: 2, name: 'Toprak', symbol: '🜃', color: '#27ae60', description: 'Güven, istikrar ve üretkenlik.' },
       { id: 3, name: 'Hava', symbol: '🜁', color: '#3498db', description: 'Zihin, vizyon ve iletişim.' },
       { id: 4, name: 'Su', symbol: '🜄', color: '#2980b9', description: 'Sezgi, şefkat ve akış.' }
     ];
-    return eList.find(e => e.name === z.element) || eList[0];
+    const lp = lifePath(d, m, y);
+    // Pisagor numeroloji element eşlemesi: 1,5,9 Ateş | 2,6 Su | 3,7 Hava | 4,8 Toprak
+    const elMap = { 1: 0, 5: 0, 9: 0, 2: 3, 6: 3, 3: 2, 7: 2, 4: 1, 8: 1, 11: 2, 22: 1, 33: 3 };
+    const idx = elMap[lp] !== undefined ? elMap[lp] : 0;
+    return eList[idx] || eList[0];
   }
 
   function moonPhase(d, m, y) {

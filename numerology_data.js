@@ -44,33 +44,8 @@
     { id: 4, name: 'Su', symbol: '🜄', color: '#2980b9', description: 'Ruhun derinliklerini ve duygusal akışı taşıyan güç, sezgi ve şifa.' }
   ];
 
-  numerologyData.planets = [
-    { number: 1, name: 'Güneş', symbol: '☉', description: 'Kimlik, irade, canlılık ve yaşam enerjisinin merkezidir.' },
-    { number: 2, name: 'Ay', symbol: '☽', description: 'Duyguların, sezgilerin ve içsel güvenlik ihtiyacının sembolüdür.' },
-    { number: 3, name: 'Merkür', symbol: '☿', description: 'Zihnin, iletişimin, düşünme biçiminin ve öğrenme sürecinin temsilcisidir.' },
-    { number: 4, name: 'Venüs', symbol: '♀', description: 'Sevginin, estetiğin, değerlerin ve ilişkisel uyumun gezegenidir.' },
-    { number: 5, name: 'Mars', symbol: '♂', description: 'Arzu, cesaret, eylem ve mücadele gücünü yöneten içsel savaşçıdır.' },
-    { number: 6, name: 'Jüpiter', symbol: '♃', description: 'İnanç, bolluk, bilgelik ve yaşam felsefesiyle büyüme ilkesini temsil eder.' },
-    { number: 7, name: 'Satürn', symbol: '♄', description: 'Disiplin, zaman, sınır ve sorumluluk bilincinin yapı kuran öğretmenidir.' },
-    { number: 8, name: 'Uranüs', symbol: '♅', description: 'Devrim, özgürlük, farkındalık ve ani değişimlerin elektriksel gücüdür.' },
-    { number: 9, name: 'Neptün', symbol: '♆', description: 'Hayal gücü, sezgi, ilahi birlik ve koşulsuz sevgi bilincini taşır.' },
-    { number: 10, name: 'Plüton', symbol: '♇', description: 'Dönüşüm, simya, ölüm ve yeniden doğuşun derin gücüdür.' }
-  ];
-
-  numerologyData.signs = [
-    { number: 1, name: 'Koç', symbol: '♈', element: 'Ateş', dates: '21 Mart - 19 Nisan' },
-    { number: 2, name: 'Boğa', symbol: '♉', element: 'Toprak', dates: '20 Nisan - 20 Mayıs' },
-    { number: 3, name: 'İkizler', symbol: '♊', element: 'Hava', dates: '21 Mayıs - 20 Haziran' },
-    { number: 4, name: 'Yengeç', symbol: '♋', element: 'Su', dates: '21 Haziran - 22 Temmuz' },
-    { number: 5, name: 'Aslan', symbol: '♌', element: 'Ateş', dates: '23 Temmuz - 22 Ağustos' },
-    { number: 6, name: 'Başak', symbol: '♍', element: 'Toprak', dates: '23 Ağustos - 22 Eylül' },
-    { number: 7, name: 'Terazi', symbol: '♎', element: 'Hava', dates: '23 Eylül - 22 Ekim' },
-    { number: 8, name: 'Akrep', symbol: '♏', element: 'Su', dates: '23 Ekim - 21 Kasım' },
-    { number: 9, name: 'Yay', symbol: '♐', element: 'Ateş', dates: '22 Kasım - 21 Aralık' },
-    { number: 10, name: 'Oğlak', symbol: '♑', element: 'Toprak', dates: '22 Aralık - 19 Ocak' },
-    { number: 11, name: 'Kova', symbol: '♒', element: 'Hava', dates: '20 Ocak - 18 Şubat' },
-    { number: 12, name: 'Balık', symbol: '♓', element: 'Su', dates: '19 Şubat - 20 Mart' }
-  ];
+  numerologyData.planets = [];
+  numerologyData.signs = [];
 
   numerologyData.arcanas = [
     { number: 1, name: 'BÜYÜCÜ', planet: 'Merkür', horoscope: 'İkizler, Başak', element: 'Hava', letter: 'A, E, O', time: '1 Gün, 1 Hafta, 1 Ay', guardian: false, desc: 'Yaratım gücü, irade, başlangıçlar, fırsatları somutlaştırma.' },
@@ -97,32 +72,7 @@
     { number: 22, name: 'JOKER', planet: 'Uranüs', horoscope: 'Kova', element: 'Hava', letter: 'T', time: 'Mevsim Başlangıçları', guardian: false, desc: 'Sonsuz özgürlük, sıfırdan başlangıç, güvenle bilinmeyene adım atma.' }
   ];
 
-  numerologyData.runes = [
-    { number: 1, name: 'Fehu', symbol: 'ᚠ', meaning: 'Bereket, zenginlik, hareketli mal ve ruhsal bolluk.' },
-    { number: 2, name: 'Uruz', symbol: 'ᚢ', meaning: 'İçsel güç, yaşam enerjisi, sağlık, dayanıklılık ve cesaret.' },
-    { number: 3, name: 'Thurisaz', symbol: 'ᚦ', meaning: 'Korunma, sınır koyma, ilahi kalkan ve gölgeleri defetme.' },
-    { number: 4, name: 'Ansuz', symbol: 'ᚨ', meaning: 'İlahi söz, bilgelik, ilham, rehberlik ve üst bilinç.' },
-    { number: 5, name: 'Raido', symbol: 'ᚱ', meaning: 'Yolculuk, doğru istikamet, kader rotası ve gelişim.' },
-    { number: 6, name: 'Kenaz', symbol: 'ᚲ', meaning: 'Aydınlanma meşalesi, kavrayış, yaratıcılık ve içsel ateş.' },
-    { number: 7, name: 'Gebo', symbol: 'ᚷ', meaning: 'Kutsal armağan, adil takas, koşulsuz sevgi ve ortaklık.' },
-    { number: 8, name: 'Wunjo', symbol: 'ᚹ', meaning: 'Neşe, huzur, kutlama, dileklerin gerçekleşmesi.' },
-    { number: 9, name: 'Hagalaz', symbol: 'ᚺ', meaning: 'Kozmik arınma, ani krizle gelen temizlik, fırtına sonrası dinginlik.' },
-    { number: 10, name: 'Nauthiz', symbol: 'ᚾ', meaning: 'Sabır, yoklukta olgunlaşma, direnç ve irade testi.' },
-    { number: 11, name: 'Isa', symbol: 'ᛁ', meaning: 'Durağanlık, buz, içe odaklanma, sabırla bekleme dönemi.' },
-    { number: 12, name: 'Jera', symbol: 'ᛃ', meaning: 'Emeklerin karşılığı, hasat vakti, döngünün meyvesi.' },
-    { number: 13, name: 'Eihwaz', symbol: 'ᛇ', meaning: 'Hayat ağacı, dayanıklılık, ölüm-yeniden doğuş ekseni.' },
-    { number: 14, name: 'Perthro', symbol: 'ᛈ', meaning: 'Kader zarı, gizem, bilinmeyen kaderin açılışı, sezgi.' },
-    { number: 15, name: 'Algiz', symbol: 'ᛉ', meaning: 'İlahi koruma, melek kalkanı, yüksek farkındalık.' },
-    { number: 16, name: 'Sowilo', symbol: 'ᛊ', meaning: 'Güneş ışığı, zafer, başarı, yaşam gücü ve berraklık.' },
-    { number: 17, name: 'Tiwaz', symbol: 'ᛏ', meaning: 'Hakikat, onur, ruhsal savaşçı, adalet ve doğruluk.' },
-    { number: 18, name: 'Berkana', symbol: 'ᛒ', meaning: 'Huş ağacı, büyüme, doğum, şifa ve dişil besleyicilik.' },
-    { number: 19, name: 'Ehwaz', symbol: 'ᛖ', meaning: 'Kutsal at, sadakat, güvenilir ortaklık, hızlı ilerleme.' },
-    { number: 20, name: 'Mannaz', symbol: 'ᛗ', meaning: 'İnsan, öz farkındalık, ortak akıl ve toplumsal bilinç.' },
-    { number: 21, name: 'Laguz', symbol: 'ᛚ', meaning: 'Su, akış, sezgiler, teslimiyet ve duygusal derinlik.' },
-    { number: 22, name: 'Ingwaz', symbol: 'ᛜ', meaning: 'Kuluçka, tohum, gizil potansiyelin olgunlaşması.' },
-    { number: 23, name: 'Othila', symbol: 'ᛟ', meaning: 'Kökler, ata mirası, kutsal yurt ve aidiyet.' },
-    { number: 24, name: 'Dagaz', symbol: 'ᛞ', meaning: 'Şafak vakti, aydınlanma, dönüşüm ve yeni başlangıç.' }
-  ];
+  numerologyData.runes = [];
 
   numerologyData.directions = [
     { number: 0, planet: 'Merkür', direction: 'Kuzey', season: 'Kış', color: 'Siyah / Mavi', member: 'Böbrek', element: 'Su', emotion: 'Korku / Bilgelik', sound: 'Chui', bgcc: '#1C398E', des: 'Derin bilgelik, yaşam özü, içsel güç ve potansiyelin sessiz kaynağıdır.' },

@@ -374,13 +374,13 @@ table.data tr:nth-child(even) td{background:#fafcff}
   </div>
 </div>
 
-<script src="astro_sushu_engine.js?v=20260918_3"></script>
-<script src="numerology_data.js?v=20260918_3"></script>
-<script src="numerology_definitions.js?v=20260918_3"></script>
-<script src="destiny_matrix_svg.js?v=20260918_3"></script>
-<script src="karmic_svg.js?v=20260918_3"></script>
-<script src="birth_wheel_svg.js?v=20260918_3"></script>
-<script src="analysis_expositor.js?v=20260918_3"></script>
+<script src="astro_sushu_engine.js?v=20260918_4"></script>
+<script src="numerology_data.js?v=20260918_4"></script>
+<script src="numerology_definitions.js?v=20260918_4"></script>
+<script src="destiny_matrix_svg.js?v=20260918_4"></script>
+<script src="karmic_svg.js?v=20260918_4"></script>
+<script src="birth_wheel_svg.js?v=20260918_4"></script>
+<script src="analysis_expositor.js?v=20260918_4"></script>
 <script>
 /* ============================================================
    UYGULAMA KATMANI
@@ -692,18 +692,14 @@ function renderHolistic(f){
   const lg = E.letterGroups(name), tc = E.transitionCycles(name, y);
   const ep = E.expressionPlanes(name);
 
-  // Ezoterik & Ek Hesaplamalar
+  // Ek Hesaplamalar
   const mc = E.moneyCode(d, m, y);
   const pc = E.pinCode(d, m, y);
   const kDebts = E.karmicDebtCheck(d, m, y, name);
-  const zSign = E.zodiacSign(d, m);
-  const pl = E.planet(lp);
-  const rn = E.rune(lp);
   const el = E.element(d, m, y);
-  const mp = E.moonPhase(d, m, y);
   const pnc = E.pinnaclesAndChallenges(d, m, y);
 
-  window._lastHolisticAnalysis = { lp, ex, su, pe, ma, at, ba, co, ca, fv, br, mc, pc, kDebts, im, dm, sm, lg, tc, ep, p: pnc, zSign, pl, rn, el, mp };
+  window._lastHolisticAnalysis = { lp, ex, su, pe, ma, at, ba, co, ca, fv, br, mc, pc, kDebts, im, dm, sm, lg, tc, ep, p: pnc, el };
 
   const karmicAlert = kDebts.length ? `
     <div style="margin-bottom:18px;padding:14px 18px;background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;display:flex;align-items:center;gap:14px;">
@@ -771,16 +767,6 @@ function renderHolistic(f){
       </div>
     </div>
   </div>
-
-  <!-- Astroloji ve Ezoterik Omurga -->
-  <h3>Ezoterik &amp; Kozmik Omurga</h3>
-  ${tableHTML(["Gösterge","Değer","Sembol / Bilgi"],[
-    ["Güneş Burcu", zSign.name, zSign.symbol + " (" + zSign.dates + ")"],
-    ["Yönetici Gezegen", pl.name, pl.symbol + " · " + pl.description],
-    ["Futhark Rünü", rn.name, `<span style="font-size:18px;font-weight:700;color:#2f5597">${rn.symbol}</span> · ${rn.meaning}`],
-    ["Baskın Element", el.name, `<span style="color:${el.color};font-weight:700;">${el.symbol} ${el.name}</span> · ${el.description}`],
-    ["Ay Fazı", mp.phase, mp.meaning]
-  ])}
 
   <!-- Tirol Çarkı (5 Yön & Element Dağılımı) -->
   <h3>Tirol Doğum Çarkı</h3>
@@ -1106,7 +1092,7 @@ function renderDestinyMatrix(f){
     ["Kişisel Kader (1. Dönem / 20-40 Yaş)", badge(dest.personal, "Arcana", "Kişisel Kader"), "Kendini keşfetme, ego ve ruh dengesini kurma arketipi."],
     ["Sosyal Kader (2. Dönem / 40-60 Yaş)", badge(dest.social, "Arcana", "Sosyal Kader"), "Topluma ve soyuna aktarılan değer, sosyal rol."],
     ["Ruhsal Kader (3. Dönem / 60+ Yaş)", badge(dest.spiritual, "Arcana", "Ruhsal Kader"), "Kişisel ve sosyal kaderin ilahi sentezi, ruhsal olgunluk."],
-    ["Gezegensel Kader (Genel Sentez)", badge(dest.planetary, "Arcana", "Gezegensel Kader"), "Evrensel planla hizalanma ve kolektif görevin arketipi."]
+    ["Kolektif / Evrensel Kader (Genel Sentez)", badge(dest.planetary, "Arcana", "Kolektif Kader"), "Evrensel planla hizalanma ve kolektif görevin arketipi."]
   ])}
 
   <h3>7 Çakra Enerji Matrisi</h3>

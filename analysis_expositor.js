@@ -41,11 +41,7 @@
       const kDebts = res.kDebts || (E ? E.karmicDebtCheck(d, m, y, name) : []);
       const dmData = E ? E.destinyMatrix(d, m, y, name) : { destinations: {}, chakras: [] };
       const karmicData = E ? E.karmicAnalysis(d, m, y, name) : { tailKarma: [] };
-      const zSign = E ? E.zodiacSign(d, m) : { name: 'Koç', symbol: '♈', dates: '' };
-      const pl = E ? E.planet(lp) : { name: 'Güneş', symbol: '☉', description: '' };
-      const rn = E ? E.rune(lp) : { name: 'Fehu', symbol: 'ᚠ', meaning: '' };
       const el = E ? E.element(d, m, y) : { name: 'Ateş', symbol: '🜂', description: '' };
-      const mp = E ? E.moonPhase(d, m, y) : { phase: 'Yeniay', meaning: '' };
       const ep = E ? E.expressionPlanes(name) : null;
       const pnc = res.p || (E ? E.pinnaclesAndChallenges(d, m, y) : { zirveler: [], zorluklar: [] });
 
@@ -141,8 +137,8 @@
         {
           no: '15',
           title: 'DÖRT KADERSEL YÖNELİM (Destinations)',
-          sub: `Kişisel, Sosyal, Ruhsal ve Gezegensel Hedefler`,
-          content: `Kişisel Kaderiniz (Arkana ${(dmData.destinations||{}).personal || '-'}), Sosyal Kaderiniz (Arkana ${(dmData.destinations||{}).social || '-'}), Ruhsal Senteziniz (Arkana ${(dmData.destinations||{}).spiritual || '-'}) ve Gezegensel Misyonunuz (Arkana ${(dmData.destinations||{}).planetary || '-'}), hayatınızın 20, 40 ve 60 yaş döngülerinde açığa çıkan kilit arketipsel basamakları gösterir.`
+          sub: `Kişisel, Sosyal, Ruhsal ve Kolektif Hedefler`,
+          content: `Kişisel Kaderiniz (Arkana ${(dmData.destinations||{}).personal || '-'}), Sosyal Kaderiniz (Arkana ${(dmData.destinations||{}).social || '-'}), Ruhsal Senteziniz (Arkana ${(dmData.destinations||{}).spiritual || '-'}) ve Kolektif Misyonunuz (Arkana ${(dmData.destinations||{}).planetary || '-'}), hayatınızın 20, 40 ve 60 yaş döngülerinde açığa çıkan kilit arketipsel basamakları gösterir.`
         },
         {
           no: '16',
@@ -176,9 +172,9 @@
         },
         {
           no: '21',
-          title: 'KOZMİK VE ASTROLOJİK OMURGA',
-          sub: `${zSign.name} Burcu (${zSign.symbol}) · Yönetici Gezegen: ${pl.name} (${pl.symbol})`,
-          content: `Güneş burcunuz ${zSign.name} (${zSign.symbol}), yönetici gezegeniniz ${pl.name} (${pl.symbol}), yaşam yolunuzla rezonansa giren Futhark Rününüz ${rn.name} (${rn.symbol}) ve baskın elementiniz ${el.name} (${el.symbol}), ruhunuzun bu dünyadaki kozmik zırhıdır.`
+          title: 'NUMEROLOJİK OMURGA VE ELEMENT DENGESİ',
+          sub: `Baskın Element: ${el.name} (${el.symbol}) · Denge Sayısı: ${ba}`,
+          content: `Doğum haritanızdaki rakamların element dağılımı (${el.name}) ve kriz anlarında merkezinize dönmenizi sağlayan Denge Sayınız (${ba}), numerolojik omurganızın en sağlam dayanağıdır. Bu denge, yaşam yolunuzda hedeflerinize sarsılmadan ilerlemenizi sağlar.`
         },
         {
           no: '22',
