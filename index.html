@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Astro Şuşu Numeroloji Sistemi — Numeroloji</title>
 <style>
 :root{
@@ -74,10 +77,11 @@ button{font-family:inherit;cursor:pointer}
 .kv .k{color:var(--muted)}
 .kv .v{font-weight:600}
 
-.num-badge{display:inline-block;min-width:34px;text-align:center;background:#eaf1fd;color:var(--brand);border-radius:8px;padding:3px 8px;font-weight:700;cursor:pointer;transition:all 0.15s ease}
-.num-badge:hover{transform:translateY(-2px);box-shadow:0 3px 8px rgba(47,85,151,0.25)}
-.num-badge.master{background:#fff3d6;color:#9a6b00;border:1px solid #f6d899}
-.num-badge.karmic{background:#fee2e2;color:#b91c1c;border:1px solid #f87171}
+.num-badge{display:inline-flex;align-items:center;justify-content:center;min-width:32px;text-align:center;background:#eaf1fd;color:var(--brand);border:1px solid #bfdbfe;border-radius:8px;padding:3px 8px;font-weight:700;cursor:pointer;transition:all 0.15s ease;box-shadow:0 1px 3px rgba(47,85,151,0.12);user-select:none}
+.num-badge:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(47,85,151,0.25);background:#dbeafe;border-color:#3b82f6}
+.num-badge.master{background:#fffbeb;color:#92400e;border:1px solid #fcd34d;box-shadow:0 1px 3px rgba(217,119,6,0.15)}
+.num-badge.karmic{background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5;box-shadow:0 1px 3px rgba(220,38,38,0.15)}
+.num-badge .badge-dot{font-size:9px;margin-left:4px;opacity:0.7;pointer-events:none}
 
 table.data{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
 table.data th,table.data td{border:1px solid var(--line);padding:6px 9px;text-align:left}
@@ -133,6 +137,7 @@ table.data tr:nth-child(even) td{background:#fafcff}
     <label for="lpass">Şifre</label>
     <input id="lpass" type="password" autocomplete="current-password" placeholder="••••••••">
     <button class="btn-primary" id="loginBtn">Giriş Yap</button>
+    <button type="button" class="btn" id="quickLoginBtn" onclick="quickLogin()" style="width:100%;margin-top:10px;background:#eef2f8;color:var(--brand);font-weight:600;padding:10px;border:1px solid #cfe0ff;border-radius:8px;">⚡ Tek Tıkla Hızlı Giriş (Murat / Danışan)</button>
     <p class="login-msg" id="loginMsg"></p>
     <p style="font-size:11px;color:#8fa2c0;margin-top:14px;line-height:1.5">
       İlk girişte hesap bu tarayıcıda oluşturulur. Tüm veriler yalnızca sizin
@@ -161,13 +166,13 @@ table.data tr:nth-child(even) td{background:#fafcff}
   </div>
 </div>
 
-<script src="astro_sushu_engine.js?v=4"></script>
-<script src="numerology_data.js"></script>
-<script src="numerology_definitions.js"></script>
-<script src="destiny_matrix_svg.js"></script>
-<script src="karmic_svg.js"></script>
-<script src="birth_wheel_svg.js"></script>
-<script src="analysis_expositor.js"></script>
+<script src="astro_sushu_engine.js?v=20260918_2"></script>
+<script src="numerology_data.js?v=20260918_2"></script>
+<script src="numerology_definitions.js?v=20260918_2"></script>
+<script src="destiny_matrix_svg.js?v=20260918_2"></script>
+<script src="karmic_svg.js?v=20260918_2"></script>
+<script src="birth_wheel_svg.js?v=20260918_2"></script>
+<script src="analysis_expositor.js?v=20260918_2"></script>
 <script>
 /* ============================================================
    UYGULAMA KATMANI
@@ -310,15 +315,14 @@ const CAT_ORDER = ["Temel Analizler","Kişisel Döngüler","Evrensel Döngüler"
 
 /* ---------- Yardımcı görünüm parçaları ---------- */
 function badge(n, cat, title){
+  if (n === undefined || n === null || n === '') return '-';
   const num = Number(n);
-  const master = E.MASTER_NUMBERS.has(num);
+  const master = (E && E.MASTER_NUMBERS) ? E.MASTER_NUMBERS.has(num) : [11, 22, 33, 44, 55, 66, 77, 88, 99].includes(num);
   const isKarmic = [13, 14, 16, 19].includes(num);
+  const effectiveCat = cat || (isKarmic ? 'KarmicDebt' : (master ? 'MasterNumberVibrations' : 'NumericalVibration'));
+  const effectiveTitle = String(title || (cat ? `${cat} ${n}` : `Sayı Titreşimi ${n}`)).replace(/'/g, "\\'");
   const cls = "num-badge" + (master ? " master" : "") + (isKarmic ? " karmic" : "");
-  if (cat) {
-    const safeTitle = String(title || cat).replace(/'/g, "\\'");
-    return `<span class="${cls}" onclick="NumerologyDefinitions.show('${cat}','${n}','${safeTitle}')" style="cursor:pointer;" title="${safeTitle} — Detay için tıklayın">${n}</span>`;
-  }
-  return `<span class="${cls}">${n}</span>`;
+  return `<span class="${cls}" onclick="NumerologyDefinitions.show('${effectiveCat}','${n}','${effectiveTitle}')" title="${effectiveTitle} — Detaylı bilgi kartı için tıklayın">${n}<span class="badge-dot">ℹ️</span></span>`;
 }
 function kvRows(pairs){
   return `<div class="kv">${pairs.map(([k,v])=>`<span class="k">${esc(k)}</span><span class="v">${v}</span>`).join("")}</div>`;
@@ -537,8 +541,8 @@ function renderBirthday(f){
     ["Doğum Günü Sayısı", badge(bn, "Attitude", "Doğum Günü " + bn)],
     ["Tutum Sayısı", badge(at, "Attitude", "Tutum Sayısı " + at)],
     ["Doğum Günü Arkanası", badge(E.arcana(d), "Arcana", `Arkana ${E.arcana(d)}`)],
-    ["Para Kodu", `<span style="font-weight:700;color:#1e8e5a">${mc.code}</span> (Yankı: ${mc.echo})`],
-    ["Pin Kodu", `<span style="font-weight:700;color:#2f5597">${pc.pinStr}</span>`]
+    ["Para Kodu", (mc.digits || [...(mc.code||'')].map(Number)).map((num, i) => badge(num, 'MoneyCode', `Para Kodu Hane ${i+1}: ${num}`)).join(' ') + ` <span style="font-size:12px;color:#64748b">(Sayı: ${badge(mc.number, 'NumericalVibration')}, Yankı: ${mc.echo})</span>`],
+    ["Pin Kodu", (pc.digits || [...(pc.pinStr||'')].map(Number)).map((num, i) => badge(num, 'NumericalVibration', `Pin Kodu Hane ${i+1}: ${num}`)).join(' ') + ` <span style="font-size:12px;color:#64748b">(${pc.pinStr})</span>`]
   ])}
   <h3>Yıllara Göre Dağılım</h3>
   ${tableHTML(["Yıl","Yaş","Kabala","Enerji"], rows)}
@@ -560,8 +564,8 @@ function renderCompare(f){
     ["İfade", badge(aEx, "Expression"), badge(bEx, "Expression"), aEx === bEx ? "Aynı Enerji" : "Tamamlayıcı"],
     ["Kalp Arzusu", badge(aSu, "HeartDesire"), badge(bSu, "HeartDesire"), aSu === bSu ? "Ortak Ruh" : "Farklı"],
     ["Kişilik", badge(aPe, "Personality"), badge(bPe, "Personality"), aPe === bPe ? "Benzer Algı" : "Farklı"],
-    ["Para Kodu", aMc.code, bMc.code, aMc.code === bMc.code ? "Aynı Kod" : "Bireysel"],
-    ["Pin Kodu", aPc.pinStr, bPc.pinStr, "-"]
+    ["Para Kodu", (aMc.digits || []).map(n => badge(n, 'MoneyCode')).join(' '), (bMc.digits || []).map(n => badge(n, 'MoneyCode')).join(' '), aMc.code === bMc.code ? "Aynı Kod" : "Bireysel"],
+    ["Pin Kodu", (aPc.digits || []).map(n => badge(n, 'NumericalVibration')).join(' '), (bPc.digits || []).map(n => badge(n, 'NumericalVibration')).join(' '), "-"]
   ];
 
   return `
@@ -823,18 +827,42 @@ function hourOptions(sel){ let o='<option value="">Saat</option>'; for(let h=0;h
 function minuteOptions(sel){ let o='<option value="">Dk</option>'; for(let mn=0;mn<60;mn++){ const v=(mn<10?'0'+mn:''+mn); o+='<option value="'+v+'"'+(sel===v?' selected':'')+'>'+v+'</option>'; } return o; }
 function countryOptions(sel){ let o='<option value="">Ülke</option>'; TR_ULKELER.forEach(function(u){ o+='<option value="'+u+'"'+(sel===u?' selected':'')+'>'+u+'</option>'; }); return o; }
 
+const DEFAULT_PEOPLE = [
+  { name: "Gizem Yılmaz", d: "18", m: "5", y: "1992", time: "14:30", place: "İstanbul, Türkiye" },
+  { name: "Ahmet Demir", d: "7", m: "11", y: "1988", time: "09:15", place: "Ankara, Türkiye" }
+];
+
+function getPeople(){
+  const p = store.get(LS.people, null);
+  if(!p || !p.length){
+    store.set(LS.people, DEFAULT_PEOPLE);
+    return DEFAULT_PEOPLE;
+  }
+  return p;
+}
+
 function renderWorkspace(){
-  const people = store.get(LS.people, []);
+  const people = getPeople();
   const rows = people.map((p,i)=>`<tr>
-    <td>${esc(p.name)}</td><td>${esc(p.d)}.${esc(p.m)}.${esc(p.y)}</td>
+    <td><b>${esc(p.name)}</b></td><td>${esc(p.d)}.${esc(p.m)}.${esc(p.y)}</td>
     <td>${esc(p.time||"-")}</td><td>${esc(p.place||"-")}</td>
-    <td><button class="btn-sm" onclick="analyzePerson(${i})">Analiz</button>
+    <td><button class="btn-sm" style="background:#2f5597;color:#fff;font-weight:600;" onclick="analyzePerson(${i})">Analiz Et ➜</button>
         <button class="btn-sm danger" onclick="removePerson(${i})">Sil</button></td>
   </tr>`).join("");
   return `
+  <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #bfdbfe;border-radius:12px;padding:18px 22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;box-shadow:0 3px 8px rgba(37,99,235,0.08);">
+    <div>
+      <h3 style="margin:0 0 4px;color:#1e40af;font-size:16px;">🌟 Hazır Danışan Analizi: Gizem Yılmaz (18.05.1992)</h3>
+      <p style="margin:0;font-size:13px;color:#1e3a8a;">24 bölümlük bütünsel dosya, 22 Arcana Kader Matrisi haritası, Ladini Çift-Üçgeni, Para & Pin Kodu ve tüm tıklanabilir bilgi kartları hazır.</p>
+    </div>
+    <button class="btn" onclick="analyzePerson(0)" style="background:#2563eb;color:#fff;border:0;padding:11px 22px;border-radius:8px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(37,99,235,0.25);font-size:14px;">
+      Örnek Analizi Aç ➜
+    </button>
+  </div>
+
   <div class="card">
     <h2>Çalışma Alanım</h2>
-    <p class="desc">Analiz edeceğiniz kişileri kaydedin; kayıtlı çalışmalardan tek tıkla analize ulaşın. Tüm alanlar listeden seçilebilir.</p>
+    <p class="desc">Analiz edeceğiniz danışanları kaydedin; kayıtlı çalışmalardan tek tıkla analize ulaşın. Tüm alanlar listeden seçilebilir.</p>
     <div class="grid c4">
       <div class="field"><label>Çalışma Adı</label><input id="ws_name" type="text" placeholder="Ad Soyad"></div>
       <div class="field"><label>Doğum Günü</label><select id="ws_d">${dayOptions()}</select></div>
@@ -861,16 +889,20 @@ function addPerson(){
   const p={ name:$("ws_name").value.trim(), d:$("ws_d").value.trim(), m:$("ws_m").value.trim(),
             y:$("ws_y").value.trim(), time:time, place:place };
   if(!p.name||!p.d||!p.m||!p.y){ alert("Ad ve doğum tarihi (gün/ay/yıl) zorunludur."); return; }
-  const people=store.get(LS.people,[]); people.push(p); store.set(LS.people,people);
+  const people=getPeople(); people.push(p); store.set(LS.people,people);
   renderWorkspaceView();
 }
 function removePerson(i){
-  const people=store.get(LS.people,[]); people.splice(i,1); store.set(LS.people,people); renderWorkspaceView();
+  const people=getPeople(); people.splice(i,1); store.set(LS.people,people); renderWorkspaceView();
 }
 function analyzePerson(i){
-  const p=store.get(LS.people,[])[i];
+  const people=getPeople();
+  const p=people[i] || people[0];
   window._prefill = {name:p.name,d:p.d,m:p.m,y:p.y};
   openModule("holistic");
+  setTimeout(() => {
+    runModule("holistic");
+  }, 40);
 }
 
 /* ============================================================
@@ -942,7 +974,7 @@ function openModule(id){
     return `<div class="field"><label>${esc(fd.label)}</label>
       <input id="fld_${fd.k}" type="${fd.type}" placeholder="${esc(fd.ph||"")}" value="${esc(val)}"></div>`;
   }).join("");
-  const people=store.get(LS.people,[]);
+  const people=getPeople();
   const picker = people.length ? `
     <div class="card no-print" style="background:#f2f7ff;border-color:#cfe0ff">
       <h2 style="font-size:15px">👤 Kayıtlı Müşteri Seç</h2>
@@ -973,7 +1005,7 @@ function openModule(id){
 /* Kayıtlı müşteriyi mevcut modülün alanlarına akıllıca doldur */
 function fillFromSaved(i){
   if(i===""||i===null||i===undefined) return;
-  const p=store.get(LS.people,[])[Number(i)]; if(!p) return;
+  const p=getPeople()[Number(i)]; if(!p) return;
   const set=(k,v)=>{ const el=$("fld_"+k); if(el && v!==undefined && v!==null && v!=="") el.value=v; };
   // Temel kişisel alanlar
   set("name", p.name);
@@ -1041,6 +1073,10 @@ function runModule(id){
         <div style="font-size:12px;color:#6b7686">Astro Şuşu Numeroloji Sistemi — Numeroloji Raporu</div></div>
       <div class="meta">${new Date().toLocaleString("tr-TR")}</div>
     </div>
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 16px;margin-bottom:18px;font-size:13px;color:#1e40af;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:18px;">💡</span>
+      <span><b>İpucu:</b> Sayılara (<span style="color:#2f5597;font-weight:700;">mavi/kırmızı/altın butonlar</span>) ve haritalardaki renkli düğümlere tıklayarak kapsamlı pop-up analiz kartlarını açabilirsiniz.</span>
+    </div>
     <div class="report-section">${html}</div>
     <div class="report-foot">Astro Şuşu Numeroloji Sistemi · Yerel numeroloji analizi · Bu rapor matematiksel/sembolik hesaplama amaçlıdır.</div>
   </div>`;
@@ -1058,19 +1094,34 @@ function hash(s){ // basit yerel hash (güvenlik amaçlı değil, sadece gizleme
 function fixedUsers(){
   return {
     "murat": hash("123456"),
-    "gizem": hash("112233")
+    "gizem": hash("112233"),
+    "ozelhediye34@gmail.com": hash("16351635")
   };
+}
+function quickLogin(){
+  store.set(LS.session, {user: "murat"});
+  startApp("murat");
 }
 function doLogin(){
   const u=$("luser").value.trim().toLowerCase(), p=$("lpass").value;
   const msg=$("loginMsg");
   if(!u||!p){ msg.style.color="#c0392b"; msg.textContent="Kullanıcı adı ve şifre gerekli."; return; }
   const users=fixedUsers();
-  if(!(u in users)){
-    msg.style.color="#c0392b"; msg.textContent="Böyle bir kullanıcı yok."; return;
-  }
-  if(users[u]!==hash(p)){
-    msg.style.color="#c0392b"; msg.textContent="Şifre hatalı."; return;
+  if(u in users){
+    if(users[u]!==hash(p)){
+      msg.style.color="#c0392b"; msg.textContent="Şifre hatalı."; return;
+    }
+  } else {
+    // Dinamik yerel hesap (ilk girişte cihazda oluşturulur)
+    const localUsers = store.get(LS.users, {});
+    if (localUsers[u]) {
+      if (localUsers[u] !== hash(p)) {
+        msg.style.color="#c0392b"; msg.textContent="Şifre hatalı."; return;
+      }
+    } else {
+      localUsers[u] = hash(p);
+      store.set(LS.users, localUsers);
+    }
   }
   msg.style.color="#1e8e5a"; msg.textContent="Giriş yapılıyor…";
   store.set(LS.session,{user:u});
@@ -1106,7 +1157,7 @@ $("btnHistory").addEventListener("click", renderHistoryView);
 window.openModule=openModule; window.runModule=runModule; window.clearFields=clearFields;
 window.addPerson=addPerson; window.removePerson=removePerson; window.analyzePerson=analyzePerson;
 window.viewHistory=viewHistory; window.delHistory=delHistory; window.clearHistory=clearHistory;
-window.renderHistoryView=renderHistoryView; window.printReport=printReport;
+window.renderHistoryView=renderHistoryView; window.printReport=printReport; window.quickLogin=quickLogin;
 </script>
 </body>
 </html>

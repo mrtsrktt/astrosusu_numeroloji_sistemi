@@ -77,8 +77,8 @@
       const arcana = global.NumerologyData ? global.NumerologyData.findArcana(v) : null;
       const tip = `${code}: ${v} ${arcana ? '— ' + arcana.name : ''}`;
       return `
-        <g class="dm-node" data-code="${code}" data-num="${v}" style="cursor:pointer;" onclick="window.NumerologyDefinitions && window.NumerologyDefinitions.openModal('${code}: ${arcana ? arcana.name : ''} (${v})', '<div style=\\'line-height:1.7\\'><h4>${code} Noktası: ${v} — ${arcana ? arcana.name : ''}</h4><p><b>Gezegen:</b> ${arcana ? arcana.planet : '-'}<br><b>Burç:</b> ${arcana ? arcana.horoscope : '-'}<br><b>Element:</b> ${arcana ? arcana.element : '-'}</p><p>${arcana ? arcana.desc : ''}</p></div>')">
-          <title>${tip}</title>
+        <g class="dm-node" data-code="${code}" data-num="${v}" style="cursor:pointer;" onclick="window.NumerologyDefinitions && window.NumerologyDefinitions.show('Arcana', '${v}', '${code} Noktası: Arkana ${v} — ${arcana ? arcana.name : ''}')">
+          <title>${tip} (Detaylı bilgi kartı için tıklayın)</title>
           <circle cx="${x}" cy="${y}" r="${r}" fill="${fill}" style="${isSmall ? smallCircleStyle : largeCircleStyle}" />
           <text x="${x}" y="${y}" style="${isSmall ? smallTextStyle : largeTextStyle}; fill:${isSmall ? '#ffffff' : '#ffffff'};">${v || code}</text>
         </g>

@@ -616,60 +616,87 @@
     return segments;
   }
 
-  function destinyMatrix(name, day, month, year) {
-    const d = parseInt(day, 10) || 0;
-    const m = parseInt(month, 10) || 0;
-    const y = parseInt(year, 10) || 0;
+  function destinyMatrix(a1, a2, a3, a4) {
+    let d, m, y, nm;
+    if (typeof a1 === 'number' || (!isNaN(Number(a1)) && !isNaN(Number(a2)))) {
+      d = parseInt(a1, 10) || 1;
+      m = parseInt(a2, 10) || 1;
+      y = parseInt(a3, 10) || 1990;
+      nm = a4 || '';
+    } else {
+      nm = a1 || '';
+      d = parseInt(a2, 10) || 1;
+      m = parseInt(a3, 10) || 1;
+      y = parseInt(a4, 10) || 1990;
+    }
 
-    // Dört köşe
-    const A = reduce22(d);              // sol üst — kişilik günü
-    const B = reduce22(m);              // sağ üst — ay
-    const C = reduce22(digitSum(y));    // sağ alt — yıl
-    const D = reduce22(A + B + C);      // sol alt — karmik
-    const merkez = reduce22(A + B + C + D);
+    // Dört ana köşe (Kişilik karesi)
+    const A = reduce22(d);              // Kişilik günü
+    const B = reduce22(m);              // Ruh ayı
+    const C = reduce22(digitSum(y));    // Karma yılı
+    const D = reduce22(A + B + C);      // Karmik kök / alt
+    const E = reduce22(A + B + C + D);  // Merkez konfor
 
-    // Yardımcı noktalar (köşegen ortaları)
-    const AB = reduce22(A + B);
-    const BC = reduce22(B + C);
-    const CD = reduce22(C + D);
-    const DA = reduce22(D + A);
+    // Soy karesi köşeleri
+    const F = reduce22(A + B);          // Erkek soyu üst
+    const G = reduce22(B + C);          // Kadın soyu üst
+    const H = reduce22(C + D);          // Kadın soyu alt
+    const I = reduce22(D + A);          // Erkek soyu alt
 
-    // Karmik kuyruk (atalar)
-    const atalar = reduce22(AB + CD);
-    const ruh = reduce22(BC + DA);
+    // Ara noktalar (kadersel araçlar)
+    const A1 = reduce22(A + E);
+    const A2 = reduce22(A + A1);
+    const B1 = reduce22(B + E);
+    const B2 = reduce22(B + B1);
+    const C1 = reduce22(C + E);
+    const C2 = reduce22(C + C1);
+    const D1 = reduce22(D + E);
+    const D2 = reduce22(D + D1);
+
+    // Kadersel Yönelimler (Destinations)
+    const personal = reduce22(A + C + B + D);
+    const social = reduce22(F + H + G + I);
+    const spiritual = reduce22(personal + social);
+    const planetary = reduce22(social + spiritual);
+
+    // 7 Çakra Enerji Dağılımı
+    const chakras = [
+      { chakra: 1, name: 'Muladhara (Kök)', fiziksel: A, enerji: D, duygusal: reduce22(A + D) },
+      { chakra: 2, name: 'Svadhisthana (Sakral)', fiziksel: A1, enerji: D1, duygusal: reduce22(A1 + D1) },
+      { chakra: 3, name: 'Manipura (Solar)', fiziksel: E, enerji: E, duygusal: E },
+      { chakra: 4, name: 'Anahata (Kalp)', fiziksel: B1, enerji: C1, duygusal: reduce22(B1 + C1) },
+      { chakra: 5, name: 'Vishuddha (Boğaz)', fiziksel: B, enerji: C, duygusal: reduce22(B + C) },
+      { chakra: 6, name: 'Ajna (Üçüncü Göz)', fiziksel: F, enerji: H, duygusal: reduce22(F + H) },
+      { chakra: 7, name: 'Sahasrara (Taç)', fiziksel: G, enerji: I, duygusal: reduce22(G + I) }
+    ];
 
     const noktalar = [
       { kod: 'A', ad: 'Kişilik (Gün)',       deger: A, tarot: TAROT[A] },
       { kod: 'B', ad: 'Ruh (Ay)',            deger: B, tarot: TAROT[B] },
       { kod: 'C', ad: 'Karma (Yıl)',         deger: C, tarot: TAROT[C] },
       { kod: 'D', ad: 'Kader (Toplam)',      deger: D, tarot: TAROT[D] },
-      { kod: 'M', ad: 'Merkez (Öz)',         deger: merkez, tarot: TAROT[merkez] },
-      { kod: 'AB', ad: 'Yetenek',            deger: AB, tarot: TAROT[AB] },
-      { kod: 'BC', ad: 'Sevgi / İlişki',     deger: BC, tarot: TAROT[BC] },
-      { kod: 'CD', ad: 'Para / Kariyer',     deger: CD, tarot: TAROT[CD] },
-      { kod: 'DA', ad: 'Sağlık / Aile',      deger: DA, tarot: TAROT[DA] },
-      { kod: 'AT', ad: 'Atalar Karması',     deger: atalar, tarot: TAROT[atalar] },
-      { kod: 'RU', ad: 'Ruh Karması',        deger: ruh, tarot: TAROT[ruh] }
+      { kod: 'M', ad: 'Merkez (Öz)',         deger: E, tarot: TAROT[E] },
+      { kod: 'F', ad: 'Erkek Soyu Üst',      deger: F, tarot: TAROT[F] },
+      { kod: 'G', ad: 'Kadın Soyu Üst',      deger: G, tarot: TAROT[G] },
+      { kod: 'H', ad: 'Kadın Soyu Alt',      deger: H, tarot: TAROT[H] },
+      { kod: 'I', ad: 'Erkek Soyu Alt',      deger: I, tarot: TAROT[I] }
     ];
 
     // Yaşam çizgisi — merkez enerjiye göre 0-80 yaş
-    const yasCizgisi = destinyAgeLine(merkez).map(s => ({
+    const yasCizgisi = destinyAgeLine(E).map(s => ({
       yas: s.yas,
       deger: s.arcana,
       tarot: TAROT[s.arcana]
     }));
 
-    // Element dağılımı
-    const elementSay = { 'Ateş': 0, 'Toprak': 0, 'Hava': 0, 'Su': 0 };
-    noktalar.forEach(n => {
-      if (n.tarot && elementSay[n.tarot.element] !== undefined) elementSay[n.tarot.element]++;
-    });
-
     return {
-      noktalar: noktalar,
-      yasCizgisi: yasCizgisi,
-      elementDagilimi: elementSay,
-      merkez: merkez
+      A, B, C, D, E, F, G, H, I,
+      A1, A2, B1, B2, C1, C2, D1, D2,
+      destinations: { personal, social, spiritual, planetary },
+      chakras,
+      noktalar,
+      yasCizgisi,
+      merkez: E
     };
   }
 
@@ -963,6 +990,7 @@
       SelfLine: { Number: selfNum, Echo: selfEcho },
       DestinyLine: { Number: destinyNum, Echo: destinyEcho },
       pinStr: `${c1Num}${c2Num}${c3Num}${c4Num}${c5Num}${c6Num}${c7Num}${c8Num}${c9Num}`,
+      digits: [c1Num, c2Num, c3Num, c4Num, c5Num, c6Num, c7Num, c8Num, c9Num],
       c1: c1Num, c2: c2Num, c3: c3Num, c4: c4Num, c5: c5Num, c6: c6Num, c7: c7Num, c8: c8Num, c9: c9Num,
       fatherLine: fatherNum, motherLine: motherNum, selfLine: selfNum, destinyLine: destinyNum
     };
@@ -1079,6 +1107,142 @@
     };
   }
 
+  /* ------------------------------------------------- Ezoterik & Kozmik Hesaplayıcılar */
+  function arcana(n) {
+    const val = Number(n) || 0;
+    return reduce22(val);
+  }
+
+  function zodiacSign(d, m) {
+    const day = Number(d) || 1, month = Number(m) || 1;
+    const signs = [
+      { number: 1, name: 'Koç', symbol: '♈', element: 'Ateş', dates: '21 Mart - 19 Nisan' },
+      { number: 2, name: 'Boğa', symbol: '♉', element: 'Toprak', dates: '20 Nisan - 20 Mayıs' },
+      { number: 3, name: 'İkizler', symbol: '♊', element: 'Hava', dates: '21 Mayıs - 20 Haziran' },
+      { number: 4, name: 'Yengeç', symbol: '♋', element: 'Su', dates: '21 Haziran - 22 Temmuz' },
+      { number: 5, name: 'Aslan', symbol: '♌', element: 'Ateş', dates: '23 Temmuz - 22 Ağustos' },
+      { number: 6, name: 'Başak', symbol: '♍', element: 'Toprak', dates: '23 Ağustos - 22 Eylül' },
+      { number: 7, name: 'Terazi', symbol: '♎', element: 'Hava', dates: '23 Eylül - 22 Ekim' },
+      { number: 8, name: 'Akrep', symbol: '♏', element: 'Su', dates: '23 Ekim - 21 Kasım' },
+      { number: 9, name: 'Yay', symbol: '♐', element: 'Ateş', dates: '22 Kasım - 21 Aralık' },
+      { number: 10, name: 'Oğlak', symbol: '♑', element: 'Toprak', dates: '22 Aralık - 19 Ocak' },
+      { number: 11, name: 'Kova', symbol: '♒', element: 'Hava', dates: '20 Ocak - 18 Şubat' },
+      { number: 12, name: 'Balık', symbol: '♓', element: 'Su', dates: '19 Şubat - 20 Mart' }
+    ];
+
+    if ((month === 3 && day >= 21) || (month === 4 && day <= 19)) return signs[0]; // Koç
+    if ((month === 4 && day >= 20) || (month === 5 && day <= 20)) return signs[1]; // Boğa
+    if ((month === 5 && day >= 21) || (month === 6 && day <= 20)) return signs[2]; // İkizler
+    if ((month === 6 && day >= 21) || (month === 7 && day <= 22)) return signs[3]; // Yengeç
+    if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) return signs[4]; // Aslan
+    if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) return signs[5]; // Başak
+    if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) return signs[6]; // Terazi
+    if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) return signs[7]; // Akrep
+    if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) return signs[8]; // Yay
+    if ((month === 12 && day >= 22) || (month === 1 && day <= 19)) return signs[9]; // Oğlak
+    if ((month === 1 && day >= 20) || (month === 2 && day <= 18)) return signs[10]; // Kova
+    return signs[11]; // Balık
+  }
+
+  function planet(lp) {
+    const pList = (global.NumerologyData && global.NumerologyData.planets) || [
+      { number: 1, name: 'Güneş', symbol: '☉', description: 'Kimlik, irade ve yaşam enerjisi.' },
+      { number: 2, name: 'Ay', symbol: '☽', description: 'Duygular, sezgiler ve içsel güvenlik.' },
+      { number: 3, name: 'Merkür', symbol: '☿', description: 'Zihin, iletişim ve öğrenme.' },
+      { number: 4, name: 'Venüs', symbol: '♀', description: 'Sevgi, estetik ve uyum.' },
+      { number: 5, name: 'Mars', symbol: '♂', description: 'Arzu, cesaret ve eylem.' },
+      { number: 6, name: 'Jüpiter', symbol: '♃', description: 'Bolluk, bilgelik ve inanç.' },
+      { number: 7, name: 'Satürn', symbol: '♄', description: 'Disiplin, sınır ve sorumluluk.' },
+      { number: 8, name: 'Uranüs', symbol: '♅', description: 'Özgürlük, devrim ve uyanış.' },
+      { number: 9, name: 'Neptün', symbol: '♆', description: 'İlahi sevgi ve hayal gücü.' },
+      { number: 10, name: 'Plüton', symbol: '♇', description: 'Dönüşüm ve yeniden doğuş.' }
+    ];
+    const n = Math.max(1, Math.min(10, reduce(lp)));
+    return pList.find(p => p.number === n) || pList[0];
+  }
+
+  function rune(lp) {
+    const rList = (global.NumerologyData && global.NumerologyData.runes) || [];
+    if (!rList.length) return { number: 1, name: 'Fehu', symbol: 'ᚠ', meaning: 'Bereket ve ruhsal bolluk.' };
+    const idx = (Number(lp) % 24) || 1;
+    return rList.find(r => r.number === idx) || rList[0];
+  }
+
+  function element(d, m, y) {
+    const z = zodiacSign(d, m);
+    const eList = (global.NumerologyData && global.NumerologyData.elements) || [
+      { id: 1, name: 'Ateş', symbol: '🜂', color: '#e74c3c', description: 'İrade, cesaret ve tutku.' },
+      { id: 2, name: 'Toprak', symbol: '🜃', color: '#27ae60', description: 'Güven, istikrar ve üretkenlik.' },
+      { id: 3, name: 'Hava', symbol: '🜁', color: '#3498db', description: 'Zihin, vizyon ve iletişim.' },
+      { id: 4, name: 'Su', symbol: '🜄', color: '#2980b9', description: 'Sezgi, şefkat ve akış.' }
+    ];
+    return eList.find(e => e.name === z.element) || eList[0];
+  }
+
+  function moonPhase(d, m, y) {
+    const day = Number(d) || 1, month = Number(m) || 1, year = Number(y) || 1990;
+    let ym = year, mm = month;
+    if (mm < 3) { ym--; mm += 12; }
+    ++mm;
+    let jd = 365.25 * ym + 30.6 * mm + day - 694039.09;
+    jd /= 29.5305882;
+    let b = Math.round((jd - parseInt(jd)) * 8);
+    if (b >= 8) b = 0;
+    const phases = [
+      { phase: 'Yeniay', meaning: 'Tohum ekme, yeni niyetler ve ruhsal başlangıçlar enerjisi.' },
+      { phase: 'Hilal', meaning: 'Büyüme arzusu, cesaretle ilk adımları atma ve vizyon oluşturma.' },
+      { phase: 'İlk Dördün', meaning: 'Engelleri aşma, irade sınavı ve kararlılıkla ilerleme.' },
+      { phase: 'Büyüyen Ay', meaning: 'Detayları rafine etme, sabır ve son hazırlıkların tamamlanması.' },
+      { phase: 'Dolunay', meaning: 'Tezahür, maksimum farkındalık, aydınlanma ve ruhsal hasat.' },
+      { phase: 'Küçülen Ay', meaning: 'Şükran duyma, bilgiyi paylaşma ve başkalarına rehberlik etme.' },
+      { phase: 'Son Dördün', meaning: 'Bırakma, affetme, eski yüklerden arınma ve teslimiyet.' },
+      { phase: 'Balzamik (Karanlık Ay)', meaning: 'Derin dinlenme, içe dönüş, meditasyon ve ruhsal yenilenme.' }
+    ];
+    return phases[b] || phases[0];
+  }
+
+  function karmicAnalysis(day, month, year, name) {
+    let d, m, y, nm;
+    if (typeof day === 'string' && isNaN(Number(day))) {
+      nm = day; d = Number(month) || 1; m = Number(year) || 1; y = Number(name) || 1990;
+    } else {
+      d = Number(day) || 1; m = Number(month) || 1; y = Number(year) || 1990; nm = name || '';
+    }
+
+    const A = reduce22(d);
+    const B = reduce22(m);
+    const C = reduce22(digitSum(y));
+    const F = reduce22(A + B);
+    const G = reduce22(B + C);
+    const H = reduce22(C + A);
+    const D = reduce22(A + B + C); // Merkez Düğüm
+    const E = reduce22(D + B);
+    const I = reduce22(D + C);
+    const K = reduce22(D + A);
+    const L = reduce22(D + F);
+
+    const spiritualPath = D;
+    const successPath = reduce22(A + C);
+    const karmicKnot = D;
+    const tailKarma = [D, reduce22(D + C), reduce22(D + B)];
+    const missions = [
+      'Geçmiş yaşam karmasını temizleyerek bu yaşamda ruhsal olgunluğa ve ilahi bilgeliğe ulaşma dersi.',
+      'Liderlik enerjisini bencillikten arındırıp toplumsal faydaya ve ışık rehberliğine dönüştürme.',
+      'Duygusal bağımlılıkları aşarak koşulsuz sevgi ve içsel huzur dengesini inşa etme.',
+      'Maddi dünyayı manevi değerlerle harmanlayıp bolluk bilincini adaletle paylaşma.'
+    ];
+    const incarnationMission = missions[D % missions.length];
+
+    return {
+      A, B, C, D, E, F, G, H, I, K, L,
+      spiritualPath, successPath, karmicKnot, tailKarma, incarnationMission,
+      hayatSayisi: { ham: d + m + y, deger: reduce22(d + m + y) },
+      yol: [{ kod: 'A', deger: A }, { kod: 'B', deger: B }, { kod: 'C', deger: C }, { kod: 'D', deger: D }],
+      basari: [{ kod: 'E', deger: E }, { kod: 'F', deger: F }, { kod: 'G', deger: G }, { kod: 'H', deger: H }],
+      dugum: [{ kod: 'I', deger: I }, { kod: 'K', deger: K }, { kod: 'L', deger: L }]
+    };
+  }
+
   /* Arayüzün kullandığı kısa ad: klasik Pisagor indirgemesi. */
   const reduceNumber = reduce;
 
@@ -1101,11 +1265,12 @@
     universalYear, universalMonth, universalDay, universalWeek,
     fibonacciSequence, fibonacciAnalysis,
     pinnaclesAndChallenges, lifeCycles, numberMatrix, transitionCycles,
-    tirolWheel, karmaAnalysis, destinyMatrix, personalCycles,
+    tirolWheel, karmaAnalysis, karmicAnalysis, destinyMatrix, personalCycles,
     transformationYears, universalDate, universalWheel, personalWeekTable,
     nameCompatibility, plateAnalysis, identityNumberAnalysis,
 
-    moneyCode, pinCode, loveCode, lifeCode, karmicDebtCheck, harmonyAnalysis
+    moneyCode, pinCode, loveCode, lifeCode, karmicDebtCheck, harmonyAnalysis,
+    arcana, zodiacSign, planet, rune, element, moonPhase
   };
 
   if (typeof module !== 'undefined' && module.exports) {
