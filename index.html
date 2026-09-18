@@ -294,10 +294,8 @@ table.data tr:nth-child(even) td{background:#fafcff}
   line-height: 1.1;
 }
 
-/* Alt Özet Şeridi */
-.omurga-bottom-bar {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+/* Alt Özet Tablosu & Denge Sekansı (Görsel referans ile birebir) */
+.omurga-bottom-table {
   border: 1px solid #cbd5e1;
   border-radius: 8px;
   overflow: hidden;
@@ -305,24 +303,144 @@ table.data tr:nth-child(even) td{background:#fafcff}
   background: #ffffff;
   text-align: center;
 }
-.omurga-bottom-item {
-  border-right: 1px solid #cbd5e1;
-  padding: 8px 4px;
+.omurga-bottom-head-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: #eceff1;
+  border-bottom: 1px solid #cbd5e1;
 }
-.omurga-bottom-item:last-child {
+.omurga-bottom-th {
+  padding: 10px 4px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.5px;
+  border-right: 1px solid #cbd5e1;
+  cursor: pointer;
+}
+.omurga-bottom-th:last-child {
   border-right: none;
 }
-.omurga-bottom-label {
-  font-size: 10px;
-  font-weight: 700;
-  color: #64748b;
-  text-transform: uppercase;
-  margin-bottom: 2px;
+.omurga-bottom-body-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: #ffffff;
 }
-.omurga-bottom-val {
-  font-size: 14px;
+.omurga-bottom-td {
+  padding: 10px 4px;
+  font-size: 15px;
   font-weight: 700;
   color: #1e293b;
+  border-right: 1px solid #cbd5e1;
+  cursor: pointer;
+}
+.omurga-bottom-td:last-child {
+  border-right: none;
+}
+.omurga-sequence-box {
+  margin-top: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #ffffff;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.omurga-sequence-box:hover {
+  border-color: #94a3b8;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.omurga-sequence-title {
+  background: #eceff1;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #cbd5e1;
+}
+.omurga-sequence-val {
+  padding: 8px 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: 1px;
+}
+
+/* Alt Bağımsız Beyaz Kartlar */
+.omurga-cards-stack {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.omurga-sub-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 16px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.omurga-sub-card:hover {
+  transform: translateY(-2px);
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.omurga-sub-card-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #1e293b;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+.omurga-sub-card-val {
+  font-size: 15px;
+  font-weight: 700;
+  color: #334155;
+  margin-top: 4px;
+}
+
+/* Floating Hane Popover */
+.omurga-popover {
+  position: fixed;
+  background: #1e2229;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 14px 16px;
+  min-width: 250px;
+  max-width: 300px;
+  text-align: center;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+  z-index: 999999;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  border: 1px solid rgba(255,255,255,0.1);
+  animation: omurgaPopFade 0.18s ease-out;
+}
+@keyframes omurgaPopFade {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.omurga-popover-btn {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: background 0.15s ease;
+}
+.omurga-popover-btn:hover {
+  background: #1d4ed8;
 }
 
 @media print{
@@ -374,13 +492,13 @@ table.data tr:nth-child(even) td{background:#fafcff}
   </div>
 </div>
 
-<script src="astro_sushu_engine.js?v=20260918_4"></script>
-<script src="numerology_data.js?v=20260918_4"></script>
-<script src="numerology_definitions.js?v=20260918_4"></script>
-<script src="destiny_matrix_svg.js?v=20260918_4"></script>
-<script src="karmic_svg.js?v=20260918_4"></script>
-<script src="birth_wheel_svg.js?v=20260918_4"></script>
-<script src="analysis_expositor.js?v=20260918_4"></script>
+<script src="astro_sushu_engine.js?v=20260918_6"></script>
+<script src="numerology_data.js?v=20260918_6"></script>
+<script src="numerology_definitions.js?v=20260918_6"></script>
+<script src="destiny_matrix_svg.js?v=20260918_6"></script>
+<script src="karmic_svg.js?v=20260918_6"></script>
+<script src="birth_wheel_svg.js?v=20260918_6"></script>
+<script src="analysis_expositor.js?v=20260918_6"></script>
 <script>
 /* ============================================================
    UYGULAMA KATMANI
@@ -554,15 +672,17 @@ function renderOmurgaHTML(f){
   const m = Number(f.m) || 0;
   const y = Number(f.y) || 0;
 
-  const ot = E.omurgaTable ? E.omurgaTable(name, d, m, y) : { top: {}, rows: [], hasDate: false, hasName: false };
+  const ot = E.omurgaTable ? E.omurgaTable(name, d, m, y) : { top: {}, rows: [], indicators: null, hasDate: false, hasName: false };
+  window._currentOmurga = ot;
   const top = ot.top || {};
   const rows = ot.rows || [];
   const hasDate = ot.hasDate;
   const hasName = ot.hasName;
+  const ind = ot.indicators;
 
-  // Bilinçaltı ve karma değerleri
-  const sk = hasName && E.subconsciousAndKarma ? E.subconsciousAndKarma(name) : { bilincalti: "-", direktKarma: "-" };
-  const dolayliKarma = hasDate && E.reduceFull ? E.reduceFull(d + m) : "-";
+  // Bilinçaltı ve karma değerleri (Decoz standart formülü: 6, 3, 2)
+  const sk = hasName && E.subconsciousAndKarma ? E.subconsciousAndKarma(name, d, m, y) : { bilincalti: "-", direktKarma: "-", dolayliKarma: "-" };
+  const dolayliKarma = sk.dolayliKarma !== undefined ? sk.dolayliKarma : (hasDate && E.reduceFull ? E.reduceFull(d + m) : "-");
 
   return `
   <div class="omurga-container">
@@ -636,7 +756,7 @@ function renderOmurgaHTML(f){
               if (r.aNum !== null) {
                 const subHtml = r.aEcho ? `<span class="omurga-a-sub">(${r.aEcho})</span>` : '';
                 aHtml = `
-                  <div class="omurga-a-box" style="background:${r.aBoxBg};" onclick="NumerologyDefinitions.show('Chakra','${r.num}','${r.num}. Çakra ve Pin Kodu Hane Açılımı: ${r.aDisplay}')" title="${r.num}. Çakra ve Pin Kodu Hane Açılımı: ${r.aDisplay} (Tıklayın)">
+                  <div class="omurga-a-box" style="background:${r.aBoxBg};" onclick="window.showOmurgaPopover(event, ${r.num})" title="${r.haneName} (${r.ageRange}) — Popover ve Çakra Detayı için Tıklayın">
                     ${subHtml}
                     <span class="omurga-a-main">${r.aNum}</span>
                   </div>
@@ -658,25 +778,205 @@ function renderOmurgaHTML(f){
         </table>
       </div>
 
-      <!-- Alt Karma ve Bilinçaltı Şeridi -->
-      <div class="omurga-bottom-bar">
-        <div class="omurga-bottom-item" onclick="NumerologyDefinitions.show('SubconsciousSelf','${sk.bilincalti}','Bilinçaltı Benlik: ${sk.bilincalti}')" style="cursor:pointer;">
-          <div class="omurga-bottom-label">BİLİNÇALTI</div>
-          <div class="omurga-bottom-val">${sk.bilincalti}</div>
+      <!-- Alt Karma ve Bilinçaltı Tablosu (frame_500.png ile birebir) -->
+      <div class="omurga-bottom-table">
+        <div class="omurga-bottom-head-row">
+          <div class="omurga-bottom-th" onclick="NumerologyDefinitions.show('SubconsciousSelf','${sk.bilincalti}','Bilinçaltı Benlik: ${sk.bilincalti}')">BİLİNÇALTI</div>
+          <div class="omurga-bottom-th" onclick="NumerologyDefinitions.show('KarmicDebt','${sk.direktKarma}','Direk Karma Dersi: ${sk.direktKarma}')">DİREK KARMA</div>
+          <div class="omurga-bottom-th" onclick="NumerologyDefinitions.show('KarmicDebt','${dolayliKarma}','Dolaylı Karma Dersi: ${dolayliKarma}')">DOLAYLI KARMA</div>
         </div>
-        <div class="omurga-bottom-item" onclick="NumerologyDefinitions.show('KarmicDebt','${sk.direktKarma}','Direk Karma Dersi: ${sk.direktKarma}')" style="cursor:pointer;">
-          <div class="omurga-bottom-label">DİREK KARMA</div>
-          <div class="omurga-bottom-val">${sk.direktKarma}</div>
-        </div>
-        <div class="omurga-bottom-item" onclick="NumerologyDefinitions.show('KarmicDebt','${dolayliKarma}','Dolaylı Karma Dersi: ${dolayliKarma}')" style="cursor:pointer;">
-          <div class="omurga-bottom-label">DOLAYLI KARMA</div>
-          <div class="omurga-bottom-val">${dolayliKarma}</div>
+        <div class="omurga-bottom-body-row">
+          <div class="omurga-bottom-td" onclick="NumerologyDefinitions.show('SubconsciousSelf','${sk.bilincalti}','Bilinçaltı Benlik: ${sk.bilincalti}')">${sk.bilincalti}</div>
+          <div class="omurga-bottom-td" onclick="NumerologyDefinitions.show('KarmicDebt','${sk.direktKarma}','Direk Karma Dersi: ${sk.direktKarma}')">${sk.direktKarma}</div>
+          <div class="omurga-bottom-td" onclick="NumerologyDefinitions.show('KarmicDebt','${dolayliKarma}','Dolaylı Karma Dersi: ${dolayliKarma}')">${dolayliKarma}</div>
         </div>
       </div>
+
+      <!-- Denge Sayı Sekansı Bloğu (frame_500.png ile birebir) -->
+      ${ind ? `
+      <div class="omurga-sequence-box" onclick="NumerologyDefinitions.show('Balance','${ind.dengeSekansi}','Denge Sayı Sekansı: ${ind.dengeSekansi}')">
+        <div class="omurga-sequence-title">DENGE SAYI SEKANSI</div>
+        <div class="omurga-sequence-val">${ind.dengeSekansi}</div>
+      </div>
+      ` : ''}
     </div>
+
+    <!-- Alt Bağımsız Beyaz Kartlar Bloğu (frame_1800.png ile birebir) -->
+    ${ind ? `
+    <div class="omurga-cards-stack">
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('LifePurpose','${ind.hayatAmaci}','HAYAT AMACI: ${ind.hayatAmaci}')">
+        <div class="omurga-sub-card-title">HAYAT AMACI</div>
+        <div class="omurga-sub-card-val">${ind.hayatAmaci}</div>
+      </div>
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('LifePath','${ind.yasamYolu}','YAŞAM YOLU: ${ind.yasamYolu}')">
+        <div class="omurga-sub-card-title">YAŞAM YOLU</div>
+        <div class="omurga-sub-card-val">${ind.yasamYolu}</div>
+      </div>
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('Maturity','${ind.olgunluk}','OLGUNLUK: ${ind.olgunluk}')">
+        <div class="omurga-sub-card-title">OLGUNLUK</div>
+        <div class="omurga-sub-card-val">${ind.olgunluk}</div>
+      </div>
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('LifePath','${ind.yasamKodu}','YAŞAM KODU: ${ind.yasamKodu}')">
+        <div class="omurga-sub-card-title">YAŞAM KODU</div>
+        <div class="omurga-sub-card-val">${ind.yasamKodu}</div>
+      </div>
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('Expression','${ind.kader}','KADER: ${ind.kader}')">
+        <div class="omurga-sub-card-title">KADER</div>
+        <div class="omurga-sub-card-val">${ind.kader}</div>
+      </div>
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('Bridge','${ind.kopru}','KÖPRÜ: ${ind.kopru}')">
+        <div class="omurga-sub-card-title">KÖPRÜ</div>
+        <div class="omurga-sub-card-val">${ind.kopru}</div>
+      </div>
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('Attitude','${ind.tutum}','TUTUM: ${ind.tutum}')">
+        <div class="omurga-sub-card-title">TUTUM</div>
+        <div class="omurga-sub-card-val">${ind.tutum}</div>
+      </div>
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('EarlyLesson','${ind.erkenDers}','ERKEN DERS: ${ind.erkenDers}')">
+        <div class="omurga-sub-card-title">ERKEN DERS</div>
+        <div class="omurga-sub-card-val">${ind.erkenDers}</div>
+      </div>
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('MoneyCode','${ind.paraKodu}','PARA KODU: ${ind.paraKodu}')">
+        <div class="omurga-sub-card-title">PARA KODU</div>
+        <div class="omurga-sub-card-val">${ind.paraKodu}</div>
+      </div>
+    </div>
+    ` : ''}
   </div>
   `;
 }
+
+/* Floating Hane Popover & Çakra Detay Modal Yöneticisi */
+window.showOmurgaPopover = function(e, num) {
+  if (e && e.stopPropagation) e.stopPropagation();
+  const ot = window._currentOmurga;
+  if (!ot || !ot.rows) return;
+  const r = ot.rows.find(x => x.num === num);
+  if (!r || r.aNum === null) return;
+
+  let pop = document.getElementById('omurgaFloatingPopover');
+  if (!pop) {
+    pop = document.createElement('div');
+    pop.id = 'omurgaFloatingPopover';
+    pop.className = 'omurga-popover';
+    document.body.appendChild(pop);
+    document.addEventListener('click', (evt) => {
+      if (pop && !pop.contains(evt.target)) {
+        pop.style.display = 'none';
+      }
+    });
+  }
+
+  const badgeColor = (r.uyum && r.uyum.title.includes('Zorlu')) ? '#f87171' : '#6ee7b7';
+
+  pop.innerHTML = `
+    <div style="position:relative;">
+      <div style="font-size:13px;font-weight:700;color:#ffffff;line-height:1.3;">${r.haneName}</div>
+      <div style="font-size:11px;color:#cbd5e1;margin-top:2px;">(${r.ageRange})</div>
+      <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-top:4px;letter-spacing:0.3px;">(ETKİ:${r.etki} - STRES:${r.stres} - GÖLGE:${r.golge})</div>
+      <div style="height:1px;background:rgba(255,255,255,0.14);margin:10px 0;"></div>
+      <div style="font-size:13px;font-weight:700;color:#ffffff;">Uyum</div>
+      <div style="font-size:12px;font-weight:700;color:${badgeColor};margin-top:2px;">${r.uyum ? r.uyum.title : '-'}</div>
+      <div style="font-size:11px;color:#cbd5e1;margin-top:3px;line-height:1.4;">${r.uyum ? r.uyum.desc : ''}</div>
+      <button type="button" class="omurga-popover-btn" onclick="window.openChakraModal(${r.num})">NUMEROLOJİ > ÇAKRA AÇILIMI →</button>
+    </div>
+  `;
+
+  // Tıklanan kutunun konumuna göre yerleşim
+  const target = e.currentTarget || e.target;
+  const rect = target.getBoundingClientRect();
+  pop.style.display = 'block';
+  pop.style.visibility = 'hidden';
+
+  requestAnimationFrame(() => {
+    const popWidth = pop.offsetWidth || 260;
+    const popHeight = pop.offsetHeight || 180;
+    const padding = 12;
+
+    let left = rect.left - popWidth - 10;
+    if (left < padding) {
+      left = Math.max(padding, Math.min(window.innerWidth - popWidth - padding, rect.left));
+    }
+
+    let top = rect.top + (rect.height / 2) - (popHeight / 2);
+    if (top < padding) top = padding;
+    if (top + popHeight > window.innerHeight - padding) {
+      top = window.innerHeight - popHeight - padding;
+    }
+
+    pop.style.left = `${left}px`;
+    pop.style.top = `${top}px`;
+    pop.style.visibility = 'visible';
+  });
+};
+
+window.openChakraModal = function(num) {
+  const pop = document.getElementById('omurgaFloatingPopover');
+  if (pop) pop.style.display = 'none';
+
+  const ot = window._currentOmurga;
+  if (!ot || !ot.rows) return;
+  const r = ot.rows.find(x => x.num === Number(num));
+  if (!r) return;
+
+  const chakraData = (window.NumerologyData && window.NumerologyData.findChakra) ? window.NumerologyData.findChakra(num) : null;
+  const chakraName = chakraData ? chakraData.name : `${num}. Çakra`;
+
+  let mainDef = (window.NumerologyDefinitions && window.NumerologyDefinitions.get) ? (window.NumerologyDefinitions.get(`Num/Chakra/${num}.html`) || '') : '';
+  let karmaDef = (window.NumerologyDefinitions && window.NumerologyDefinitions.get) ? (window.NumerologyDefinitions.get(`Num/ChakraKarma/${num}.html`) || '') : '';
+
+  const modalTitle = 'NUMEROLOJİ > ÇAKRA AÇILIMI';
+  const html = `
+    <div style="font-family:'Segoe UI',system-ui,sans-serif;line-height:1.7;color:#334155;">
+      <!-- Çakra & Hane Başlık Kartı -->
+      <div style="background:linear-gradient(135deg,#1e293b,#0f172a);color:#ffffff;padding:16px 20px;border-radius:12px;margin-bottom:18px;box-shadow:0 4px 12px rgba(0,0,0,0.15);">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div>
+            <span style="background:rgba(255,255,255,0.15);color:#93c5fd;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.5px;text-transform:uppercase;">${num}. ÇAKRA REZONANSI</span>
+            <h3 style="margin:6px 0 2px;color:#ffffff;font-size:18px;">${num}. Çakra — ${chakraName}</h3>
+            <div style="font-size:13px;color:#cbd5e1;">${num}. Hane: <b>${r.haneName}</b> (${r.ageRange} Yaş Dönemi)</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:11px;color:#94a3b8;font-weight:600;">HANE ENERJİSİ</div>
+            <div style="font-size:22px;font-weight:800;color:#facc15;">${r.aDisplay}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4'lü Metrik Paneli (Etki - Stres - Gölge - Uyum) -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px;">
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;color:#64748b;">ETKİ (REZONANS)</div>
+          <div style="font-size:20px;font-weight:800;color:#2563eb;margin-top:2px;">${r.etki !== null ? r.etki : '-'}</div>
+          <div style="font-size:10px;color:#94a3b8;margin-top:2px;">Tezahür Gücü</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;color:#64748b;">STRES (DİRENÇ)</div>
+          <div style="font-size:20px;font-weight:800;color:#dc2626;margin-top:2px;">${r.stres !== null ? r.stres : '-'}</div>
+          <div style="font-size:10px;color:#94a3b8;margin-top:2px;">Gelişim Gerilimi</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;color:#64748b;">GÖLGE (KÖR NOKTA)</div>
+          <div style="font-size:20px;font-weight:800;color:#d97706;margin-top:2px;">${r.golge !== null ? r.golge : '-'}</div>
+          <div style="font-size:10px;color:#94a3b8;margin-top:2px;">Dönüşüm Sınavı</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;color:#64748b;">UYUM MODELİ</div>
+          <div style="font-size:13px;font-weight:700;color:${(r.uyum && r.uyum.title.includes('Zorlu')) ? '#dc2626' : '#15803d'};margin-top:4px;">${r.uyum ? r.uyum.title : '-'}</div>
+          <div style="font-size:10px;color:#64748b;margin-top:2px;">${r.uyum ? r.uyum.desc : ''}</div>
+        </div>
+      </div>
+
+      <!-- Çakra Açılım Metinleri -->
+      <div style="font-size:14px;line-height:1.7;">
+        ${mainDef}
+        ${karmaDef ? `<div style="margin-top:20px;padding-top:16px;border-top:1px solid #e2e8f0;">${karmaDef}</div>` : ''}
+      </div>
+    </div>
+  `;
+
+  window.NumerologyDefinitions.openModal(modalTitle, html);
+};
 
 /* ---------- Analiz görünümleri ---------- */
 function renderHolistic(f){

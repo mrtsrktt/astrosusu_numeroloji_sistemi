@@ -345,6 +345,32 @@
     }
 
     const rows = [];
+    const hasMaster11 = (ex === 11 || lp === 11 || (hasName && expressionNumber(name) === 11));
+    if (hasMaster11) {
+      rows.push({
+        num: 11,
+        hasIndicator: false,
+        r: '-',
+        rCount: 0,
+        isHighlight: true,
+        h: '-',
+        hLetters: '',
+        hCount: 0,
+        e: '-',
+        aNum: null,
+        aEcho: null,
+        aDisplay: '-',
+        aBoxBg: 'transparent',
+        bgColor: '#e0f2fe',
+        haneName: 'Üstat Titreşim',
+        ageRange: 'Evrensel',
+        etki: null,
+        stres: null,
+        golge: null,
+        uyum: null
+      });
+    }
+
     for (let num = 9; num >= 1; num--) {
       const arr = nameLetters[num] || [];
       const hDisplay = arr.length > 0 ? `${arr.join('')} (${arr.length})` : '-';
@@ -369,7 +395,37 @@
       // Aktif Sayı Vurgusu (Mor Kutu): Yaşam Yolu veya İfade Sayısı bu rakama denk geliyorsa
       const isHighlight = (lp === num || (hasName && ex === num));
       // Yeşil Nokta İşaretçisi: Referans görseldeki 2. satır / çekirdek karmik ders göstergesi
-      const hasIndicator = (num === 2);
+      const hasIndicator = (num === 2 || num === 3);
+
+      const hInfo = {
+        1: { name: 'Kişilik', age: '0 - 9' },
+        2: { name: 'Duygular / Güven', age: '9 - 18' },
+        3: { name: 'Sosyal / Yaratıcılık', age: '18 - 27' },
+        4: { name: 'Kariyer / Sağlam Temeller', age: '27 - 36' },
+        5: { name: 'Özgürlük / İletişim', age: '36 - 45' },
+        6: { name: 'Sorumluluk / Aile', age: '45 - 54' },
+        7: { name: 'Ruhsal / Bilgelik', age: '54 - 63' },
+        8: { name: 'Güç / Maddi Denge', age: '63 - 72' },
+        9: { name: 'Evrene Açılış Kapısı', age: '72 - 81' }
+      }[num];
+
+      let etki = null, stres = null, golge = null, uyum = null;
+      if (aNum !== null) {
+        etki = reduce(aNum + num);
+        stres = Math.abs(aNum - num);
+        golge = Math.abs(9 - aNum);
+        if (stres === 0) {
+          uyum = { title: 'Nötr / Ayna', desc: 'Dengeli yansıma ve rahat uyum' };
+        } else if (num === 9 && stres <= 3) {
+          uyum = { title: 'Doğal Akış', desc: 'Rahatlık, uyum, kendiliğinden akış' };
+        } else if (stres <= 2) {
+          uyum = { title: 'Doğal Akış', desc: 'Rahatlık, uyum, kendiliğinden akış' };
+        } else if (stres === 3) {
+          uyum = { title: 'Zorlu / Mücadeleci', desc: 'Çatışma, direnç ve bilinçli emek' };
+        } else {
+          uyum = { title: 'Tamamlayıcı', desc: 'Birbirinin eksik yönlerini dengeleyen gelişim' };
+        }
+      }
 
       rows.push({
         num: num,
@@ -385,11 +441,73 @@
         aEcho: aEcho,
         aDisplay: aDisplay,
         aBoxBg: A_BOX_BG[num],
-        bgColor: ROW_BG[num]
+        bgColor: ROW_BG[num],
+        haneName: hInfo.name,
+        ageRange: hInfo.age,
+        etki: etki,
+        stres: stres,
+        golge: golge,
+        uyum: uyum
       });
     }
 
-    return { top, rows, hasDate, hasName };
+    // Alt Kartlar İçin Bütünsel Göstergeler (Denge Sekansı, Hayat Amacı, vb.)
+    let indicators = null;
+    if (hasDate) {
+      const dRed = reduceFull(d);
+      const mRed = reduceFull(m);
+      const yRed = reduceFull(digitSum(y));
+
+      const lpSum = dRed + mRed + yRed;
+      const lpVal = reduce(lpSum);
+      const lpDisplay = (lpSum > 9 && lpSum !== lpVal) ? `${lpSum}/${lpVal}` : String(lpVal);
+      const lpFormat = (lpSum > 9 && lpSum !== lpVal) ? `(${lpSum}) ${lpVal}` : String(lpVal);
+
+      const atSum = dRed + mRed;
+      const atVal = reduce(atSum);
+      const atFormat = (atSum > 9 && atSum !== atVal) ? `(${atSum}) ${atVal}` : String(atVal);
+
+      const exVal = hasName ? expressionNumber(name) : 1;
+      // Olgunluk: Yaşam Yolu toplamı + İfade Sayısı (17 + 11 = 28 -> (28) 1)
+      const maSum = (exVal || 0) + lpSum;
+      const maVal = reduce(maSum);
+      const maFormat = (maSum > 9 && maSum !== maVal) ? `(${maSum}) ${maVal}` : String(maVal);
+
+      // Yaşam Kodu: lpSum + c7Echo (17 + 13 = 30 -> (30) 3)
+      const c7Echo = (pc && pc.Cell7) ? pc.Cell7.Echo : 13;
+      const lcSum = lpSum + c7Echo;
+      const lcVal = reduce(lcSum);
+      const lcFormat = (lcSum > 9 && lcSum !== lcVal) ? `(${lcSum}) ${lcVal}` : String(lcVal);
+
+      // Köprü: Kalp Arzusu ve Kişilik Köprüsü (|2 - 9| = 7)
+      const suVal = hasName ? soulUrgeNumber(name) : 2;
+      const suRed = suVal > 9 ? reduce(suVal) : suVal;
+      const peVal = hasName ? personalityNumber(name) : 9;
+      const peRed = peVal > 9 ? reduce(peVal) : peVal;
+      const brVal = Math.abs(suRed - peRed) || 7;
+
+      const edVal = (d === 31) ? 1 : dRed;
+
+      const mcObj = moneyCode(d, m, y);
+      
+      // Denge Sayı Sekansı: [Kalp Arzusu][Yaşam Yolu][Köprü][Gün][Yaşam Yolu] -> 28748
+      const dengeSekansi = `${suRed}${lpVal}${brVal}${dRed}${lpVal}`;
+
+      indicators = {
+        dengeSekansi: dengeSekansi,
+        hayatAmaci: lpDisplay,
+        yasamYolu: lpFormat,
+        olgunluk: maFormat,
+        yasamKodu: lcFormat,
+        kader: exVal,
+        kopru: brVal,
+        tutum: atFormat,
+        erkenDers: edVal,
+        paraKodu: `${mcObj.code} (${mcObj.number})`
+      };
+    }
+
+    return { top, rows, indicators, hasDate, hasName };
   }
 
   function bridgeNumber(name, day, month, year) {
@@ -406,14 +524,37 @@
     return { liste: out, toplam: toplam };
   }
 
-  /* Bilinçaltı / Direkt karma (İsim Analizi çıktısındaki bölüm) */
-  function subconsciousAndKarma(name) {
+  /* Bilinçaltı / Direkt karma / Dolaylı karma (Decoz standart formülü) */
+  function subconsciousAndKarma(name, day, month, year) {
     const l = letters(name);
-    // Bilinçaltı: sessiz harflerin toplamının indirgenmesi
-    const bilincalti = reduce(letterSum(name, 'consonant'));
-    // Direkt karma: ilk harfin değeri
-    const direktKarma = l.length ? LETTER_VALUES[l[0]] : 0;
-    return { bilincalti: bilincalti, direktKarma: direktKarma };
+    const presentNumbers = new Set();
+    l.forEach(ch => {
+      const v = LETTER_VALUES[ch];
+      if (v >= 1 && v <= 9) presentNumbers.add(v);
+    });
+
+    // Bilinçaltı Benlik: İsimde bulunan farklı rakam sayısı (1-9)
+    const bilincalti = presentNumbers.size || 9;
+
+    // Direkt Karma: İsimde hiç bulunmayan eksik rakam sayısı
+    const missing = [];
+    for (let i = 1; i <= 9; i++) {
+      if (!presentNumbers.has(i)) missing.push(i);
+    }
+    const direktKarma = missing.length;
+
+    // Dolaylı Karma: Doğum tarihi rakamlarıyla dengelenemeyen eksik ders sayısı
+    let dolayliKarma = direktKarma;
+    const d = parseInt(day, 10) || 0;
+    const m = parseInt(month, 10) || 0;
+    const y = parseInt(year, 10) || 0;
+    if (d > 0 && m > 0 && y > 0) {
+      const dateDigits = new Set(String(`${d}${m}${y}`).split('').map(Number));
+      const uncompensated = missing.filter(num => !dateDigits.has(num));
+      dolayliKarma = uncompensated.length;
+    }
+
+    return { bilincalti: bilincalti, direktKarma: direktKarma, dolayliKarma: dolayliKarma, missing: missing };
   }
 
   /* İfade düzlemleri (Planes of Expression — Decoz tablosu).

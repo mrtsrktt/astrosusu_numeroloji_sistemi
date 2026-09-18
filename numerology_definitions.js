@@ -209,67 +209,78 @@
       let title = 'BİLGİ KARTI';
       let html = null;
 
-      // Case 1: show(category, number, customTitle)
-      if (arg1 && arg2 !== undefined && (typeof arg2 === 'number' || !String(arg2).includes('/'))) {
+      // Normalize arguments
+      const isPath = (arg2 && String(arg2).startsWith('Num/'));
+      if (isPath) {
+        title = arg1 || 'BİLGİ KARTI';
+        html = this.get(arg2);
+      } else if (arg1 && arg2 !== undefined) {
         const cat = String(arg1);
-        const val = String(arg2);
-        title = arg3 || `${cat} ${val}`;
+        const rawVal = String(arg2).trim();
+        title = arg3 || `${cat} ${rawVal}`;
 
-        if (cat === 'Arcana' || cat === 'Arkana') {
-          const arc = (global.NumerologyData && global.NumerologyData.arcanas) ? global.NumerologyData.arcanas.find(a => a.number === Number(val)) : null;
-          if (arc) {
-            title = `Arkana ${arc.number}: ${arc.name}`;
-            html = `
-              <div style="font-size:14px;line-height:1.7;">
-                <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-                  <span style="background:#eef2f8;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;color:#2f5597;">Gezegen: ${arc.planet || '-'}</span>
-                  <span style="background:#eef2f8;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;color:#2f5597;">Element: ${arc.element || '-'}</span>
-                  <span style="background:#eef2f8;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;color:#2f5597;">Burç: ${arc.horoscope || '-'}</span>
-                  ${arc.guardian ? '<span style="background:#e8f6ee;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;color:#1e8e5a;">🛡️ Koruyucu Melek</span>' : ''}
-                </div>
-                <h4 style="margin:10px 0 6px;color:#1e293b;font-size:15px;">Arketip ve Anlamı</h4>
-                <p style="margin:0 0 12px;color:#475569;">${arc.desc || ''}</p>
-                <div style="background:#f8fafc;padding:12px;border-radius:8px;border:1px solid #e2e8f0;font-size:13px;color:#64748b;">
-                  <b>Zamanlama / Tezahür:</b> ${arc.time || '-'}<br>
-                  <b>İlişkili Harfler:</b> ${arc.letter || '-'}
-                </div>
-              </div>
-            `;
-          }
-        } else if (cat === 'Rune' || cat === 'Run') {
-          const rn = (global.NumerologyData && global.NumerologyData.runes) ? global.NumerologyData.runes.find(r => r.number === Number(val)) : null;
-          if (rn) {
-            title = `Futhark Rünü ${rn.number}: ${rn.name} (${rn.symbol})`;
-            html = `
-              <div style="text-align:center;margin:6px 0 16px;">
-                <span style="font-size:48px;color:#2f5597;display:inline-block;padding:10px 24px;background:#f1f5f9;border-radius:12px;">${rn.symbol}</span>
-                <h3 style="margin:10px 0 4px;color:#1e293b;">${rn.name}</h3>
-              </div>
-              <h4 style="margin:10px 0 6px;color:#1e293b;">Ezoterik Anlamı</h4>
-              <p style="color:#475569;line-height:1.7;">${rn.meaning}</p>
-            `;
-          }
-        } else if (cat === 'KarmicDebt') {
+        // Extract primary single/master number from expressions like (17) 8, 17/8, 5848 (7), (28) 1
+        let cleanNum = rawVal;
+        const parensMatch = rawVal.match(/\((\d+)\)\s*(\d+)/);
+        const slashMatch = rawVal.match(/(\d+)\/(\d+)/);
+        const codeMatch = rawVal.match(/\((\d+)\)/);
+        if (parensMatch) cleanNum = parensMatch[2];
+        else if (slashMatch) cleanNum = slashMatch[2];
+        else if (codeMatch) cleanNum = codeMatch[1];
+        else {
+          const digits = rawVal.match(/\b\d+\b/);
+          if (digits) cleanNum = digits[0];
+        }
+
+        if (cat === 'KarmicDebt') {
           const debts = {
             13: { title: '13 — Disiplin ve Emek Borcu', text: 'Kişi geçmiş enkarnasyonlarında ya da yaşamının önceki döngülerinde emeğini esirgemiş, kolaya kaçmış veya görevlerini savsaklamış olabilir. Bu borç, sabır, kararlılık, disiplin ve sıkı çalışma yoluyla dengelenir. Kestirme yollara sapmadan, temelleri sağlam inşa etmesi istenir.' },
             14: { title: '14 — Özgürlük ve Ölçü Borcu', text: 'Geçmişte özgürlüğün suiistimal edilmesi, zevk ve haz düşkünlüğü veya aşırılıkların faturasıdır. Bu yaşamda bağımlılıklar, düzensizlik ve kısıtlanmalar ile karşılaşılabilir. Kurtuluş, ılımlılık, ölçü ve içsel özgürlüğü sorumlu biçimde deneyimlemekten geçer.' },
             16: { title: '16 — Ego ve İllüzyon Borcu (Kule Yıkımı)', text: 'Geçmişte aşırı kibir, başkalarının kalbini kırma veya sahte temeller üzerine güç inşa etme sonucu oluşan borçtur. Ani kırılmalar, iflaslar veya ilişki hayal kırıklıklarıyla egonun kabuğu kırılır ve saf ruhsal hakikat açığa çıkar. Çözüm: Alçakgönüllülük ve kalpten sevgi.' },
             19: { title: '19 — Bireysellik ve Paylaşım Borcu', text: 'Geçmişte gücü bencilce kullanma, başkalarını yok sayma ve \'yalnız ben varım\' yaklaşımının getirdiği sınavdır. Kişi hayatında derin bir yalnızlık ve yardım alamama hissi deneyimleyebilir. Çözüm: Başkalarından yardım istemeyi öğrenmek, şefkati ve gücü paylaşmaktır.' }
           };
-          const d = debts[val] || { title: `Karmik Borç ${val}`, text: 'Karmik döngü sınavı ve ruhsal gelişim dersi.' };
+          const d = debts[cleanNum] || debts[rawVal] || { title: `Karmik Ders / Borç: ${rawVal}`, text: `Karmik döngü sınavı ve ruhsal gelişim dersi (${rawVal} eksik alan). Bu titreşimdeki eksiklikleri farkındalıkla tamamlamak ve ruhsal dengelenmeyi sağlamak esastır.` };
           title = d.title;
           html = `<p style="line-height:1.8;color:#334155;font-size:15px;">${d.text}</p>`;
+        } else if (cat === 'SubconsciousSelf') {
+          title = `Bilinçaltı Benlik: ${rawVal}`;
+          html = `
+            <div style="font-size:14px;line-height:1.7;">
+              <h4 style="margin:0 0 10px;color:#1e293b;">Bilinçaltı Benlik (Kriz ve Güvenlik Refleksi)</h4>
+              <p>Bilinçaltı Benlik, ani tehlike, beklenmedik kriz veya yoğun duygusal baskı anlarında kişinin düşünmeden verdiği otomatik tepkileri ve içsel savunma refleksini belirler.</p>
+              <p>İsimdeki harflerin 1 ile 9 arasındaki sayı çeşitliliğinden doğar. Bu kişinin haritasında <b>${rawVal}</b> farklı temel titreşim aktiftir. Bu durum, olaylar karşısında ne kadar çok yönlü veya odaklı bir refleks gösterildiğini açıklar.</p>
+              <div style="background:#f8fafc;padding:12px;border-radius:8px;border:1px solid #e2e8f0;margin-top:12px;">
+                <b>Tavsiye:</b> Kriz anlarında panik yerine merkezde kalarak, ${rawVal} titreşiminin getirdiği içsel donanımı soğukkanlılıkla devreye alın.
+              </div>
+            </div>
+          `;
+        } else if (cat === 'Balance') {
+          title = `Denge Sayı Sekansı: ${rawVal}`;
+          html = `
+            <div style="font-size:14px;line-height:1.7;">
+              <h4 style="margin:0 0 10px;color:#1e293b;">Denge Sayı Sekansı (Koruyucu Kalkan)</h4>
+              <p>Denge Sayı Sekansı (<b>${rawVal}</b>), doğum haritanız ve pin kodunuzun çekirdek enerjilerinden sentezlenen kişisel koruyucu frekansınızdır.</p>
+              <p>Yaşamda sarsıntı, zihinsel karmaşa, tükenmişlik ya da karar verme güçlüğü hissettiğinizde bu sayı sekansını zihninizde tekrarlamak, enerji alanınızı merkeze çekip auranızı güçlendirir.</p>
+              <div style="background:#f0fdf4;padding:12px;border-radius:8px;border:1px solid #bbf7d0;margin-top:12px;color:#166534;">
+                <b>Kullanım Reçetesi:</b> Günde 3 kez derin nefes alarak <b>${rawVal}</b> sekansını odaklanarak içinizden tekrarlayın veya kişisel defterinize yazın.
+              </div>
+            </div>
+          `;
+        } else if (cat === 'LifePurpose') {
+          const infoHtml = this.get('Num/LifePurpose/info.html') || '';
+          const lpNumHtml = this.get(`Num/LifePath/${cleanNum}.html`) || this.get(`Num/NumericalVibration/${cleanNum}.html`) || '';
+          title = `Hayat Amacı: ${rawVal}`;
+          html = `<div>${infoHtml}<hr style="border:0;border-top:1px solid #e2e8f0;margin:16px 0;">${lpNumHtml}</div>`;
         } else {
-          // Standard definition lookup
-          let candidate = this.get(`Num/${cat}/${val}.html`);
-          if (!candidate) candidate = this.get(`Num/${cat}/${val}`);
+          // Standard definition lookup with cleanNum and fallback
+          let candidate = this.get(`Num/${cat}/${cleanNum}.html`);
+          if (!candidate) candidate = this.get(`Num/${cat}/${rawVal}.html`);
+          if (!candidate) candidate = this.get(`Num/${cat}/${cleanNum}`);
           if (!candidate) candidate = this.get(`Num/${cat}/info.html`);
-          if (!candidate) candidate = this.get(`Num/NumericalVibration/${val}.html`);
+          if (!candidate) candidate = this.get(`Num/LifePath/${cleanNum}.html`);
+          if (!candidate) candidate = this.get(`Num/NumericalVibration/${cleanNum}.html`);
           html = candidate;
         }
-      } else if (arg2 && String(arg2).includes('/')) {
-        title = arg1;
-        html = this.get(arg2);
       } else if (arg1 && !arg2) {
         html = this.get(arg1) || arg1;
       }
