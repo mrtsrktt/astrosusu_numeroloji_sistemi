@@ -45,7 +45,7 @@
     const pH = { x: w - 80, y: 80 };
 
     let svg = `
-      <svg viewBox="0 0 ${w} ${h}" style="display:block;width:100%;height:auto;max-width:${w}px;margin:0 auto;">
+      <svg viewBox="0 0 ${w} ${h}" style="display:block;width:100%;height:auto;max-width:100%;margin:0 auto;">
         <defs>
           <filter id="kShadow" x="-20%" y="-20%" width="140%" height="140%">
             <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.25"/>

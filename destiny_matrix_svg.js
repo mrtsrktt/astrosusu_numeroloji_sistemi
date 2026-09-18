@@ -37,7 +37,7 @@
     const smallTextStyle = 'font-weight:700;font-family:Segoe UI,sans-serif;font-size:11px;cursor:pointer;user-select:none;text-anchor:middle;dominant-baseline:central;';
 
     let svg = `
-      <svg viewBox="0 0 ${opt.width} ${opt.height}" style="display:block;width:100%;height:auto;max-width:${opt.width}px;margin:0 auto;overflow:visible;">
+      <svg viewBox="-18 -18 ${opt.width + 36} ${opt.height + 36}" style="display:block;width:100%;height:auto;max-width:100%;margin:0 auto;">
         <defs>
           <filter id="dmShadow" x="-20%" y="-20%" width="140%" height="140%">
             <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.25"/>

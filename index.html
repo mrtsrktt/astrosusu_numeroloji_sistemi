@@ -34,8 +34,14 @@
   --sidebar-w: 270px;
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-body {
+html, body {
   margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background: var(--bg);
   color: var(--ink);
@@ -552,6 +558,7 @@ table.data tr:nth-child(even) td { background: #fafcff; }
   margin: 16px auto 24px auto;
   max-width: 440px;
   width: 100%;
+  box-sizing: border-box;
 }
 .omurga-top-bar {
   display: grid;
@@ -561,27 +568,37 @@ table.data tr:nth-child(even) td { background: #fafcff; }
   overflow: hidden;
   background: #ffffff;
   text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 .omurga-top-item {
   border-right: 1px solid #cbd5e1;
-  padding: 8px 3px;
+  padding: 8px 2px;
   cursor: pointer;
   transition: background 0.15s ease;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 .omurga-top-item:last-child { border-right: none; }
 .omurga-top-item:hover { background: #f8fafc; }
 .omurga-top-label {
-  font-size: 9.5px;
+  font-size: 8.5px;
   font-weight: 800;
   color: #64748b;
   text-transform: uppercase;
   margin-bottom: 2px;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .omurga-top-val {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .omurga-card {
@@ -589,14 +606,16 @@ table.data tr:nth-child(even) td { background: #fafcff; }
   border-top: none;
   border-radius: 0 0 10px 10px;
   background: #ffffff;
-  padding: 14px;
+  padding: 12px 8px;
   box-shadow: var(--shadow-card);
+  width: 100%;
+  box-sizing: border-box;
 }
 .omurga-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .omurga-title {
   font-size: 15px;
@@ -609,8 +628,8 @@ table.data tr:nth-child(even) td { background: #fafcff; }
   color: #ffffff;
   border: none;
   border-radius: 8px;
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -623,45 +642,50 @@ table.data tr:nth-child(even) td { background: #fafcff; }
   border: 1px solid #cbd5e1;
   border-radius: 8px;
   overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 .omurga-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 11.5px;
 }
 .omurga-table thead tr { background: #e2e8f0; }
 .omurga-table th {
-  padding: 8px 4px;
-  font-size: 12.5px;
+  padding: 6px 2px;
+  font-size: 11.5px;
   font-weight: 800;
   color: #0f172a;
   border-right: 1px solid #cbd5e1;
   text-align: center;
+  box-sizing: border-box;
 }
 .omurga-table th:last-child { border-right: none; }
 .omurga-table td {
-  padding: 6px 4px;
+  padding: 5px 2px;
   border-right: 1px solid #e2e8f0;
   border-bottom: 1px solid #e2e8f0;
   text-align: center;
   vertical-align: middle;
+  box-sizing: border-box;
 }
 .omurga-table td:last-child { border-right: none; }
 .omurga-table tr:last-child td { border-bottom: none; }
 
-/* Sütun genişlikleri */
-.omurga-col-dot { width: 26px; }
-.omurga-col-r { width: 38px; }
-.omurga-col-num { width: 34px; }
-.omurga-col-h { text-align: left !important; padding-left: 8px !important; min-width: 75px; }
-.omurga-col-e { text-align: left !important; padding-left: 8px !important; }
-.omurga-col-a { width: 52px; }
+/* Sütun genişlikleri - Toplam %100, taşma imkansız */
+.omurga-col-dot { width: 7%; padding: 4px 1px !important; }
+.omurga-col-r   { width: 11%; padding: 4px 1px !important; }
+.omurga-col-num { width: 9%; padding: 4px 1px !important; }
+.omurga-col-h   { width: 22%; text-align: left !important; padding-left: 4px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.omurga-col-e   { width: 36%; text-align: left !important; padding-left: 4px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 10.5px; }
+.omurga-col-a   { width: 15%; padding: 2px 1px !important; }
 
 /* Yeşil Nokta */
 .omurga-green-dot {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   background: #16a34a;
   border-radius: 50%;
   display: inline-block;
@@ -674,8 +698,8 @@ table.data tr:nth-child(even) td { background: #fafcff; }
   background: #ddd6fe;
   color: #4338ca;
   font-weight: 800;
-  padding: 2px 7px;
-  border-radius: 6px;
+  padding: 2px 5px;
+  border-radius: 5px;
   display: inline-block;
   cursor: pointer;
 }
@@ -686,26 +710,29 @@ table.data tr:nth-child(even) td { background: #fafcff; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
-  padding: 2px 4px;
-  min-width: 36px;
+  border-radius: 5px;
+  padding: 2px 1px;
+  width: 100%;
+  max-width: 42px;
   border: 1px solid rgba(0,0,0,0.1);
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   background: #ffffff;
+  box-sizing: border-box;
+  margin: 0 auto;
 }
 .omurga-a-box:hover {
-  transform: scale(1.08);
+  transform: scale(1.06);
   box-shadow: 0 2px 6px rgba(0,0,0,0.12);
 }
 .omurga-a-sub {
-  font-size: 10px;
+  font-size: 8.5px;
   font-weight: 700;
   color: #334155;
   line-height: 1;
 }
 .omurga-a-main {
-  font-size: 14px;
+  font-size: 12.5px;
   font-weight: 800;
   color: #0f172a;
   line-height: 1.1;
@@ -864,7 +891,7 @@ table.data tr:nth-child(even) td { background: #fafcff; }
     position: fixed;
     top: 0;
     left: 0;
-    width: 290px;
+    width: 280px;
     height: 100vh;
     height: 100dvh;
     z-index: 1000;
@@ -875,50 +902,129 @@ table.data tr:nth-child(even) td { background: #fafcff; }
     transform: translateX(0);
   }
   #topbar {
-    padding: 10px 14px;
-    gap: 10px;
+    padding: 8px 12px;
+    gap: 8px;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
   }
   #topbar .crumb {
     font-size: 13px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
-  #topbar .user {
-    display: none;
+  #btnWorkspace, #btnHistory, #topbar .user {
+    display: none !important;
+  }
+  #btnLogout {
+    padding: 6px 10px;
+    font-size: 11.5px;
+    flex-shrink: 0;
   }
   #content {
-    padding: 16px 12px;
+    padding: 12px 10px;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+    overflow-x: hidden;
   }
   .grid.c4 { grid-template-columns: repeat(2, 1fr); }
   .grid.c3 { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 640px) {
-  #topbar .btn-sm:not(.danger) {
-    padding: 7px 10px;
-    font-size: 12px;
+  #topbar {
+    padding: 6px 10px;
+  }
+  #content {
+    padding: 10px 8px;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
   }
   .card {
-    padding: 16px 14px;
+    padding: 12px 10px;
     border-radius: 12px;
+    margin-bottom: 12px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+  .card h2 {
+    font-size: 16px;
   }
   .grid.c2, .grid.c3, .grid.c4 {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 10px;
+  }
+  .actions {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
   }
   .actions .btn {
     flex: 1;
     width: 100%;
+    padding: 10px;
+    font-size: 13px;
   }
   .omurga-container {
+    width: 100%;
     max-width: 100%;
+    margin: 8px auto 16px auto;
+    box-sizing: border-box;
   }
-  .omurga-col-h {
-    min-width: 55px;
+  .omurga-card {
+    padding: 10px 6px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .omurga-table-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .omurga-top-label {
+    font-size: 8px;
+  }
+  .omurga-top-val {
+    font-size: 11px;
+  }
+  .omurga-sub-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
   }
   .omurga-popover {
-    width: calc(100vw - 28px) !important;
-    max-width: 330px !important;
+    width: calc(100vw - 20px) !important;
+    max-width: 320px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
+    padding: 12px 14px;
+    box-sizing: border-box;
+  }
+  table.data {
+    font-size: 11.5px;
+    width: 100%;
+    max-width: 100%;
+  }
+  table.data th, table.data td {
+    padding: 6px 3px;
+    word-break: break-word;
+  }
+  .report-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .report-head .meta {
+    text-align: left;
+    font-size: 11px;
+  }
+  .report-head h1 {
+    font-size: 18px;
   }
 }
 
@@ -2094,7 +2200,13 @@ function printReport(){ window.print(); }
    ============================================================ */
 function renderNav(activeId){
   const root=$("navRoot");
-  let html="";
+  let html=`
+    <div class="nav-group">
+      <h4>GENEL</h4>
+      <a class="nav-item${activeId==='workspace'?' active':''}" href="#" onclick="renderWorkspaceView();return false;">🏠 Çalışma Alanım</a>
+      <a class="nav-item${activeId==='history'?' active':''}" href="#" onclick="renderHistoryView();return false;">📜 Geçmiş Raporlar</a>
+    </div>
+  `;
   CAT_ORDER.forEach(cat=>{
     const mods=MODULES.filter(m=>m.cat===cat);
     if(!mods.length) return;
