@@ -301,7 +301,7 @@ async function interpret(snapshot, telemetry = {}, input = {name:'Sevgili danı�
    delete telemetry.httpStatus;
    const response=await fetch('https://api.deepseek.com/chat/completions',{
     method:'POST',signal:AbortSignal.timeout(remainingMs),headers:{Authorization:`Bearer ${key}`,'Content-Type':'application/json'},
-    body:JSON.stringify({model:process.env.DEEPSEEK_MODEL || 'deepseek-chat',temperature:0.75,max_tokens:16000,
+    body:JSON.stringify({model:process.env.DEEPSEEK_MODEL || 'deepseek-v4-flash',thinking:{type:'disabled'},temperature:0.75,max_tokens:16000,
       response_format:{type:'json_object'},messages:(layoutContexts ? [
         {role:'system',content:'Türkçe numeroloji yorumundaki errors nedenlerini düzelt ve bodyBudget içine sığdır. Aynı temayı ve sen dilini koru; yeni hesap veya yaşanmış olay ekleme, rakam kullanma. preserveAdvice true ise existingAdvice doğrulanmıştır ve yerelde aynen korunacaktır; onu değiştirme veya gövdeye tekrar yazma. Yanıtı geçerli bir json nesnesi olarak döndür. preserveAdvice true bölümlerde yalnız istenen bölüm kimliği ve kısaltılmış paragraphs döndür: {"sections":[{"id":"section-30","paragraphs":["..."]}]}. Bu bölümlerde advice alanı döndürme. preserveAdvice false bölümlerde id, paragraphs ve düzeltilmiş advice döndür. bodyBudget yalnız gövdeye ayrılmıştır; öneri kutusu yüksekliği zaten çıkarılmıştır. İçerik hatalı bölümlerde adviceBudget önerinin sınırıdır; errors içindeki tüm nedenleri gider.'},
         {role:'user',content:JSON.stringify({sections:layoutContexts})}
