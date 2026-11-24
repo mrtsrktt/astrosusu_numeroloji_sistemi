@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hesap ve Üyelik — Derin Numeroloji</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #FFFCF7;
+      --surface: #FFFFFF;
+      --ink: #29212C;
+      --muted: #5E5262;
+      --line: #E7DFE4;
+      --input-border: #D8CED5;
+      --plum: #4D304A;
+      --plum-hover: #3b2438;
+      --badge-bg: #F0E8EF;
+      --green: #15803d;
+      --green-bg: #dcfce7;
+      --amber: #92400e;
+      --amber-bg: #fef3c7;
+      --red: #991b1b;
+      --red-bg: #fee2e2;
+      --font-serif: Georgia, "Times New Roman", serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--plum);
+      outline-offset: 2px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 580px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Üst Başlık */
+    .site-header {
+      border-bottom: 1px solid var(--line);
+      background-color: var(--surface);
+    }
+
+    .header-inner {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .brand-logo {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: -0.3px;
+    }
+
+    .header-back-link {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+
+    .header-back-link:hover {
+      color: var(--ink);
+    }
+
+    /* Ana İçerik */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 36px 0 64px;
+    }
+
+    .auth-card {
+      background-color: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 32px 28px;
+      width: 100%;
+    }
+
+    .auth-card h1 {
+      font-family: var(--font-serif);
+      font-size: 25px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+
+    .auth-card .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 22px;
+    }
+
+    /* Sekmeler */
+    .tab-bar {
+      display: flex;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 24px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      min-height: 44px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 10px;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .tab-btn.active {
+      color: var(--plum);
+      border-bottom-color: var(--plum);
+    }
+
+    /* Form Grupları */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      min-height: 44px;
+      height: 44px;
+      padding: 10px 14px;
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      font-size: 15px;
+      color: var(--ink);
+      background-color: #ffffff;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--plum);
+      box-shadow: 0 0 0 3px rgba(77, 48, 74, 0.12);
+    }
+
+    /* Düğmeler */
+    .btn-submit {
+      width: 100%;
+      min-height: 46px;
+      background-color: var(--plum);
+      color: #ffffff;
+      border: 1px solid var(--plum);
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.15s ease;
+      margin-top: 8px;
+      text-decoration: none;
+    }
+
+    .btn-submit:hover {
+      background-color: var(--plum-hover);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      width: 100%;
+      min-height: 44px;
+      background-color: transparent;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 14px;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--bg);
+      border-color: var(--input-border);
+      color: var(--ink);
+    }
+
+    /* Mesaj Kutuları */
+    .msg-box {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+      line-height: 1.5;
+    }
+
+    .msg-error {
+      background-color: #fff1f2;
+      border: 1px solid #fecdd3;
+      color: #9f1239;
+    }
+
+    .msg-success {
+      background-color: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+    }
+
+    /* Durum Kartı (Giriş Yapmış Üye İçin) */
+    .status-card {
+      display: none;
+    }
+
+    .user-info-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 14px 16px;
+      background-color: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .user-email {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      word-break: break-all;
+      min-width: 0;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .status-badge.pending {
+      background-color: var(--amber-bg);
+      color: var(--amber);
+      border: 1px solid #fde68a;
+    }
+
+    .status-badge.active {
+      background-color: var(--green-bg);
+      color: var(--green);
+      border: 1px solid #bbf7d0;
+    }
+
+    .status-badge.expired {
+      background-color: var(--red-bg);
+      color: var(--red);
+      border: 1px solid #fecaca;
+    }
+
+    /* Üyelik Bilgi Kutusu */
+    .sub-info-box {
+      background-color: #FAF6F8;
+      border: 1px solid #E4D8E1;
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 24px;
+    }
+
+    .sub-info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .sub-info-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .sub-info-label {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .sub-info-val {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    /* Plan Seçim Kartları */
+    .plan-selector-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 12px;
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
+    }
+
+    .plan-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .plan-option-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .plan-option-label:hover {
+      background-color: var(--bg);
+    }
+
+    .plan-option-label.selected {
+      border-color: var(--plum);
+      background-color: #FAF5F9;
+    }
+
+    .plan-option-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .plan-option-left input[type="radio"] {
+      accent-color: var(--plum);
+      width: 18px;
+      height: 18px;
+    }
+
+    .plan-option-name {
+      font-weight: 700;
+      color: var(--ink);
+      font-size: 15px;
+    }
+
+    .plan-option-desc {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .plan-option-price {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--plum);
+      white-space: nowrap;
+    }
+
+    /* Ödeme Yöntemi Kartı */
+    .payment-method-box {
+      background-color: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .method-tab-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .method-tab-btn {
+      flex: 1;
+      min-height: 40px;
+      background-color: #ffffff;
+      border: 1px solid var(--input-border);
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .method-tab-btn.active {
+      background-color: var(--plum);
+      border-color: var(--plum);
+      color: #ffffff;
+    }
+
+    /* Havale Bilgi Satırları */
+    .bank-info-table {
+      width: 100%;
+      margin-bottom: 16px;
+      font-size: 13.5px;
+    }
+
+    .bank-info-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .bank-info-row:last-child {
+      border-bottom: none;
+    }
+
+    .bank-label {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .bank-val-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: var(--ink);
+      word-break: break-all;
+    }
+
+    .btn-copy {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      font-size: 11.5px;
+      padding: 4px 8px;
+      cursor: pointer;
+      color: var(--plum);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .btn-copy:hover {
+      background: var(--bg);
+      border-color: var(--plum);
+    }
+
+    /* Durum Takip Kartı */
+    .order-status-card {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .order-status-draft {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+    }
+
+    .order-status-pending {
+      background-color: var(--amber-bg);
+      border: 1px solid #fde68a;
+      color: var(--amber);
+    }
+
+    .order-status-approved {
+      background-color: var(--green-bg);
+      border: 1px solid #bbf7d0;
+      color: var(--green);
+    }
+
+    .order-status-rejected {
+      background-color: var(--red-bg);
+      border: 1px solid #fecaca;
+      color: var(--red);
+    }
+
+    @media (max-width: 480px) {
+      .auth-card {
+        padding: 24px 18px;
+      }
+      .header-inner {
+        padding: 0 16px;
+      }
+      .brand-logo {
+        font-size: 18px;
+      }
+      .plan-option-label {
+        padding: 12px;
+      }
+      .bank-info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+      .bank-val-wrap {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+  </style>
+  <script src="/assets/site-theme.js"></script>
+  <link rel="stylesheet" href="/assets/site-theme.css">
+  <style>
+    .account .site-header { background:#322331; border-bottom:1px solid #6e536a; }
+    .account .header-inner { min-height:90px; height:auto; padding-block:14px; gap:20px; flex-wrap:nowrap; }
+    .account .brand-logo { display:inline-flex; align-items:center; gap:14px; min-width:0; color:#fff9f4; font-size:28px; line-height:1.05; letter-spacing:-.035em; }
+    .account .brand-portrait { width:58px; height:58px; flex:0 0 auto; border:1px solid #c6a28e; border-radius:50%; object-fit:cover; }
+    .account .brand-lockup { display:grid; gap:7px; }
+    .account .brand-signature { display:flex; align-items:center; gap:9px; color:#ece0e8; font:400 13px/1.35 var(--font-sans); letter-spacing:0; }
+    .account .brand-signature strong { color:#ebc6a2; font-weight:650; }
+    .account .brand-divider { width:12px; height:1px; background:#aa887f; }
+    .account .account-header-actions { display:flex; align-items:center; gap:12px; width:auto; flex:0 0 auto; }
+    .account .header-back-link { color:#fff9f4; padding-inline:8px; }
+    .account .header-back-link:hover { color:#ebc6a2; }
+    .account .site-header .theme-toggle { color:#fff9f4; border-color:#c6a28e; background:transparent; }
+    .account .site-header :focus-visible { outline:2px solid #ebc6a2; outline-offset:3px; }
+    .main-wrapper > .container:has(#authSection:not([style*="display: none"])) { max-width:940px; }
+    #authSection.auth-card { padding:0; overflow:hidden; background:#fffaf2; }
+    [data-theme="dark"] #authSection.auth-card { background:var(--surface); }
+    .auth-layout { display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); }
+    .auth-photo { width:100%; height:100%; min-height:550px; object-fit:cover; }
+    .auth-form-surface { min-width:0; padding:34px; }
+    #authSection h1 { font-size:30px; }
+    #authSection .tab-btn.active { border-bottom-color:#b88b77; color:var(--ink); }
+    #authSection input { font-size:16px; min-height:46px; }
+    #authSection input:focus-visible { outline:2px solid #b88b77; outline-offset:2px; }
+    #authSection .btn-submit { background:#4d304a; border-color:#4d304a; color:#fff9f4; }
+    #authSection .btn-submit:hover { background:#3b2438; }
+    @media (max-width:760px) {
+      .account .header-inner { gap:10px; padding-inline:16px; }
+      .account .brand-logo { gap:8px; font-size:22px; }
+      .account .brand-portrait { width:42px; height:42px; }
+      .account .brand-signature { flex-direction:column; align-items:flex-start; gap:1px; font-size:11px; }
+      .account .brand-divider { display:none; }
+      .account .account-header-actions { gap:4px; }
+      .account .header-back-link { font-size:13px; padding-inline:4px; }
+      .account .theme-toggle { width:40px; height:40px; }
+      .auth-layout { grid-template-columns:minmax(0,1fr); }
+      .auth-photo { display:none; }
+      .auth-form-surface { padding:26px 22px; }
+      .main-wrapper > .container { padding-inline:16px; }
+    }
+  </style>
+</head>
+<body class="account">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="brand-logo"><img class="brand-portrait" src="/assets/gizem-sule-mert-avatar.webp" width="58" height="58" alt=""><span class="brand-lockup"><span>Derin Numeroloji</span><span class="brand-signature"><strong>Astroşuşu Akademi</strong><span class="brand-divider" aria-hidden="true"></span><span>Gizem Şule Mert</span></span></span></a>
+      <div class="account-header-actions"><a href="/" class="header-back-link">Anasayfa</a><button type="button" class="theme-toggle" data-theme-toggle aria-label="Karanlık tema" aria-pressed="false"><svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 15.3A8.7 8.7 0 0 1 8.7 3.6 8.7 8.7 0 1 0 20.4 15.3Z"/></svg><svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M19 5l-1.5 1.5m-11 11L5 19"/></svg></button></div>
+    </div>
+  </header>
+
+  <main class="main-wrapper">
+    <div class="container">
+
+      <!-- ==================== GİRİŞ YAPMIŞ ÜYE ALANI ==================== -->
+      <div id="statusSection" class="auth-card status-card">
+        <h1>Üyelik Hesabı</h1>
+        <p class="subtitle">Hesap durumunuz ve yıllık üyelik başvurusu.</p>
+
+        <div class="user-info-row">
+          <span class="user-email" id="userEmailText">—</span>
+          <span class="status-badge" id="statusBadge">—</span>
+        </div>
+
+        <!-- Aktif Üyelik Özeti (Varsa) -->
+        <div id="activeSubBox" class="sub-info-box" style="display:none;">
+          <div class="sub-info-row">
+            <span class="sub-info-label">Geçerli Paket:</span>
+            <span class="sub-info-val" id="activePlanNameText">—</span>
+          </div>
+          <div class="sub-info-row">
+            <span class="sub-info-label">Dönem Bitişi:</span>
+            <span class="sub-info-val" id="activeExpiresText">—</span>
+          </div>
+          <div class="sub-info-row" id="pdfCreditRow" style="display:none;">
+            <span class="sub-info-label">PDF kredileri:</span>
+            <span class="sub-info-val" id="pdfCreditsText">0</span>
+          </div>
+        </div>
+
+        <!-- Üye Alanı & Yönetici Butonları -->
+        <a href="/raporlarim" class="btn-secondary" style="margin-bottom:20px;">Raporlarım · PDF arşivim</a>
+        <div id="activeActionArea" style="display:none;margin-bottom:20px;">
+          <a href="/uygulama" class="btn-submit" style="text-decoration:none;">Üye Analiz Alanına Git ➜</a>
+        </div>
+        <div id="adminActionArea" style="display:none;margin-bottom:20px;">
+          <a href="/admin" class="btn-secondary" style="border-color:var(--plum);color:var(--plum);font-weight:700;">Yönetici Paneli ⚙️</a>
+        </div>
+
+        <!-- Plan Seçim ve Ödeme Bildirimi Bölümü -->
+        <div class="plan-selector-title" id="paymentSectionTitle">Yıllık Üyelik ve Ödeme Bildirimi</div>
+        <p style="font-size:13.5px;color:var(--muted);margin-bottom:14px;" id="paymentSectionDesc">
+          Paketinizi seçip Shopier veya banka havalesi ile ödemenizi bildirebilirsiniz.
+        </p>
+
+        <!-- Plan Seçimi -->
+        <div class="plan-options">
+          <label class="plan-option-label selected" id="labelPlanCalc" onclick="selectPlan('calc')">
+            <div class="plan-option-left">
+              <input type="radio" name="planChoice" id="radioPlanCalc" value="calc" checked>
+              <div>
+                <div class="plan-option-name">Hesaplama</div>
+                <div class="plan-option-desc">Tüm modüllerde sınırsız hesaplama ve arşiv</div>
+              </div>
+            </div>
+            <div class="plan-option-price">2.500 TL <small style="font-size:12px;color:var(--muted);font-weight:500;">/ yıl</small></div>
+          </label>
+
+          <label class="plan-option-label" id="labelPlanFull" onclick="selectPlan('full')">
+            <div class="plan-option-left">
+              <input type="radio" name="planChoice" id="radioPlanFull" value="full">
+              <div>
+                <div class="plan-option-name">Hesaplama + Yorum Raporu</div>
+                <div class="plan-option-desc">Sınırsız hesaplama + 100 kişiye özel yorum PDF’si</div>
+              </div>
+            </div>
+            <div class="plan-option-price">6.000 TL <small style="font-size:12px;color:var(--muted);font-weight:500;">/ yıl</small></div>
+          </label>
+        </div>
+
+        <button type="button" class="btn-submit" id="btnStartPayment" onclick="syncOrderWithServer()" style="margin-bottom:16px;">Ödemeyi başlat</button>
+        <!-- Ödeme Yöntemi Kutusu -->
+        <div class="payment-method-box">
+          <div class="method-tab-bar">
+            <button type="button" class="method-tab-btn active" id="tabShopier" onclick="switchPaymentMethod('shopier')">Shopier ile Öde</button>
+            <button type="button" class="method-tab-btn" id="tabHavale" onclick="switchPaymentMethod('havale')">Banka Havalesi</button>
+          </div>
+
+          <!-- Shopier İçeriği -->
+          <div id="shopierPane">
+            <p style="font-size:13.5px;color:var(--muted);margin-bottom:14px;">
+              Shopier mağazamız üzerinden kredi veya banka kartınız ile güvenle ödeme yapabilirsiniz.
+            </p>
+            <div style="margin-bottom:16px;">
+              <span style="font-size:13px;color:var(--muted);">Sipariş Referansınız: </span>
+              <strong id="shopierOrderRefText" style="color:var(--ink);letter-spacing:0.5px;">—</strong>
+            </div>
+            <a id="btnOpenShopier" href="https://shop.shopier.com/astrosusu" target="_blank" rel="noopener noreferrer" class="btn-submit" style="margin-bottom:18px;text-decoration:none;">
+              Shopier Mağazasını Aç ↗
+            </a>
+
+            <div class="form-group" style="margin-bottom:10px;">
+              <label for="fShopierNo">Shopier Sipariş Numarası</label>
+              <input type="text" id="fShopierNo" placeholder="Örn: 918273645">
+            </div>
+            <button type="button" class="btn-submit" id="btnShopierSubmit" onclick="submitShopierNotice()">Shopier Sipariş No Bildir</button>
+          </div>
+
+          <!-- Havale İçeriği -->
+          <div id="havalePane" style="display:none;">
+            <p style="font-size:13.5px;color:var(--muted);margin-bottom:14px;">
+              Ödenecek tutarı aşağıdaki banka hesabına havale veya EFT ile gönderebilirsin.
+            </p>
+            <div class="bank-info-table">
+              <div class="bank-info-row">
+                <span class="bank-label">Alıcı:</span>
+                <div class="bank-val-wrap">
+                  <span id="bankReceiver">Şule mert</span>
+                  <button type="button" class="btn-copy" onclick="copyText('Şule mert', this)">Kopyala</button>
+                </div>
+              </div>
+              <div class="bank-info-row">
+                <span class="bank-label">Banka:</span>
+                <div class="bank-val-wrap"><span>Vakıfbank</span></div>
+              </div>
+              <div class="bank-info-row">
+                <span class="bank-label">IBAN:</span>
+                <div class="bank-val-wrap">
+                  <span id="bankIban">TR680001500158007366472240</span>
+                  <button type="button" class="btn-copy" onclick="copyText('TR680001500158007366472240', this)">Kopyala</button>
+                </div>
+              </div>
+              <div class="bank-info-row">
+                <span class="bank-label">Ödenecek Tutar:</span>
+                <div class="bank-val-wrap"><strong id="havaleAmountText">2.500 TL</strong></div>
+              </div>
+            </div>
+
+            <button type="button" class="btn-submit" id="btnHavaleSubmit" onclick="submitHavaleNotice()">Havaleyi Yaptım</button>
+          </div>
+        </div>
+
+        <!-- Başvuru Durum Kutusu -->
+        <div id="orderStatusBox" class="order-status-card" style="display:none;"></div>
+
+        <button type="button" class="btn-secondary" onclick="doLogout()">Oturumu Kapat</button>
+      </div>
+
+      <!-- ==================== GİRİŞ & KAYIT FORMU ==================== -->
+      <div id="authSection" class="auth-card">
+        <div class="auth-layout">
+        <img class="auth-photo" src="/assets/numeroloji-calisma-defteri.webp" width="1200" height="800" alt="Numeroloji çalışma defterinde 5, 7 ve 9 sayıları">
+        <div class="auth-form-surface">
+        <h1 id="authTitle">Hesaba Giriş</h1>
+        <p class="subtitle" id="authSubtitle">Çalışma alanınıza erişmek için bilgilerinizi girin.</p>
+
+        <!-- Seçilen Plan Bilgilendirmesi (Varsa) -->
+        <div id="selectedPlanNotice" style="display:none;background:#FAF5F9;border:1px solid #E4D8E1;border-radius:8px;padding:10px 14px;margin-bottom:18px;font-size:13.5px;color:var(--plum);font-weight:600;">
+          Seçilen Paket: <span id="selectedPlanNoticeName">Hesaplama (2.500 TL)</span>. Giriş veya kayıt sonrasında ödeme adımına yönlendirileceksiniz.
+        </div>
+
+        <div class="tab-bar">
+          <button type="button" class="tab-btn active" id="tabLogin" onclick="switchTab('login')">Giriş Yap</button>
+          <button type="button" class="tab-btn" id="tabRegister" onclick="switchTab('register')">Kayıt Ol</button>
+        </div>
+
+        <form id="authForm" onsubmit="handleAuthSubmit(event)">
+          <div class="form-group">
+            <label for="fEmail">E-posta Adresi</label>
+            <input type="email" id="fEmail" required placeholder="ornek@alanadi.com" autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <label for="fPassword">Şifre</label>
+            <input type="password" id="fPassword" required placeholder="••••••••" autocomplete="current-password">
+          </div>
+
+          <div class="form-group" id="confirmPassGroup" style="display: none;">
+            <label for="fPasswordConfirm">Şifre Tekrarı</label>
+            <input type="password" id="fPasswordConfirm" placeholder="En az 12 karakter" autocomplete="new-password">
+            <small style="display:block;margin-top:4px;font-size:12px;color:var(--muted)">Yeni üyelik için şifreniz en az 12 karakter olmalıdır.</small>
+          </div>
+
+          <button type="submit" class="btn-submit" id="btnSubmit">Giriş Yap</button>
+        </form>
+
+        <div id="msgError" class="msg-box msg-error"></div>
+        <div id="msgSuccess" class="msg-box msg-success"></div>
+        </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="/assets/report-ui.js"></script>
+  <script>
+    let currentMode = 'login'; // 'login' or 'register'
+    let currentPlan = 'calc';
+    let currentMethod = 'shopier';
+    let currentOrder = null;
+    let currentUser = null;
+
+    function showMsg(type, text) {
+      const errBox = document.getElementById('msgError');
+      const succBox = document.getElementById('msgSuccess');
+      errBox.style.display = 'none';
+      succBox.style.display = 'none';
+      if (type === 'error') {
+        errBox.textContent = text;
+        errBox.style.display = 'block';
+      } else if (type === 'success') {
+        succBox.textContent = text;
+        succBox.style.display = 'block';
+      }
+    }
+
+    function switchTab(mode) {
+      currentMode = mode;
+      showMsg(null);
+
+      const tabLogin = document.getElementById('tabLogin');
+      const tabRegister = document.getElementById('tabRegister');
+      const confirmGroup = document.getElementById('confirmPassGroup');
+      const title = document.getElementById('authTitle');
+      const subtitle = document.getElementById('authSubtitle');
+      const btn = document.getElementById('btnSubmit');
+      const passInput = document.getElementById('fPassword');
+      const confirmInput = document.getElementById('fPasswordConfirm');
+
+      if (mode === 'login') {
+        tabLogin.classList.add('active');
+        tabRegister.classList.remove('active');
+        confirmGroup.style.display = 'none';
+        title.textContent = 'Hesaba Giriş';
+        subtitle.textContent = 'Çalışma alanınıza erişmek için bilgilerinizi girin.';
+        btn.textContent = 'Giriş Yap';
+        passInput.placeholder = '••••••••';
+        passInput.removeAttribute('minlength');
+        confirmInput.removeAttribute('required');
+      } else {
+        tabLogin.classList.remove('active');
+        tabRegister.classList.add('active');
+        confirmGroup.style.display = 'block';
+        title.textContent = 'Yeni Hesap Oluştur';
+        subtitle.textContent = 'Derin Numeroloji üyeliğinizi başlatın.';
+        btn.textContent = 'Kayıt Ol';
+        passInput.placeholder = 'En az 12 karakter';
+        passInput.setAttribute('minlength', '12');
+        confirmInput.setAttribute('required', 'required');
+      }
+    }
+
+    async function checkCurrentSession() {
+      // Check url param for plan
+      const params = new URLSearchParams(window.location.search);
+      const requestedPlan = params.get('plan');
+      if (requestedPlan === 'full' || requestedPlan === 'calc') {
+        currentPlan = requestedPlan;
+        sessionStorage.setItem('intended_plan', requestedPlan);
+      } else {
+        const stored = sessionStorage.getItem('intended_plan');
+        if (stored === 'full' || stored === 'calc') currentPlan = stored;
+      }
+
+      if (currentPlan === 'full') {
+        document.getElementById('selectedPlanNoticeName').textContent = 'Hesaplama + Yorum Raporu (6.000 TL)';
+        document.getElementById('selectedPlanNotice').style.display = 'block';
+      } else if (params.has('plan')) {
+        document.getElementById('selectedPlanNoticeName').textContent = 'Hesaplama (2.500 TL)';
+        document.getElementById('selectedPlanNotice').style.display = 'block';
+      }
+
+      try {
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          currentUser = await res.json();
+          renderUserStatus(currentUser);
+        } else {
+          document.getElementById('authSection').style.display = 'block';
+          document.getElementById('statusSection').style.display = 'none';
+        }
+      } catch (e) {
+        document.getElementById('authSection').style.display = 'block';
+        document.getElementById('statusSection').style.display = 'none';
+      }
+    }
+
+    function renderUserStatus(user) {
+      document.getElementById('authSection').style.display = 'none';
+      document.getElementById('statusSection').style.display = 'block';
+
+      document.getElementById('userEmailText').textContent = user.email;
+      const badge = document.getElementById('statusBadge');
+      const activeArea = document.getElementById('activeActionArea');
+      const adminArea = document.getElementById('adminActionArea');
+      const subBox = document.getElementById('activeSubBox');
+
+      if (user.role === 'admin') {
+        adminArea.style.display = 'block';
+      } else {
+        adminArea.style.display = 'none';
+      }
+
+      const sub = user.subscription;
+      if (sub && sub.status === 'active') {
+        badge.className = 'status-badge active';
+        badge.textContent = 'Aktif Üye';
+        activeArea.style.display = 'block';
+
+        subBox.style.display = 'block';
+        document.getElementById('activePlanNameText').textContent = sub.plan_name;
+        document.getElementById('activeExpiresText').textContent = new Date(sub.expires_at).toLocaleDateString('tr-TR');
+
+        if (sub.plan_id === 'full') {
+          ReportUI.credits(document.getElementById('pdfCreditsText'));
+          document.getElementById('pdfCreditRow').style.display = 'flex';
+        } else {
+          document.getElementById('pdfCreditRow').style.display = 'none';
+        }
+
+        document.getElementById('paymentSectionTitle').textContent = 'Üyelik Yenileme';
+        document.getElementById('paymentSectionDesc').textContent =
+          'Mevcut paketinizin süresini 1 yıl daha uzatmak için aşağıdan ödeme bildirimi yapabilirsiniz.';
+      } else {
+        activeArea.style.display = 'none';
+        subBox.style.display = 'none';
+
+        if (user.status === 'active') {
+          // Status active but subscription expired or none
+          badge.className = 'status-badge expired';
+          badge.textContent = 'Süresi Doldu';
+        } else {
+          badge.className = 'status-badge pending';
+          badge.textContent = 'Abonelik Bekleniyor';
+        }
+      }
+
+      // Sync plan selection UI
+      selectPlan(currentPlan, false);
+      switchPaymentMethod(sessionStorage.getItem('intended_method') || 'shopier');
+
+      // Check user's latest order status
+      if (user.latestOrder) {
+        selectPlan(user.latestOrder.plan_id, false);
+        switchPaymentMethod(user.latestOrder.payment_method);
+        currentOrder = user.latestOrder;
+        renderOrderStatus(currentOrder);
+      } else {
+        document.getElementById('orderStatusBox').style.display = 'none';
+      }
+    }
+
+    function selectPlan(planId, sync = true) {
+      if (currentOrder && currentOrder.status === 'pending_review') {
+        return;
+      }
+      currentPlan = planId;
+      sessionStorage.setItem('intended_plan', planId);
+      document.getElementById('radioPlanCalc').checked = (planId === 'calc');
+      document.getElementById('radioPlanFull').checked = (planId === 'full');
+
+      const labelCalc = document.getElementById('labelPlanCalc');
+      const labelFull = document.getElementById('labelPlanFull');
+
+      if (planId === 'calc') {
+        labelCalc.classList.add('selected');
+        labelFull.classList.remove('selected');
+        document.getElementById('havaleAmountText').textContent = '2.500 TL';
+      } else {
+        labelCalc.classList.remove('selected');
+        labelFull.classList.add('selected');
+        document.getElementById('havaleAmountText').textContent = '6.000 TL';
+      }
+
+    }
+
+    function switchPaymentMethod(method) {
+      if (currentOrder && currentOrder.status === 'pending_review') {
+        return;
+      }
+      currentMethod = method;
+      sessionStorage.setItem('intended_method', method);
+      const tabShopier = document.getElementById('tabShopier');
+      const tabHavale = document.getElementById('tabHavale');
+      const shopierPane = document.getElementById('shopierPane');
+      const havalePane = document.getElementById('havalePane');
+
+      if (method === 'shopier') {
+        tabShopier.classList.add('active');
+        tabHavale.classList.remove('active');
+        shopierPane.style.display = 'block';
+        havalePane.style.display = 'none';
+      } else {
+        tabShopier.classList.remove('active');
+        tabHavale.classList.add('active');
+        shopierPane.style.display = 'none';
+        havalePane.style.display = 'block';
+      }
+
+    }
+
+    async function syncOrderWithServer() {
+      if (!currentUser) return;
+      const button = document.getElementById('btnStartPayment');
+      if (button.disabled || currentOrder?.status === 'pending_review') return;
+      button.disabled = true;
+      try {
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ planId: currentPlan, paymentMethod: currentMethod })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          currentOrder = data.order;
+          renderOrderStatus(currentOrder);
+        } else { alert((await res.json()).error || 'Sipariş oluşturulamadı.'); }
+      } catch (e) {
+        console.error('Sipariş senkronizasyon hatası:', e);
+        alert('Bağlantı hatası. Lütfen tekrar deneyin.');
+      } finally { button.disabled = currentOrder?.status === 'pending_review'; }
+    }
+
+    function renderOrderStatus(order) {
+      if (!order) return;
+      document.getElementById('btnStartPayment').disabled = order.status === 'pending_review';
+
+      document.getElementById('shopierOrderRefText').textContent = order.order_ref;
+
+      const box = document.getElementById('orderStatusBox');
+      box.style.display = 'block';
+
+      const radioCalc = document.getElementById('radioPlanCalc');
+      const radioFull = document.getElementById('radioPlanFull');
+      const tabShopier = document.getElementById('tabShopier');
+      const tabHavale = document.getElementById('tabHavale');
+      const fShopierNo = document.getElementById('fShopierNo');
+      const btnShopierSubmit = document.getElementById('btnShopierSubmit');
+      const btnHavaleSubmit = document.getElementById('btnHavaleSubmit');
+
+      if (order.status === 'draft') {
+        radioCalc.disabled = false;
+        radioFull.disabled = false;
+        tabShopier.disabled = false;
+        tabHavale.disabled = false;
+        if (fShopierNo) fShopierNo.disabled = false;
+        if (btnShopierSubmit) btnShopierSubmit.disabled = false;
+        if (btnHavaleSubmit) btnHavaleSubmit.disabled = false;
+
+        box.className = 'order-status-card order-status-draft';
+        box.innerHTML = `
+          <strong>📝 Sipariş Taslağı Oluşturuldu</strong><br>
+          Sipariş Referansınız: <strong>${order.order_ref}</strong> (${order.plan_name} - ${order.amount_tl} TL).<br>
+          Ödemenizi tamamladıktan sonra lütfen yukarıdaki buton ile bildiriminizi iletiniz.
+        `;
+      } else if (order.status === 'pending_review') {
+        radioCalc.disabled = true;
+        radioFull.disabled = true;
+        tabShopier.disabled = true;
+        tabHavale.disabled = true;
+        if (fShopierNo) {
+          fShopierNo.value = order.shopier_order_no || '';
+          fShopierNo.disabled = true;
+        }
+        if (btnShopierSubmit) btnShopierSubmit.disabled = true;
+        if (btnHavaleSubmit) btnHavaleSubmit.disabled = true;
+
+        box.className = 'order-status-card order-status-pending';
+        box.innerHTML = `
+          <strong>⏳ İnceleme Bekliyor</strong><br>
+          Sipariş Referansınız: <strong>${order.order_ref}</strong> (${order.plan_name} - ${order.amount_tl} TL).<br>
+          Ödeme bildiriminiz alınmıştır. Yönetici kontrolünün ardından üyeliğiniz aktifleşecektir.
+          <p style="font-size:12px;color:var(--muted);margin-top:6px;margin-bottom:0;">İnceleme sürecinde plan veya yöntem değiştirilemez.</p>
+        `;
+      } else if (order.status === 'approved') {
+        radioCalc.disabled = false;
+        radioFull.disabled = false;
+        tabShopier.disabled = false;
+        tabHavale.disabled = false;
+        if (fShopierNo) fShopierNo.disabled = false;
+        if (btnShopierSubmit) btnShopierSubmit.disabled = false;
+        if (btnHavaleSubmit) btnHavaleSubmit.disabled = false;
+
+        box.className = 'order-status-card order-status-approved';
+        box.innerHTML = `
+          <strong>✓ Onaylandı</strong><br>
+          ${order.plan_name} paketiniz onaylandı. Yıllık üyelik süreniz aktifleşmiştir!
+        `;
+      } else if (order.status === 'rejected') {
+        radioCalc.disabled = false;
+        radioFull.disabled = false;
+        tabShopier.disabled = false;
+        tabHavale.disabled = false;
+        if (fShopierNo) fShopierNo.disabled = false;
+        if (btnShopierSubmit) btnShopierSubmit.disabled = false;
+        if (btnHavaleSubmit) btnHavaleSubmit.disabled = false;
+
+        box.className = 'order-status-card order-status-rejected';
+        box.innerHTML = `
+          <strong>✕ Reddedildi</strong><br>
+          Ödeme bildiriminiz onaylanamadı.<br>
+          <button type="button" class="btn-submit" style="margin-top:10px;min-height:38px;font-size:13.5px;" onclick="createNewOrderAfterReject()">Yeni Başvuru Başlat</button>
+        `;
+      }
+    }
+
+    async function createNewOrderAfterReject() {
+      currentOrder = null;
+      await syncOrderWithServer();
+    }
+
+    async function submitShopierNotice() {
+      if (!currentOrder || currentOrder.status !== 'draft' || currentOrder.plan_id !== currentPlan || currentOrder.payment_method !== currentMethod) {
+        alert('Lütfen önce Ödemeyi başlat düğmesine basınız.');
+        return;
+      }
+      const shopierNo = document.getElementById('fShopierNo').value.trim();
+      if (!shopierNo) {
+        alert('Lütfen Shopier sipariş numaranızı giriniz.');
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/orders/${currentOrder.order_ref}/notify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ shopierOrderNo: shopierNo })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          alert(data.error || 'Bildirim iletilemedi.');
+          return;
+        }
+        currentOrder = data.order;
+        renderOrderStatus(currentOrder);
+        alert('Shopier sipariş numaranız başarıyla iletildi. İnceleniyor.');
+      } catch (err) {
+        alert('Bağlantı hatası.');
+      }
+    }
+
+    async function submitHavaleNotice() {
+      if (!currentOrder || currentOrder.status !== 'draft' || currentOrder.plan_id !== currentPlan || currentOrder.payment_method !== currentMethod) {
+        alert('Lütfen önce Ödemeyi başlat düğmesine basınız.');
+        return;
+      }
+      try {
+        const res = await fetch(`/api/orders/${currentOrder.order_ref}/notify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          alert(data.error || 'Bildirim iletilemedi.');
+          return;
+        }
+        currentOrder = data.order;
+        renderOrderStatus(currentOrder);
+        alert('Havale bildiriminiz alındı. Ödemeniz kontrol edildikten sonra üyeliğiniz açılacaktır.');
+      } catch (err) {
+        alert('Bağlantı hatası.');
+      }
+    }
+
+    function copyText(val, btn) {
+      navigator.clipboard.writeText(val).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = 'Kopyalandı!';
+        setTimeout(() => { btn.textContent = orig; }, 2000);
+      });
+    }
+
+    async function handleAuthSubmit(event) {
+      event.preventDefault();
+      showMsg(null);
+
+      const email = document.getElementById('fEmail').value.trim();
+      const password = document.getElementById('fPassword').value;
+      const btn = document.getElementById('btnSubmit');
+
+      if (!email || !password) {
+        showMsg('error', 'Lütfen tüm alanları doldurun.');
+        return;
+      }
+
+      if (currentMode === 'register') {
+        const confirm = document.getElementById('fPasswordConfirm').value;
+        if (password !== confirm) {
+          showMsg('error', 'Girdiğiniz şifreler eşleşmiyor.');
+          return;
+        }
+        if (password.length < 12) {
+          showMsg('error', 'Yeni şifreniz en az 12 karakter olmalıdır.');
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Kayıt yapılıyor...';
+
+        try {
+          const res = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json();
+          if (!res.ok) {
+            showMsg('error', data.error || 'Kayıt oluşturulamadı.');
+          } else {
+            currentUser = data.user;
+            renderUserStatus(currentUser);
+          }
+        } catch (err) {
+          showMsg('error', 'Bağlantı hatası oluştu.');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Kayıt Ol';
+        }
+      } else {
+        btn.disabled = true;
+        btn.textContent = 'Giriş yapılıyor...';
+
+        try {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json();
+          if (!res.ok) {
+            showMsg('error', data.error || 'Giriş başarısız.');
+          } else {
+            currentUser = data.user;
+            renderUserStatus(currentUser);
+          }
+        } catch (err) {
+          showMsg('error', 'Bağlantı hatası oluştu.');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Giriş Yap';
+        }
+      }
+    }
+
+    async function doLogout() {
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' });
+      } catch (err) {}
+      currentUser = null;
+      document.getElementById('statusSection').style.display = 'none';
+      document.getElementById('authSection').style.display = 'block';
+    }
+
+    // Başlat
+    checkCurrentSession();
+  </script>
+  <a class="whatsapp-fab" href="https://wa.me/905370300640" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp’tan yaz" title="WhatsApp’tan yaz"></a>
+</body>
+</html>

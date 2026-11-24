@@ -1,0 +1,37 @@
+{
+  "name": "astrosusu_numeroloji_sistemi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "analysis_expositor.js",
+  "scripts": {
+    "test": "node test_reports.js",
+    "migrate": "node migrate.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrtsrktt/astrosusu_numeroloji_sistemi.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/mrtsrktt/astrosusu_numeroloji_sistemi/issues"
+  },
+  "homepage": "https://github.com/mrtsrktt/astrosusu_numeroloji_sistemi#readme",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1176.0",
+    "@vercel/functions": "^3.11.3",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.3.0",
+    "pdf-lib": "^1.17.1",
+    "pdfkit": "^0.21.0",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "ajv": "^8.20.0",
+    "ajv-draft-04": "^1.0.0",
+    "minimatch": "^11.0.9"
+  }
+}

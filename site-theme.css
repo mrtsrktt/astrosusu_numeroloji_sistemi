@@ -1,0 +1,196 @@
+.theme-toggle {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.theme-toggle:hover { background: #99778e25; }
+.theme-toggle:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.theme-toggle svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.theme-toggle .theme-sun,
+[data-theme="dark"] .theme-toggle .theme-moon { display: none; }
+[data-theme="dark"] .theme-toggle .theme-sun { display: block; }
+.account-header-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; }
+.report-archive-navigation { align-items: center; }
+.report-archive-navigation .theme-toggle { margin-inline-start: auto; }
+
+.whatsapp-fab {
+  position: fixed;
+  right: calc(20px + env(safe-area-inset-right, 0px));
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  z-index: 70;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #166b46;
+  color: #fff;
+  box-shadow: 0 5px 18px #13251c35;
+}
+
+.whatsapp-fab:hover { background: #115a3a; }
+.whatsapp-fab:focus-visible { outline: 2px solid #fff; outline-offset: -5px; }
+
+.whatsapp-fab::before {
+  content: "";
+  width: 31px;
+  height: 31px;
+  background: #fff;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20.7 11.7a8.7 8.7 0 0 1-12.8 7.7L3.3 20.6l1.2-4.5a8.7 8.7 0 1 1 16.2-4.4Z' fill='none' stroke='black' stroke-width='1.7' stroke-linejoin='round'/%3E%3Cpath d='M8.5 7h.7c.2 0 .3.1.4.3l.8 1.8c.1.2 0 .4-.1.6l-.6.7c-.1.1-.1.3 0 .4.7 1.2 1.7 2.2 3 2.8.2.1.3.1.4-.1l.8-1c.1-.2.3-.2.5-.1l1.9.9c.2.1.3.3.3.5-.1 1.1-1 1.8-2.1 1.8-1.4 0-3.4-1-4.8-2.4C8.3 11.8 7.4 10.3 7.4 9c0-1 .5-1.8 1.1-2Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.whatsapp-fab::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid #40ae7d;
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  animation: whatsapp-pulse 2.3s ease-out .35s 2;
+}
+
+@keyframes whatsapp-pulse {
+  from { opacity: .65; transform: scale(1); }
+  to { opacity: 0; transform: scale(1.6); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-fab::after { animation: none; }
+}
+
+@media screen and (max-width: 760px) {
+  .whatsapp-fab {
+    right: calc(18px + env(safe-area-inset-right, 0px));
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    width: 52px;
+    height: 52px;
+  }
+
+  :is(.account, .member, .report-archive):has(> .whatsapp-fab) {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (max-width: 480px) {
+  .landing .site-header .nav-btn-account { padding-inline: 8px; }
+  .landing .brand-logo { font-size: clamp(1rem, 5.1vw, 1.5rem); }
+  .admin .header-inner { height: auto; min-height: 64px; flex-wrap: wrap; gap: 2px 12px; padding-block: 8px; }
+  .account .header-inner { height: auto; min-height: 64px; gap: 8px; }
+  .account .account-header-actions { justify-content: flex-end; }
+}
+@media print { .theme-toggle, .whatsapp-fab { display: none !important; } }
+
+@media screen {
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --theme-paper: #19151a;
+    --theme-panel: #252027;
+    --theme-raised: #302733;
+    --theme-line: #544655;
+    --theme-ink: #f6edf2;
+    --theme-muted: #cbbac8;
+    --theme-accent: #e4bce0;
+    --theme-button: #714c72;
+  }
+  [data-theme="dark"] :is(.landing,.account,.admin,.member,.report-archive) {
+    --bg: var(--theme-paper);
+    --surface: var(--theme-panel);
+    --panel: var(--theme-panel);
+    --panel-alt: var(--theme-raised);
+    --ink: var(--theme-ink);
+    --ink-secondary: var(--theme-muted);
+    --muted: var(--theme-muted);
+    --line: var(--theme-line);
+    --line-subtle: var(--theme-line);
+    --input-border: var(--theme-line);
+    --badge-bg: var(--theme-raised);
+    --plum: var(--theme-accent);
+    --plum-hover: var(--theme-button);
+    --brand: var(--theme-accent);
+    --brand-light: var(--theme-raised);
+    --green: #a7e5b7;
+    --green-bg: #223c2c;
+    --amber: #f4d198;
+    --amber-bg: #3d3023;
+    --red: #ffb7bd;
+    --red-bg: #4d292e;
+    --bad: #ffb7bd;
+    background-color: var(--theme-paper);
+    color: var(--theme-ink);
+  }
+  :root[data-theme="dark"] { background: var(--theme-paper); }
+  [data-theme="dark"] :is(.landing .btn-primary,.account .btn-primary,.account .btn-submit,.account .method-tab-btn.active,.admin .btn-primary) {
+    background: var(--theme-button);
+    border-color: var(--theme-button);
+    color: #fff;
+  }
+  [data-theme="dark"] :is(.landing .btn-primary,.account .btn-primary,.admin .btn-primary):hover {
+    background: #825582;
+  }
+  [data-theme="dark"] :is(.account,.admin) :is(input,select,textarea) {
+    background: var(--theme-raised);
+    border-color: var(--theme-line);
+    color: var(--theme-ink);
+  }
+  [data-theme="dark"] :is(.account .payment-details,.account .pay-box,.account .plan-option,.account .status-card,.account .btn-secondary,.admin th,.admin .stat-card) {
+    background: var(--theme-panel);
+    color: var(--theme-ink);
+  }
+  [data-theme="dark"] :is(.account .sub-info-box,.account .plan-option-label.selected,.account .method-tab-btn:not(.active),.account .btn-copy,.account .order-status-draft,.admin .badge-draft,.admin tr:hover td) {
+    background: var(--theme-raised);
+    border-color: var(--theme-line);
+    color: var(--theme-ink);
+  }
+  [data-theme="dark"] .account .msg-error { background: var(--red-bg); color: var(--red); border-color: var(--theme-line); }
+  [data-theme="dark"] .account .msg-success { background: var(--green-bg); color: var(--green); border-color: var(--theme-line); }
+  [data-theme="dark"] .report-archive :is(h1,h2) { color: var(--theme-ink); }
+  [data-theme="dark"] .report-archive :is(p,.meta) { color: var(--theme-muted); }
+  [data-theme="dark"] .report-archive :is(a,.theme-toggle) { color: var(--theme-accent); }
+  [data-theme="dark"] .report-archive :is(.card,.badge) { background: var(--theme-panel); border-color: var(--theme-line); }
+  [data-theme="dark"] .report-archive .download { border-color: var(--theme-line); }
+
+  [data-theme="dark"] .member #topbar,
+  [data-theme="dark"] .member :is(.btn-menu-toggle,.btn-sm,.module-input-card,.module-customer-picker,.module-actions-bar,.dashboard-card,.dashboard-button,.report-head,.a4-export-card) {
+    background: var(--theme-panel);
+    color: var(--theme-ink);
+    border-color: var(--theme-line);
+  }
+  [data-theme="dark"] .member :is(.card h2,.report-head h1,.member-dashboard h1,.member-dashboard h2,.a4-export-title) {
+    color: var(--theme-ink);
+  }
+  [data-theme="dark"] .member :is(.desc,.field label,.member-dashboard p,.member-dashboard dt,.a4-export-desc,.holistic-hint-note) {
+    color: var(--theme-muted);
+  }
+  [data-theme="dark"] .member :is(.dashboard-primary,.a4-export-btn,.module-input-card .btn-go) {
+    background: var(--theme-button);
+    border-color: var(--theme-button);
+    color: #fff;
+  }
+  [data-theme="dark"] .member :is(.module-input-card input,.module-customer-picker select,.field input,.field select,.field textarea,.module-input-card .btn-ghost,.module-customer-picker button) {
+    background: var(--theme-raised);
+    border-color: var(--theme-line);
+    color: var(--theme-ink);
+  }
+  [data-theme="dark"] .member :is(.dashboard-history-row,.dashboard-membership div) { border-color: var(--theme-line); }
+  /* Older result blocks include fixed palettes for matrices and charts. Preserve their tonal hierarchy. */
+  [data-theme="dark"] .member .report-section {
+    --ink: #17111a;
+    --muted: #5e5262;
+    --brand: #1e3a8a;
+    --line: #e7dfe4;
+    --panel: #fff;
+    color: #17111a;
+    background-color: #f2eaf1;
+    filter: invert(1) hue-rotate(180deg) brightness(.9);
+  }
+}

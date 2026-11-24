@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Raporlarım · Astro Şuşu</title>
+  <style>
+    *{box-sizing:border-box} body{margin:0;background:#f5f7fa;color:#233047;font:15px/1.6 system-ui,sans-serif}
+    main{max-width:960px;margin:40px auto;padding:0 20px} h1{font-size:30px;margin:20px 0 6px}
+    p{color:#586579} a{color:#31588b} nav{display:flex;gap:18px;flex-wrap:wrap}
+    .card{background:white;border:1px solid #dfe5ec;border-radius:16px;padding:22px;margin:18px 0}
+    .report{display:flex;gap:18px;align-items:center;justify-content:space-between}
+    .report>div{min-width:0;overflow-wrap:anywhere} h2{font-size:17px;margin:0 0 8px}
+    .meta{font-size:13px;color:#586579}.badge{display:inline-block;background:#edf2f8;border-radius:6px;padding:3px 9px;margin-top:8px}
+    .download{display:inline-block;padding:9px 14px;border:1px solid #31588b;border-radius:8px;text-decoration:none;white-space:nowrap}
+    @media(max-width:480px){main{margin:20px auto;padding:0 16px}.card{padding:18px}.report{align-items:flex-start;flex-direction:column}h1{font-size:26px}}
+  </style>
+  <script src="/assets/site-theme.js"></script>
+  <link rel="stylesheet" href="/assets/site-theme.css">
+</head>
+<body class="report-archive"><main>
+  <nav class="report-archive-navigation" aria-label="Üye sayfaları"><a href="/hesap">Hesabım</a><a href="/uygulama">Üye Paneli</a><button type="button" class="theme-toggle" data-theme-toggle aria-label="Karanlık tema" aria-pressed="false"><svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 15.3A8.7 8.7 0 0 1 8.7 3.6 8.7 8.7 0 1 0 20.4 15.3Z"/></svg><svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M19 5l-1.5 1.5m-11 11L5 19"/></svg></button></nav>
+  <h1>Raporlarım</h1><p>Arşiviniz üyeliğiniz sona erse de korunur. Hazır PDF’leri yeniden indirmek kredi kullanmaz.</p>
+  <section class="card"><h2>PDF kredileri</h2><p id="credits" role="status">Yükleniyor…</p></section>
+  <section id="reports" aria-label="Rapor arşivi" aria-live="polite"><p>Raporlar yükleniyor…</p></section>
+</main><script src="/assets/report-ui.js"></script><script>
+  const root = document.getElementById('reports');
+  async function load() {
+    try {
+      const items = await ReportUI.json('/api/reports');
+      ReportUI.credits(document.getElementById('credits'));
+      root.replaceChildren();
+      if (!items.length) { root.textContent = 'Henüz raporunuz yok. Kaydedilmiş bir analizden rapor isteyebilirsiniz.'; return; }
+      for (const r of items) {
+        const card = document.createElement('article'); card.className = 'card report';
+        const details = document.createElement('div');
+        const title = document.createElement('h2'); title.textContent = r.analysisName;
+        const date = document.createElement('div'); date.className = 'meta';
+        date.textContent = new Date(r.createdAt).toLocaleString('tr-TR');
+        const status = document.createElement('span'); status.className = 'badge';
+        status.textContent = ({ready:'Hazır',pending:'Hazırlanıyor',failed:'Başarısız · Kredi kullanılmadı',expired:'Süre aşımı · Kredi serbest bırakıldı'})[r.status] + (r.isSample ? ' · Örnek PDF' : '');
+        details.append(title,date,status); card.append(details);
+        if (r.status === 'ready') {
+          const a = document.createElement('a'); a.className = 'download'; a.href = r.downloadUrl; a.textContent = 'PDF’yi indir'; card.append(a);
+        }
+        root.append(card);
+      }
+      if (items.some(r => r.status === 'pending')) setTimeout(load,1500);
+    } catch (e) { root.textContent = e.message; }
+  }
+  load();
+</script>
+<a class="whatsapp-fab" href="https://wa.me/905370300640" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp’tan yaz" title="WhatsApp’tan yaz"></a>
+</body></html>

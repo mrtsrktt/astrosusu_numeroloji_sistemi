@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "express",
+  "functions": {
+    "server.js": {
+      "maxDuration": 300,
+      "includeFiles": "{*.html,*.js,*.css,*.webp,astro-susu-ornek-rapor.pdf,report-outline.json,schema.sql,assets/fonts/**}",
+      "excludeFiles": "{**/.env*,private-reports/**,test-artifacts/**,kaynak_ornekler/**,**/*.sqlite*,**/*.db,**/*.dump,test_*,run_*,inspect_*,check_*}"
+    }
+  }
+}

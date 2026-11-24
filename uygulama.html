@@ -1,0 +1,3684 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Derin Numeroloji — Üye Analiz Alanı</title>
+<style>
+:root {
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --panel-alt: #f1f5f9;
+  --ink: #0f172a;
+  --ink-secondary: #334155;
+  --muted: #64748b;
+  --brand: #1e3a8a;
+  --brand-hover: #1e40af;
+  --brand2: #2563eb;
+  --brand-light: #eff6ff;
+  --line: #e2e8f0;
+  --line-subtle: #f1f5f9;
+  --ok: #059669;
+  --warn: #d97706;
+  --bad: #dc2626;
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.03), 0 4px 16px -2px rgba(15,23,42,0.04);
+  --shadow-hover: 0 8px 24px -4px rgba(15,23,42,0.08);
+  --shadow-lg: 0 20px 40px -8px rgba(15,23,42,0.18);
+  --sidebar-w: 270px;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+button { font-family: inherit; cursor: pointer; }
+.hidden { display: none !important; }
+
+/* ---------- Giriş Ekranı ---------- */
+#loginScreen {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top left, #1e3a8a, #0b1329);
+  padding: 16px;
+}
+.login-card {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 20px;
+  padding: 36px 30px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 25px 60px -10px rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.3);
+}
+.login-card h1 {
+  margin: 0 0 6px;
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+.login-card h1 span {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2563eb;
+  background: #eff6ff;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-left: 6px;
+}
+.login-card p.sub {
+  margin: 0 0 22px;
+  color: #64748b;
+  font-size: 13.5px;
+}
+.login-card label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  margin: 14px 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.login-card input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.15s ease;
+  background: #ffffff;
+}
+.login-card input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+.btn-primary {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  color: #ffffff;
+  border: 0;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+  transition: all 0.15s ease;
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #1e40af, #1d4ed8);
+  transform: translateY(-1px);
+}
+.login-msg { margin-top: 12px; font-size: 13px; min-height: 18px; text-align: center; }
+
+/* ---------- Layout & Sidebar ---------- */
+#app {
+  display: flex;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+}
+#sidebar {
+  width: var(--sidebar-w);
+  background: #090e1a;
+  color: #94a3b8;
+  flex-shrink: 0;
+  padding: 0 0 24px 0;
+  overflow-y: auto;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  z-index: 100;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 99;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.sidebar-backdrop.open {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+#sidebar .brand {
+  padding: 18px 20px 16px;
+  font-size: 17px;
+  font-weight: 800;
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  margin-bottom: 10px;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#sidebar .brand-title {
+  display: flex;
+  flex-direction: column;
+}
+#sidebar .brand small {
+  font-weight: 600;
+  font-size: 10.5px;
+  color: #64748b;
+  margin-top: 3px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+.sidebar-close-btn {
+  display: none;
+  background: rgba(255,255,255,0.08);
+  border: 0;
+  color: #cbd5e1;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+}
+.nav-group { margin: 12px 0 4px; }
+.nav-group h4 {
+  margin: 0;
+  padding: 6px 20px 8px;
+  font-size: 10.5px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #475569;
+  font-weight: 700;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 16px;
+  margin: 2px 10px;
+  border-radius: 8px;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+.nav-item:hover {
+  background: rgba(255,255,255,0.05);
+  color: #ffffff;
+}
+.nav-item.active {
+  background: rgba(37,99,235,0.18);
+  color: #60a5fa;
+  font-weight: 700;
+  box-shadow: inset 3px 0 0 #3b82f6;
+}
+.nav-item .badge {
+  font-size: 10px;
+  background: rgba(255,255,255,0.08);
+  color: #64748b;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-weight: 600;
+}
+
+/* ---------- Topbar & Main ---------- */
+#main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--bg);
+}
+#topbar {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+.btn-menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-xs);
+  transition: background 0.15s;
+}
+.btn-menu-toggle:hover {
+  background: #f1f5f9;
+}
+#topbar .crumb {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#topbar .spacer { flex: 1; }
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+#topbar .user {
+  font-size: 13px;
+  color: var(--muted);
+  padding: 6px 12px;
+  background: var(--line-subtle);
+  border-radius: 8px;
+  font-weight: 500;
+}
+#topbar .user b { color: var(--ink); font-weight: 700; }
+.btn-sm {
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-secondary);
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-xs);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-sm:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: var(--ink);
+}
+.btn-sm.danger {
+  color: var(--bad);
+  border-color: #fecaca;
+  background: #fff;
+}
+.btn-sm.danger:hover { background: #fef2f2; }
+
+#content {
+  padding: 24px;
+  max-width: 1140px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+/* ---------- Kartlar & Izgara ---------- */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card h2 {
+  margin: 0 0 6px;
+  font-size: 19px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.card h3 {
+  margin: 20px 0 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+}
+.card .desc {
+  color: var(--muted);
+  font-size: 13.5px;
+  margin: 0 0 18px;
+  line-height: 1.55;
+}
+
+.grid { display: grid; gap: 14px; }
+.grid.c2 { grid-template-columns: repeat(2, 1fr); }
+.grid.c3 { grid-template-columns: repeat(3, 1fr); }
+.grid.c4 { grid-template-columns: repeat(4, 1fr); }
+
+.field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.field input, .field select, .field textarea {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  font-size: 14px;
+  font-family: inherit;
+  background: #ffffff;
+  color: var(--ink);
+  transition: all 0.15s ease;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none;
+  border-color: var(--brand2);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.btn {
+  min-height: 42px;
+  padding: 10px 22px;
+  border: 0;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+.btn-go {
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.28);
+}
+.btn-go:hover {
+  background: linear-gradient(135deg, #1e40af, #1d4ed8);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
+}
+.btn-ghost {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid var(--line);
+}
+.btn-ghost:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; font-size: 13.5px; }
+.kv .k { color: var(--muted); }
+.kv .v { font-weight: 600; color: var(--ink); }
+
+.num-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  text-align: center;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-xs);
+  user-select: none;
+}
+.num-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37,99,235,0.22);
+  background: #dbeafe;
+  border-color: #3b82f6;
+}
+.num-badge.master {
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
+  box-shadow: 0 1px 3px rgba(217,119,6,0.12);
+}
+.num-badge.karmic {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  box-shadow: 0 1px 3px rgba(220,38,38,0.12);
+}
+.num-badge .badge-dot { font-size: 9px; margin-left: 4px; opacity: 0.7; }
+
+table.data { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; border-radius: 8px; overflow: hidden; }
+table.data th, table.data td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; }
+table.data th { background: #f8fafc; color: #1e3a8a; font-weight: 700; }
+table.data tr:nth-child(even) td { background: #fafcff; }
+
+.matrix { display: inline-grid; grid-template-columns: repeat(3, 64px); grid-template-rows: repeat(3, 52px); gap: 6px; }
+.matrix div {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  box-shadow: var(--shadow-xs);
+}
+.matrix div b { font-size: 16px; color: #1e3a8a; }
+.matrix div span { font-size: 11px; color: var(--muted); }
+
+.chip {
+  display: inline-block;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 2px 4px;
+  color: #1d4ed8;
+}
+.chip.warn { background: #fffbeb; border-color: #fde68a; color: var(--warn); }
+.chip.ok { background: #ecfdf5; border-color: #a7f3d0; color: var(--ok); }
+
+.empty { color: var(--muted); font-size: 13px; padding: 18px 0; text-align: center; }
+.history-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.history-item:last-child { border-bottom: 0; }
+.history-item .h-title { font-weight: 700; color: var(--ink); }
+.history-item .h-meta { font-size: 12px; color: var(--muted); }
+.history-item .spacer { flex: 1; }
+
+.pill { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: #f1f5f9; color: var(--muted); }
+.pill.free { background: #ecfdf5; color: var(--ok); }
+.pill.paid { background: #fffbeb; color: var(--warn); }
+
+/* ---------- Rapor ---------- */
+#reportView { background: #fff; padding: 0; }
+.report-head { border-bottom: 1px solid #E7DFE4; padding-bottom: 12px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: flex-end; }
+.report-head h1 { margin: 0; font-size: 22px; color: #29212C; font-weight: 800; }
+.report-head .meta { font-size: 12px; color: var(--muted); text-align: right; }
+
+/* ---------- Analiz Giriş Kartı ---------- */
+.card.module-input-card,
+.card.holistic-input-card {
+  background-color: #FFFCF7;
+  border: 1px solid #E7DFE4;
+}
+.module-input-card h2,
+.holistic-input-card h2 {
+  color: #29212C;
+}
+.module-input-card .field,
+.holistic-input-card .field {
+  min-width: 0;
+}
+.module-input-card .field input,
+.holistic-input-card .field input {
+  background-color: #ffffff;
+  border: 1px solid #D8CED5;
+  color: #29212C;
+  font-size: 16px;
+  min-height: 44px;
+  height: 44px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  width: 100%;
+}
+.module-input-card .field input:focus,
+.holistic-input-card .field input:focus {
+  outline: none;
+  border-color: #4D304A;
+  box-shadow: 0 0 0 3px rgba(77, 48, 74, 0.15);
+}
+.module-input-card .field input:focus-visible,
+.holistic-input-card .field input:focus-visible {
+  outline: 2px solid #4D304A;
+  outline-offset: 1px;
+}
+.module-input-card .btn.btn-go,
+.holistic-input-card .btn.btn-go {
+  background: #4D304A;
+  background-image: none;
+  color: #ffffff;
+  box-shadow: none;
+  border: 1px solid #4D304A;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.module-input-card .btn.btn-go:hover,
+.holistic-input-card .btn.btn-go:hover {
+  background: #3b2438;
+  border-color: #3b2438;
+  background-image: none;
+  box-shadow: none;
+  transform: none;
+}
+.module-input-card .btn.btn-ghost,
+.holistic-input-card .btn.btn-ghost {
+  background: #ffffff;
+  border: 1px solid #E7DFE4;
+  color: #4D304A;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  box-shadow: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.module-input-card .btn.btn-ghost:hover,
+.holistic-input-card .btn.btn-ghost:hover {
+  background: #FFFCF7;
+  border-color: #D8CED5;
+  color: #29212C;
+}
+.module-input-card .btn:focus-visible,
+.holistic-input-card .btn:focus-visible {
+  outline: 2px solid #4D304A;
+  outline-offset: 2px;
+}
+
+@media (min-width: 481px) {
+  .holistic-input-card .grid.c4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card.module-input-card,
+  .card.holistic-input-card {
+    padding: 16px;
+  }
+  .holistic-input-card .grid.c4 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .holistic-input-card .grid.c4 .field:first-child {
+    grid-column: 1 / -1;
+  }
+  .module-input-card .actions,
+  .holistic-input-card .actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .module-input-card .actions .btn.btn-go,
+  .holistic-input-card .actions .btn.btn-go {
+    flex: 2 1 0;
+    width: auto;
+    min-height: 44px;
+  }
+  .module-input-card .actions .btn.btn-ghost,
+  .holistic-input-card .actions .btn.btn-ghost {
+    flex: 1 1 0;
+    width: auto;
+    min-height: 44px;
+  }
+}
+
+/* ---------- Analiz Kayıtlı Kişi Seç Kartı ---------- */
+.card.module-customer-picker,
+.card.holistic-customer-picker {
+  background-color: #ffffff;
+  border: 1px solid #E7DFE4;
+  margin-top: 14px;
+}
+.module-customer-picker h2,
+.holistic-customer-picker h2 {
+  color: #29212C;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+}
+.module-customer-picker .desc,
+.holistic-customer-picker .desc {
+  color: #5E5262;
+  font-size: 13.5px;
+  margin: 0 0 12px 0;
+}
+.module-picker-row,
+.holistic-picker-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+.module-picker-select-field,
+.holistic-picker-select-field {
+  flex: 1;
+  min-width: 0;
+}
+.module-picker-select-field select,
+.holistic-picker-select-field select {
+  width: 100%;
+  min-height: 44px;
+  height: 44px;
+  padding: 8px 12px;
+  border: 1px solid #D8CED5;
+  background-color: #ffffff;
+  color: #29212C;
+  font-size: 15px;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+.module-picker-select-field select:focus,
+.holistic-picker-select-field select:focus {
+  outline: none;
+  border-color: #4D304A;
+  box-shadow: 0 0 0 3px rgba(77, 48, 74, 0.15);
+}
+.module-picker-select-field select:focus-visible,
+.holistic-picker-select-field select:focus-visible {
+  outline: 2px solid #4D304A;
+  outline-offset: 1px;
+}
+.module-picker-btn,
+.holistic-picker-btn {
+  min-height: 44px;
+  height: 44px;
+  padding: 8px 18px;
+  background-color: #ffffff;
+  color: #4D304A;
+  border: 1px solid #E7DFE4;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.module-picker-btn:hover,
+.holistic-picker-btn:hover {
+  background-color: #FFFCF7;
+  border-color: #D8CED5;
+  color: #29212C;
+}
+.module-picker-btn:focus-visible,
+.holistic-picker-btn:focus-visible {
+  outline: 2px solid #4D304A;
+  outline-offset: 2px;
+}
+@media (max-width: 480px) {
+  .card.module-customer-picker,
+  .card.holistic-customer-picker {
+    padding: 16px;
+  }
+  .module-picker-row,
+  .holistic-picker-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .module-picker-select-field,
+  .holistic-picker-select-field,
+  .module-picker-btn,
+  .holistic-picker-btn {
+    width: 100%;
+  }
+}
+
+/* ---------- Bütünsel Analiz Sonuç Bölümleri ---------- */
+.holistic-report-body {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.holistic-report-body h3,
+.report-section .holistic-report-body h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #29212C;
+  border-bottom: 1px solid #E7DFE4;
+  padding-bottom: 8px;
+  margin-top: 26px;
+  margin-bottom: 14px;
+}
+
+/* Karmik Borç Uyarısı */
+.holistic-karmic-alert {
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  background-color: #FFF8F6;
+  border: 1px solid #F0D5D5;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-sizing: border-box;
+}
+.holistic-karmic-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+.holistic-karmic-title {
+  color: #7A2338;
+  font-size: 14.5px;
+  font-weight: 700;
+}
+.holistic-karmic-badges {
+  margin-top: 6px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.holistic-karmic-sub {
+  font-size: 12.5px;
+  color: #6C535A;
+}
+
+/* Para Kodu & Pin Kodu */
+.holistic-codes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.holistic-code-card {
+  background-color: #FFFCF7;
+  border: 1px solid #E7DFE4;
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-sizing: border-box;
+}
+.holistic-code-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.holistic-code-head h4 {
+  margin: 0;
+  color: #29212C;
+  font-size: 15px;
+  font-weight: 700;
+}
+.holistic-code-val {
+  font-size: 19px;
+  font-weight: 800;
+  color: #4D304A;
+  letter-spacing: 1.5px;
+  font-variant-numeric: tabular-nums;
+}
+.holistic-code-digits {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.holistic-pin-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+  font-size: 12.5px;
+  text-align: center;
+}
+.holistic-pin-grid > div {
+  background: #ffffff;
+  padding: 6px 4px;
+  border-radius: 6px;
+  border: 1px solid #E7DFE4;
+  color: #29212C;
+}
+.holistic-pin-grid > div b {
+  color: #4D304A;
+  font-variant-numeric: tabular-nums;
+}
+.holistic-code-meta {
+  font-size: 12.5px;
+  color: #5E5262;
+  line-height: 1.55;
+}
+.holistic-code-meta b {
+  color: #29212C;
+}
+@media (max-width: 480px) {
+  .holistic-codes-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+/* Temel Göstergeler (kv) */
+.holistic-report-body .kv {
+  background: #FFFCF7;
+  border: 1px solid #E7DFE4;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  gap: 10px 20px;
+  font-size: 13.5px;
+  box-sizing: border-box;
+}
+.holistic-report-body .kv .k {
+  color: #5E5262;
+  font-weight: 600;
+}
+.holistic-report-body .kv .v {
+  color: #29212C;
+}
+@media (max-width: 480px) {
+  .holistic-report-body .kv {
+    padding: 14px 16px;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+/* Matrisler */
+.holistic-report-body .matrix {
+  display: inline-grid;
+  grid-template-columns: repeat(3, minmax(70px, 84px));
+  gap: 8px;
+  margin-bottom: 22px;
+  max-width: 100%;
+}
+.holistic-report-body .matrix > div {
+  background: #FFFCF7;
+  border: 1px solid #E7DFE4;
+  border-radius: 10px;
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+  word-break: break-word;
+  white-space: normal;
+  text-align: center;
+  box-sizing: border-box;
+}
+.holistic-report-body .matrix > div b {
+  font-size: 16px;
+  color: #4D304A;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.holistic-report-body .matrix > div span {
+  font-size: 11.5px;
+  color: #5E5262;
+  margin-top: 2px;
+}
+
+/* Sonuç Tabloları */
+.data-table-wrap,
+.holistic-table-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 10px;
+  margin-bottom: 24px;
+  border-radius: 10px;
+  border: 1px solid #E7DFE4;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+.holistic-table-wrap .data-table-wrap {
+  border: none;
+  margin: 0;
+  border-radius: 0;
+  background: transparent;
+}
+#reportView table.data,
+.holistic-report-body table.data {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  margin: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: #ffffff;
+}
+#reportView table.data th,
+.holistic-report-body table.data th {
+  background-color: #F0E8EF;
+  color: #29212C;
+  font-weight: 700;
+  padding: 10px 14px;
+  border: none;
+  border-bottom: 1px solid #E7DFE4;
+  text-align: left;
+  white-space: nowrap;
+}
+#reportView table.data td,
+.holistic-report-body table.data td {
+  padding: 10px 14px;
+  border: none;
+  border-bottom: 1px solid #E7DFE4;
+  color: #29212C;
+  font-size: 13.5px;
+  line-height: 1.45;
+  background: #ffffff;
+}
+#reportView table.data tr:nth-child(even) td,
+.holistic-report-body table.data tr:nth-child(even) td {
+  background: #FFFCF7;
+}
+#reportView table.data tr:last-child td,
+.holistic-report-body table.data tr:last-child td {
+  border-bottom: none;
+}
+#reportView h3 {
+  color: #29212C;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 18px 0 10px 0;
+}
+#reportView .kv {
+  background: #FFFCF7;
+  border: 1px solid #E7DFE4;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  gap: 10px 20px;
+  font-size: 13.5px;
+  box-sizing: border-box;
+}
+#reportView .kv .k {
+  color: #5E5262;
+  font-weight: 600;
+}
+#reportView .kv .v {
+  color: #29212C;
+}
+@media (max-width: 480px) {
+  #reportView table.data td,
+  #reportView table.data th,
+  .holistic-report-body table.data td,
+  .holistic-report-body table.data th {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+  #reportView .kv {
+    padding: 14px 16px;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+@media print {
+  #reportView table.data { width:100% !important; min-width:0 !important; table-layout:fixed; }
+  #reportView table.data th, #reportView table.data td { white-space:normal !important; overflow-wrap:anywhere; }
+  .data-table-wrap,
+  .holistic-table-wrap {
+    overflow: visible !important;
+    border: 1px solid #E7DFE4 !important;
+    page-break-inside: avoid;
+  }
+}
+
+/* ---------- Analiz Sonuç İşlem Çubuğu ---------- */
+.card.module-actions-bar,
+.card.holistic-actions-bar {
+  background: #ffffff;
+  border: 1px solid #E7DFE4;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+}
+.module-actions-bar .btn-sm,
+.holistic-actions-bar .btn-sm {
+  background: #ffffff;
+  border: 1px solid #E7DFE4;
+  color: #4D304A;
+  min-height: 44px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.module-actions-bar .btn-sm:hover,
+.holistic-actions-bar .btn-sm:hover {
+  background: #FFFCF7;
+  border-color: #d8ced5;
+  color: #29212C;
+}
+.module-actions-bar .btn-sm:focus,
+.holistic-actions-bar .btn-sm:focus {
+  outline: 2px solid #4D304A;
+  outline-offset: 2px;
+}
+.module-actions-bar .btn-sm:focus:not(:focus-visible),
+.holistic-actions-bar .btn-sm:focus:not(:focus-visible) {
+  outline: none;
+}
+@media (max-width: 480px) {
+  .card.module-actions-bar,
+  .card.holistic-actions-bar {
+    padding: 12px 16px;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .module-actions-bar .btn-sm,
+  .holistic-actions-bar .btn-sm {
+    flex: 1 1 0;
+    width: 100%;
+    min-width: 0;
+    padding: 8px 10px;
+    font-size: 13.5px;
+    text-align: center;
+  }
+}
+
+/* ---------- Analiz Üst Başlık Alanı (Ekran) ---------- */
+@media screen {
+  .report-head,
+  .report-head.report-head-holistic {
+    background-color: #ffffff;
+    border-bottom: 1px solid #E7DFE4;
+    padding: 20px;
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    box-sizing: border-box;
+  }
+  .report-head h1,
+  .report-head.report-head-holistic h1 {
+    font-size: 26px;
+    line-height: 1.2;
+    color: #29212C;
+    margin: 0 0 4px 0;
+    font-weight: 800;
+  }
+  .report-head .meta,
+  .report-head.report-head-holistic .meta {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: right;
+    white-space: nowrap;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .report-head,
+  .report-head.report-head-holistic {
+    padding: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .report-head h1,
+  .report-head.report-head-holistic h1 {
+    font-size: 22px;
+    line-height: 1.2;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+  .report-head .meta,
+  .report-head.report-head-holistic .meta {
+    text-align: left;
+    font-size: 11.5px;
+    white-space: normal;
+    margin-top: 2px;
+  }
+}
+
+/* ---------- Bütünsel Numerolojik Analiz Sade Kullanım Notu ---------- */
+.holistic-hint-note {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #5E5262;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0 20px;
+  margin: 0 0 16px 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .holistic-hint-note {
+    padding: 0 16px;
+    margin-bottom: 16px;
+  }
+}
+.report-section { margin-bottom: 22px; page-break-inside: avoid; }
+.report-section h3 { font-size: 15px; font-weight: 700; border-bottom: 1px solid var(--line); padding-bottom: 6px; color: var(--brand); }
+.report-foot { margin-top: 26px; border-top: 1px solid var(--line); padding-top: 12px; font-size: 11px; color: var(--muted); text-align: center; }
+
+/* ---------- A4 Yazdırılabilir Analiz Dosyası Kartı ---------- */
+.a4-export-card {
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  background-color: #FFFCF7;
+  border: 1px solid #E7DFE4;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-sizing: border-box;
+}
+.a4-export-info {
+  flex: 1;
+}
+.a4-export-title {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #29212C;
+  line-height: 1.3;
+}
+.a4-export-desc {
+  margin: 0;
+  font-size: 14px;
+  color: #5E5262;
+  line-height: 1.4;
+}
+.a4-export-btn {
+  background-color: #4D304A;
+  color: #ffffff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+  flex-shrink: 0;
+}
+.a4-export-btn:hover {
+  background-color: #3b2438;
+}
+
+@media (max-width: 480px) {
+  .a4-export-card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px 16px;
+    gap: 12px;
+  }
+  .a4-export-btn {
+    width: 100%;
+    text-align: center;
+    padding: 11px 16px;
+  }
+}
+
+/* ---------- Dikey Sütunlu OMURGA Tablosu (Görsel Referans & Mobil Uyumlu) ---------- */
+.omurga-container {
+  margin: 16px auto 24px auto;
+  max-width: 440px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.omurga-top-bar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border: 1px solid #cbd5e1;
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+  background: #ffffff;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+.omurga-top-item {
+  border-right: 1px solid #cbd5e1;
+  padding: 8px 2px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.omurga-top-item:last-child { border-right: none; }
+.omurga-top-item:hover { background: #f8fafc; }
+.omurga-top-label {
+  font-size: 8.5px;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.omurga-top-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.omurga-card {
+  border: 1px solid #cbd5e1;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  background: #ffffff;
+  padding: 12px 8px;
+  box-shadow: var(--shadow-card);
+  width: 100%;
+  box-sizing: border-box;
+}
+.omurga-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.omurga-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.5px;
+}
+.omurga-icon-btn {
+  background: #334155;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.omurga-icon-btn:hover { background: #1e293b; }
+
+.omurga-table-wrapper {
+  border: 1px solid #E7DFE4;
+  border-radius: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #FFFCF7;
+}
+.omurga-table {
+  width: 100%;
+  min-width: 330px;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-family: inherit;
+  font-size: 11.5px;
+  background-color: #FFFCF7;
+  color: #29212C;
+}
+.omurga-table thead tr { background: #F0E8EF; }
+.omurga-table th {
+  padding: 6px 2px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #29212C;
+  background-color: #F0E8EF;
+  border-right: 1px solid #E7DFE4;
+  border-bottom: 1px solid #E7DFE4;
+  text-align: center;
+  box-sizing: border-box;
+}
+.omurga-table th:last-child { border-right: none; }
+.omurga-table td {
+  padding: 5px 2px;
+  border-right: 1px solid #E7DFE4;
+  border-bottom: 1px solid #E7DFE4;
+  text-align: center;
+  vertical-align: middle;
+  box-sizing: border-box;
+  color: #29212C;
+}
+.omurga-table td:last-child { border-right: none; }
+.omurga-table tr:last-child td { border-bottom: none; }
+
+/* Sayı ve frekans hücrelerinde eş genişlikli rakamlar */
+.omurga-table .omurga-col-num,
+.omurga-table .omurga-col-r,
+.omurga-table .omurga-col-a {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Hücre içi metin renkleri: koyu mürdüm editoryal uyum */
+.omurga-table td span:not([style*="color:#94a3b8"]):not(.omurga-highlight-num) {
+  color: #29212C !important;
+}
+.omurga-table td span[style*="color:#94a3b8"] {
+  color: #9c8e9b !important;
+}
+.omurga-table .omurga-a-main {
+  color: #29212C;
+}
+.omurga-table .omurga-a-sub {
+  color: #635466;
+}
+
+/* Sütun genişlikleri - Toplam %100, taşma imkansız */
+.omurga-col-dot { width: 7%; padding: 4px 1px !important; }
+.omurga-col-r   { width: 11%; padding: 4px 1px !important; white-space: nowrap; }
+.omurga-col-num { width: 9%; padding: 4px 1px !important; }
+.omurga-col-h   { width: 22%; text-align: left !important; padding-left: 4px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.omurga-col-e   { width: 36%; text-align: left !important; padding-left: 4px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 10.5px; }
+.omurga-col-a   { width: 15%; padding: 2px 1px !important; }
+
+/* 480 px ve altı ekranlar: editoryal mobil gövde boyutu ve E sütunu satır bölme */
+@media (max-width: 480px) {
+  .omurga-table tbody td {
+    font-size: 13px;
+    line-height: 1.35;
+  }
+  .omurga-table .omurga-e-text {
+    font-size: 13px !important;
+    line-height: 1.35;
+    word-break: break-all;
+    overflow-wrap: anywhere;
+  }
+  .omurga-table .omurga-col-e {
+    font-size: 13px !important;
+    line-height: 1.35;
+    white-space: normal !important;
+    word-break: break-all;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Yeşil Nokta */
+.omurga-green-dot {
+  width: 10px;
+  height: 10px;
+  background: #16a34a;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.25);
+}
+
+/* Aktif Sayı Vurgusu (Mor Kutu) */
+.omurga-highlight-num {
+  background: #ddd6fe;
+  color: #4338ca;
+  font-weight: 800;
+  padding: 2px 5px;
+  border-radius: 5px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* Pin Kodu Hane Açılımı (A Sütunu) */
+.omurga-a-box {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  padding: 2px 1px;
+  width: 100%;
+  max-width: 42px;
+  border: 1px solid rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  background: #ffffff;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+.omurga-a-box:hover {
+  transform: scale(1.06);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+.omurga-a-sub {
+  font-size: 8.5px;
+  font-weight: 700;
+  color: #334155;
+  line-height: 1;
+}
+.omurga-a-main {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+/* Alt Özet Tablosu & Denge Sekansı */
+.omurga-bottom-table {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 14px;
+  background: #ffffff;
+  text-align: center;
+}
+.omurga-bottom-head-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: #eceff1;
+  border-bottom: 1px solid #cbd5e1;
+}
+.omurga-bottom-th {
+  padding: 10px 4px;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.5px;
+  border-right: 1px solid #cbd5e1;
+  cursor: pointer;
+}
+.omurga-bottom-th:last-child { border-right: none; }
+.omurga-bottom-body-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: #ffffff;
+}
+.omurga-bottom-td {
+  padding: 10px 4px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #1e293b;
+  border-right: 1px solid #cbd5e1;
+  cursor: pointer;
+}
+.omurga-bottom-td:last-child { border-right: none; }
+.omurga-sequence-box {
+  margin-top: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #ffffff;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.omurga-sequence-box:hover {
+  border-color: #94a3b8;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.omurga-sequence-title {
+  background: #eceff1;
+  padding: 8px 12px;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #cbd5e1;
+}
+.omurga-sequence-val {
+  padding: 8px 12px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #1e293b;
+  letter-spacing: 1px;
+}
+
+/* Alt Bağımsız Beyaz Kartlar */
+.omurga-cards-stack {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.omurga-sub-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px 16px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-xs);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.omurga-sub-card:hover {
+  transform: translateY(-2px);
+  border-color: #cbd5e1;
+  box-shadow: var(--shadow-hover);
+}
+.omurga-sub-card-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #1e293b;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+.omurga-sub-card-val {
+  font-size: 15px;
+  font-weight: 700;
+  color: #334155;
+  margin-top: 4px;
+}
+
+/* Floating Hane Popover */
+.omurga-popover {
+  position: fixed;
+  background: #181d24;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 14px 16px;
+  min-width: 250px;
+  max-width: 320px;
+  text-align: center;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.55);
+  z-index: 999999;
+  font-family: inherit;
+  border: 1px solid rgba(255,255,255,0.12);
+  animation: omurgaPopFade 0.16s ease-out;
+}
+@keyframes omurgaPopFade {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+.omurga-popover-btn {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: background 0.15s ease;
+}
+.omurga-popover-btn:hover { background: #1d4ed8; }
+
+/* ---------- RESPONSIVE MEDIA QUERIES ---------- */
+@media (max-width: 820px) {
+  .btn-menu-toggle { display: inline-flex; }
+  .sidebar-close-btn { display: inline-flex; }
+  .sidebar-backdrop {
+    display: none;
+    pointer-events: none;
+  }
+  .sidebar-backdrop.open {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  #sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 1000;
+    transform: translateX(-100%);
+    box-shadow: 0 0 50px rgba(0,0,0,0.55);
+  }
+  #sidebar.open {
+    transform: translateX(0);
+  }
+  #topbar {
+    padding: 8px 12px;
+    gap: 8px;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+  #topbar .crumb {
+    font-size: 13px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #btnWorkspace, #btnHistory, #topbar .user {
+    display: none !important;
+  }
+  #btnLogout {
+    padding: 6px 10px;
+    font-size: 11.5px;
+    flex-shrink: 0;
+  }
+  #content {
+    padding: 12px 10px;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+  .grid.c4 { grid-template-columns: repeat(2, 1fr); }
+  .grid.c3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  #topbar {
+    padding: 6px 10px;
+  }
+  #content {
+    padding: 10px 8px;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+  .card {
+    padding: 12px 10px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+  .card h2 {
+    font-size: 16px;
+  }
+  .grid.c2, .grid.c3, .grid.c4 {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .actions {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+  }
+  .actions .btn {
+    flex: 1;
+    width: 100%;
+    padding: 10px;
+    font-size: 13px;
+  }
+  .omurga-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 8px auto 16px auto;
+    box-sizing: border-box;
+  }
+  .omurga-card {
+    padding: 10px 6px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .omurga-table-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .omurga-top-label {
+    font-size: 8px;
+  }
+  .omurga-top-val {
+    font-size: 11px;
+  }
+  .omurga-sub-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  .omurga-popover {
+    width: calc(100vw - 20px) !important;
+    max-width: 320px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    padding: 12px 14px;
+    box-sizing: border-box;
+  }
+  table.data {
+    font-size: 11.5px;
+    width: 100%;
+    max-width: 100%;
+  }
+  table.data th, table.data td {
+    padding: 6px 3px;
+    word-break: break-word;
+  }
+  .report-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .report-head .meta {
+    text-align: left;
+    font-size: 11px;
+  }
+  .report-head h1 {
+    font-size: 18px;
+  }
+}
+
+/* Üye ana ekranı */
+.member-dashboard {
+  --dashboard-ink: #29212c;
+  --dashboard-plum: #4d304a;
+  --dashboard-muted: #625462;
+  --dashboard-line: #e7dfe4;
+  color: var(--dashboard-ink);
+}
+.member-dashboard .dashboard-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+  margin-bottom: 18px;
+}
+.member-dashboard .dashboard-card {
+  padding: clamp(16px, 3vw, 28px);
+  min-width: 0;
+  border: 1px solid var(--dashboard-line);
+  border-radius: 14px;
+  background: #fff;
+}
+.member-dashboard .dashboard-intro { background: #fffcf7; }
+.member-dashboard h1,
+.member-dashboard h2 {
+  color: var(--dashboard-ink);
+  font-family: Georgia, serif;
+  font-weight: 600;
+  line-height: 1.18;
+}
+.member-dashboard h1 { margin: 0 0 10px; font-size: clamp(28px, 4vw, 42px); }
+.member-dashboard h2 { margin: 0; font-size: 22px; }
+.member-dashboard p { margin: 0; color: var(--dashboard-muted); line-height: 1.55; }
+.member-dashboard .dashboard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+.member-dashboard .dashboard-button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border: 1px solid var(--dashboard-line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--dashboard-plum);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+}
+.member-dashboard .dashboard-button:hover { background: #f3ebf1; }
+.member-dashboard .dashboard-button:focus-visible {
+  outline: 2px solid var(--dashboard-plum);
+  outline-offset: 2px;
+}
+.member-dashboard .dashboard-primary {
+  border-color: var(--dashboard-plum);
+  background: var(--dashboard-plum);
+  color: #fff;
+}
+.member-dashboard .dashboard-primary:hover { background: #392337; }
+.member-dashboard .dashboard-membership { margin: 16px 0 8px; }
+.member-dashboard .dashboard-membership div {
+  padding: 10px 0;
+  border-top: 1px solid var(--dashboard-line);
+}
+.member-dashboard dt { color: var(--dashboard-muted); font-size: 13px; }
+.member-dashboard dd { margin: 3px 0 0; font-weight: 700; overflow-wrap: anywhere; }
+.member-dashboard .dashboard-history-header,
+.member-dashboard .dashboard-history-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  flex-wrap: wrap;
+}
+.member-dashboard .dashboard-history-header { margin-bottom: 12px; }
+.member-dashboard .dashboard-history-row { padding: 12px 0; border-top: 1px solid var(--dashboard-line); }
+.member-dashboard .dashboard-history-row p { margin-top: 3px; font-size: 13px; }
+.member-dashboard .dashboard-history-items { list-style: none; padding: 0; margin: 0; }
+@media (max-width: 680px) {
+  .member-dashboard .dashboard-layout { grid-template-columns: minmax(0, 1fr); gap: 12px; margin-bottom: 12px; }
+  .member-dashboard .dashboard-actions .dashboard-button { flex: 1 1 140px; }
+}
+
+@media print{
+  #sidebar,#topbar,.no-print{display:none !important}
+  #content{padding:0;max-width:none}
+  body{background:#fff}
+  .card{box-shadow:none;border:0;padding:0}
+  .holistic-hint-note{display:none !important}
+  .holistic-print-tip{display:flex !important}
+}
+/* Screen-only holistic workspace. Print and A4 templates retain their sizing. */
+@media screen {
+  #content:has(.holistic-screen) { max-width:1456px; padding:28px; }
+  #reportView.holistic-screen { --hs-paper:#fffcf7; --hs-ink:#322735; --hs-muted:#706374; --hs-line:#e5dadb; --hs-plum:#55334f; container-type:inline-size; padding:24px; color:var(--hs-ink); background:var(--hs-paper); border:1px solid var(--hs-line); }
+  .holistic-screen .report-head { background:transparent; gap:16px; flex-wrap:wrap; }
+  .holistic-screen .report-head h1 { color:var(--hs-plum); font-size:28px; }
+  .holistic-screen .report-head .meta { color:var(--hs-muted); }
+  .holistic-screen .holistic-toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:14px 0 18px; margin:0 0 18px; border:0; border-bottom:1px solid var(--hs-line); border-radius:0; box-shadow:none; background:transparent; }
+  .holistic-screen #analysisPdf:not([hidden]) { display:flex; flex-wrap:wrap; gap:10px; align-items:center; padding:0; margin:0; }
+  .holistic-screen #analysisPdf p { flex-basis:100%; order:2; max-width:420px; color:var(--hs-muted); margin:0 !important; }
+  .holistic-pdf-credits { font-size:12px; color:var(--hs-muted); }
+  .holistic-screen .holistic-pdf-group { display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; width:100%; }
+  .holistic-screen #analysisPdf:not([hidden]) { display:contents; }
+  .holistic-screen #analysisPdf p { order:3; max-width:none; }
+  .holistic-screen .holistic-danisan-file-card { display:none; }
+  .holistic-screen .report-section { padding:0; }
+  #reportView.holistic-screen .holistic-report-body h3 { font-family:Georgia,'Times New Roman',serif; color:var(--hs-plum); border-color:var(--hs-line); font-size:20px; }
+  .holistic-screen .omurga-container { display:grid; grid-template-columns:minmax(0,3fr) minmax(0,2fr); gap:20px; max-width:none; margin:20px 0 24px; }
+  .holistic-screen :is(.holistic-omurga-core,.omurga-cards-stack,.holistic-matrices > section,.holistic-detail-pair > section) { min-width:0; }
+  .holistic-screen .omurga-cards-stack { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:0; align-content:start; }
+  .holistic-screen .omurga-sub-card { padding:18px 8px; margin:0; min-width:0; background:var(--hs-paper); border:1px solid var(--hs-line); box-shadow:none; border-radius:10px; }
+  .holistic-screen .omurga-sub-card-title { font-size:10px; color:var(--hs-muted); white-space:normal; letter-spacing:.4px; }
+  .holistic-screen .omurga-sub-card-val { font-size:26px; color:var(--hs-plum); }
+  .holistic-screen :is(.omurga-card,.omurga-top-bar) { background:var(--hs-paper); border-color:var(--hs-line); box-shadow:none; }
+  .holistic-screen .omurga-table { min-width:300px; font-size:14px; }
+  .holistic-screen .omurga-table tbody tr { height:40px; }
+  .holistic-screen .omurga-table :is(th,td) { font-size:14px; }
+  .holistic-screen .omurga-table .omurga-col-e { white-space:normal; overflow:visible; }
+  .holistic-screen .omurga-e-text { font-size:14px !important; overflow-wrap:anywhere; letter-spacing:0 !important; }
+  .holistic-screen .omurga-table .omurga-col-h { white-space:normal; overflow-wrap:anywhere; }
+  .holistic-screen .omurga-col-a { width:17%; }
+  .holistic-screen .omurga-col-e { width:34%; }
+  .holistic-screen .omurga-top-label { font-size:9px; }
+  .holistic-screen .omurga-top-val { font-size:14px; }
+  #reportView.holistic-screen .kv { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 24px; padding:4px 18px; background:var(--hs-paper); border-color:var(--hs-line); }
+  .holistic-screen .holistic-indicator { padding:16px 0; border-bottom:1px solid var(--hs-line); display:grid; grid-template-columns:minmax(110px, .8fr) minmax(0,1.2fr); gap:12px; align-items:start; }
+  .holistic-screen .holistic-indicator .k { color:var(--hs-muted); }
+  .holistic-screen .holistic-indicator .v { color:var(--hs-ink); }
+  .holistic-screen .holistic-matrices { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
+  .holistic-screen .holistic-matrices h3 { font-size:18px; min-height:48px; }
+  .holistic-screen .matrix { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); width:100%; }
+  .holistic-screen .matrix > div { min-height:68px; }
+  .holistic-screen .holistic-detail-pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+  .holistic-screen :is(.holistic-code-card,.matrix > div) { background:var(--hs-paper); border-color:var(--hs-line); }
+  .holistic-screen .num-badge { cursor:pointer; }
+  @container (max-width:860px) {
+    .holistic-screen .omurga-container { grid-template-columns:1fr; }
+    .holistic-screen .omurga-cards-stack { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .holistic-screen .holistic-detail-pair { grid-template-columns:1fr; }
+  }
+  @container (max-width:560px) {
+    .holistic-screen .omurga-cards-stack { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .holistic-screen :is(.holistic-codes-grid,.kv,.holistic-matrices) { grid-template-columns:1fr; }
+    .holistic-screen .holistic-matrices { gap:0; }
+    .holistic-screen .holistic-matrices h3 { min-height:0; }
+    .holistic-screen .report-head h1 { font-size:24px; }
+  }
+  @media(max-width:600px) {
+    #content:has(.holistic-screen) { padding:12px; }
+    #reportView.holistic-screen { padding:14px; }
+  }
+  [data-theme="dark"] #reportView.holistic-screen { --hs-paper:#241e29; --hs-ink:#f1e8ed; --hs-muted:#c5b5c5; --hs-line:#514052; --hs-plum:#e4bfdb; }
+  [data-theme="dark"] .member .holistic-screen .report-section { filter:none; background:transparent; color:var(--hs-ink); }
+  [data-theme="dark"] .holistic-screen :is(.omurga-title,.omurga-top-val) { color:var(--hs-plum); }
+  [data-theme="dark"] .holistic-screen .omurga-top-label { color:var(--hs-muted); }
+  [data-theme="dark"] .holistic-screen :is(.omurga-sub-card-title,.holistic-code-meta,.matrix > div span,.holistic-indicator .v div) { color:var(--hs-muted) !important; }
+  [data-theme="dark"] .holistic-screen :is(.holistic-code-head h4,.holistic-code-val,.holistic-code-meta b,.matrix > div b) { color:var(--hs-plum); }
+  [data-theme="dark"] #reportView.holistic-screen .kv :is(.k,.v) { color:var(--hs-ink); }
+  #reportView.holistic-screen .holistic-matrices h3 { font-size:18px; }
+  @container (max-width:560px) { #reportView.holistic-screen .kv { grid-template-columns:1fr; } }
+}
+@media print {
+  .holistic-omurga-core,.holistic-indicator,.holistic-matrices,.holistic-matrices > section,.holistic-detail-pair,.holistic-detail-pair > section { display:contents; }
+}
+</style>
+  <script src="/assets/site-theme.js"></script>
+  <link rel="stylesheet" href="/assets/site-theme.css">
+</head>
+<body class="member">
+
+<!-- ==================== UYGULAMA ==================== -->
+<div id="app">
+  <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="closeSidebar()"></div>
+
+  <aside id="sidebar">
+    <div class="brand">
+      <div class="brand-title">
+        <span>Astro Şuşu</span>
+        <small>Numeroloji &amp; Analiz</small>
+      </div>
+      <button class="sidebar-close-btn" onclick="closeSidebar()" aria-label="Menüyü Kapat">✕</button>
+    </div>
+    <div id="navRoot"></div>
+  </aside>
+
+  <div id="main">
+    <div id="topbar">
+      <button class="btn-menu-toggle" id="btnMenuToggle" onclick="toggleSidebar()" aria-label="Menüyü Aç">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <span class="crumb" id="crumb">Üye Paneli</span>
+      <span class="spacer"></span>
+      <div class="topbar-actions">
+        <button class="btn-sm" id="btnWorkspace">Çalışma Alanım</button>
+        <button class="btn-sm" id="btnHistory">Geçmiş</button>
+        <span class="user" id="userBox"></span>
+        <button class="btn-sm danger" id="btnLogout">Çıkış</button>
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="Karanlık tema" aria-pressed="false"><svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 15.3A8.7 8.7 0 0 1 8.7 3.6 8.7 8.7 0 1 0 20.4 15.3Z"/></svg><svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M19 5l-1.5 1.5m-11 11L5 19"/></svg></button>
+      </div>
+    </div>
+    <div id="content"></div>
+  </div>
+</div>
+
+<script src="/assets/report-ui.js"></script>
+<script src="/assets/astro_sushu_engine.js?v=20260918_6"></script>
+<script src="/assets/numerology_data.js?v=20260918_6"></script>
+<script src="/assets/numerology_definitions.js?v=20260918_6"></script>
+<script src="/assets/destiny_matrix_svg.js?v=20260918_6"></script>
+<script src="/assets/karmic_svg.js?v=20260918_6"></script>
+<script src="/assets/birth_wheel_svg.js?v=20260918_6"></script>
+<script src="/assets/analysis_expositor.js?v=20260918_6"></script>
+<script>
+/* ============================================================
+   UYGULAMA KATMANI
+   ============================================================ */
+const E = window.AstroSushuEngine;
+const LS = {
+  users:  "astrosushu_users",
+  session:"astrosushu_session",
+  people: "astrosushu_people",
+  hist:   "astrosushu_history",
+};
+const $ = (id)=>document.getElementById(id);
+const esc = (s)=>String(s==null?"":s).replace(/[&"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let memberSession = null;
+const store = {
+  get(k,d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d; }catch(e){ return d; } },
+  set(k,v){ localStorage.setItem(k, JSON.stringify(v)); },
+};
+
+/* ---------- Modül Tanımları ---------- */
+const MODULES = [
+  // --- Temel Analizler ---
+  {id:"holistic", cat:"Temel Analizler", name:"Bütünsel Numerolojik Analiz", free:true,
+   desc:"Ad, soyad ve doğum tarihinden tüm numerolojik katmanları tek ekranda inceler.",
+   fields:[{k:"name",label:"Tam Ad",type:"text",ph:"Ad Soyad"},{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderHolistic(f)},
+  {id:"fullname", cat:"Temel Analizler", name:"İsim Analizi", free:true,
+   desc:"İsmin harf yapısı ve temel sayısal göstergeleri.",
+   fields:[{k:"name",label:"Tam Ad",type:"text",ph:"Ad Soyad"}],
+   run:(f)=>renderFullName(f)},
+  {id:"birthday", cat:"Temel Analizler", name:"Doğum Tarihi Analizi", free:true,
+   desc:"Doğum tarihinden yaşam yolu, doğum günü ve yıllara göre dağılım.",
+   fields:[{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderBirthday(f)},
+  {id:"compare", cat:"Temel Analizler", name:"Karşılaştırma Analizi", free:true,
+   desc:"İki kişinin temel numerolojik göstergelerini karşılaştırır.",
+   fields:[{k:"n1",label:"1. Kişi — Ad Soyad",type:"text"},{k:"d1",label:"1. Gün",type:"number"},{k:"m1",label:"1. Ay",type:"number"},{k:"y1",label:"1. Yıl",type:"number"},
+           {k:"n2",label:"2. Kişi — Ad Soyad",type:"text"},{k:"d2",label:"2. Gün",type:"number"},{k:"m2",label:"2. Ay",type:"number"},{k:"y2",label:"2. Yıl",type:"number"}],
+   run:(f)=>renderCompare(f)},
+  {id:"comparenm", cat:"Temel Analizler", name:"İsim Karşılaştırma", free:true,
+   desc:"İki ismin sayısal göstergelerini karşılaştırır.",
+   fields:[{k:"n1",label:"1. İsim",type:"text"},{k:"n2",label:"2. İsim",type:"text"}],
+   run:(f)=>renderCompareName(f)},
+  {id:"location", cat:"Temel Analizler", name:"Adres / Lokasyon Analizi", free:true,
+   desc:"Adres bileşenlerinin sayısal değeri.",
+   fields:[{k:"ulke",label:"Ülke",type:"text"},{k:"eyalet",label:"Eyalet / Bölge",type:"text"},{k:"sehir",label:"Şehir",type:"text"},{k:"ilce",label:"İlçe",type:"text"},{k:"semt",label:"Semt",type:"text"}],
+   run:(f)=>renderLocation(f)},
+  {id:"identity", cat:"Temel Analizler", name:"Kimlik Numarası Analizi", free:true,
+   desc:"Kimlik numarasının rakam frekansı (yankı) tablosu.",
+   fields:[{k:"no",label:"Kimlik Numarası",type:"text"}],
+   run:(f)=>renderEcho(f.no,"Kimlik Numarası")},
+  {id:"phone", cat:"Temel Analizler", name:"Telefon Numarası Analizi", free:true,
+   desc:"Telefon numarasının rakam frekansı tablosu.",
+   fields:[{k:"no",label:"Telefon Numarası",type:"text"}],
+   run:(f)=>renderEcho(f.no,"Telefon Numarası")},
+  {id:"carplate", cat:"Temel Analizler", name:"Araba Plaka Analizi", free:true,
+   desc:"Plakanın rakam frekansı ve harf değeri.",
+   fields:[{k:"no",label:"Araba Plakası",type:"text"}],
+   run:(f)=>renderPlate(f.no,"Araba Plakası")},
+  {id:"motoplate", cat:"Temel Analizler", name:"Motosiklet Plaka Analizi", free:true,
+   desc:"Motosiklet plakasının rakam frekansı ve harf değeri.",
+   fields:[{k:"no",label:"Motosiklet Plakası",type:"text"}],
+   run:(f)=>renderPlate(f.no,"Motosiklet Plakası")},
+
+  // --- Kişisel Döngüler ---
+  {id:"pdate", cat:"Kişisel Döngüler", name:"Kişisel Tarih", free:true,
+   desc:"Belirli bir tarihin kişisel gün/ay/yıl titreşimi.",
+   fields:[{k:"d",label:"Doğum Gün",type:"number"},{k:"m",label:"Doğum Ay",type:"number"},{k:"y",label:"Doğum Yıl",type:"number"},
+           {k:"cd",label:"Hedef Gün",type:"number"},{k:"cm",label:"Hedef Ay",type:"number"},{k:"cy",label:"Hedef Yıl",type:"number"}],
+   run:(f)=>renderPersonalDate(f)},
+  {id:"pweek", cat:"Kişisel Döngüler", name:"Kişisel Hafta", free:true,
+   desc:"Kişisel hafta titreşimi.",
+   fields:[{k:"d",label:"Doğum Gün",type:"number"},{k:"m",label:"Doğum Ay",type:"number"},{k:"y",label:"Doğum Yıl",type:"number"},
+           {k:"cd",label:"Hedef Gün",type:"number"},{k:"cm",label:"Hedef Ay",type:"number"},{k:"cy",label:"Hedef Yıl",type:"number"}],
+   run:(f)=>renderPersonalWeek(f)},
+  {id:"pfib", cat:"Kişisel Döngüler", name:"Kişisel Fibonacci", free:true,
+   desc:"Yaşam yolundan Fibonacci dizilim modeli.",
+   fields:[{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderFibonacci(f,"Kişisel")},
+  {id:"pcycles", cat:"Kişisel Döngüler", name:"Kişisel Döngüler", free:true,
+   desc:"Zirve dönemler ve meydan okumalar.",
+   fields:[{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderPinnacles(f)},
+  {id:"pfateful", cat:"Kişisel Döngüler", name:"Kadersel Döngüler", free:true,
+   desc:"Yaşam yoluna göre kadersel dönemler.",
+   fields:[{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderPinnacles(f,"Kadersel Döngüler")},
+  {id:"ptrans", cat:"Kişisel Döngüler", name:"Dönüşüm Yılları", free:true,
+   desc:"Kişisel yıl döngüsünde dönüşüm yılları.",
+   fields:[{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"},{k:"cy",label:"Hedef Yıl",type:"number"}],
+   run:(f)=>renderTransformation(f)},
+
+  // --- Evrensel Döngüler ---
+  {id:"udate", cat:"Evrensel Döngüler", name:"Evrensel Tarih", free:true,
+   desc:"Bir tarihin evrensel yıl/ay/gün titreşimi.",
+   fields:[{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderUniversal(f,"Tarih")},
+  {id:"uweek", cat:"Evrensel Döngüler", name:"Evrensel Hafta", free:true,
+   desc:"Bir tarihin evrensel hafta titreşimi.",
+   fields:[{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderUniversal(f,"Hafta")},
+  {id:"ufib", cat:"Evrensel Döngüler", name:"Evrensel Fibonacci", free:true,
+   desc:"Evrensel yıldan Fibonacci dizilim modeli.",
+   fields:[{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderFibonacci({d:1,m:1,y:f.y},"Evrensel")},
+  {id:"ucycles", cat:"Evrensel Döngüler", name:"Evrensel Döngüler", free:true,
+   desc:"Evrensel sayı döngüleri.",
+   fields:[{k:"y",label:"Başlangıç Yılı",type:"number"},{k:"n",label:"Kaç Yıl",type:"number"}],
+   run:(f)=>renderUniversalCycles(f)},
+  {id:"uwheel", cat:"Evrensel Döngüler", name:"Evrensel Çark", free:true,
+   desc:"Evrensel çark hesaplaması (9 yıllık döngü çarkı).",
+   fields:[{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderWheel(f)},
+
+  // --- Ekoller ---
+  {id:"karmic", cat:"Ekoller", name:"Karma Analizi (Ladini)", free:true,
+   desc:"Karmik göstergeler ve eksik sayılar.",
+   fields:[{k:"name",label:"Tam Ad",type:"text"},{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderKarmic(f)},
+  {id:"destiny", cat:"Ekoller", name:"Kader Matrisi", free:true,
+   desc:"İsim + doğum tarihi sayı matrisi ve sentez.",
+   fields:[{k:"name",label:"Tam Ad",type:"text"},{k:"d",label:"Gün",type:"number"},{k:"m",label:"Ay",type:"number"},{k:"y",label:"Yıl",type:"number"}],
+   run:(f)=>renderDestinyMatrix(f)},
+
+  // --- Araçlar ---
+  {id:"compat", cat:"Araçlar", name:"İsim Uyumluluğu", free:true,
+   desc:"İki ismin kalp arzusu / kişilik / ifade uyumu.",
+   fields:[{k:"n1",label:"1. İsim",type:"text"},{k:"n2",label:"2. İsim",type:"text"}],
+   run:(f)=>renderCompatibility(f)},
+  {id:"calc", cat:"Araçlar", name:"Hesaplama Aracı", free:true,
+   desc:"Herhangi bir metin veya sayının numerolojik değeri.",
+   fields:[{k:"val",label:"Değer (metin veya sayı)",type:"text"}],
+   run:(f)=>renderCalculator(f)},
+  {id:"pin", cat:"Araçlar", name:"Pin Kodu Karşılaştırma", free:true,
+   desc:"İki pin kodunun rakam yapısını karşılaştırır.",
+   fields:[{k:"p1",label:"1. Pin Kodu",type:"text"},{k:"p2",label:"2. Pin Kodu",type:"text"}],
+   run:(f)=>renderPinCompare(f)},
+];
+
+const CAT_ORDER = ["Temel Analizler","Kişisel Döngüler","Evrensel Döngüler","Ekoller","Araçlar"];
+
+/* ---------- Yardımcı görünüm parçaları ---------- */
+function badge(n, cat, title){
+  if (n === undefined || n === null || n === '') return '-';
+  const num = Number(n);
+  const master = (E && E.MASTER_NUMBERS) ? E.MASTER_NUMBERS.has(num) : [11, 22, 33, 44, 55, 66, 77, 88, 99].includes(num);
+  const isKarmic = [13, 14, 16, 19].includes(num);
+  const effectiveCat = cat || (isKarmic ? 'KarmicDebt' : (master ? 'MasterNumberVibrations' : 'NumericalVibration'));
+  const effectiveTitle = String(title || (cat ? `${cat} ${n}` : `Sayı Titreşimi ${n}`)).replace(/'/g, "\\'");
+  const cls = "num-badge" + (master ? " master" : "") + (isKarmic ? " karmic" : "");
+  return `<span class="${cls}" onclick="NumerologyDefinitions.show('${effectiveCat}','${n}','${effectiveTitle}')" title="${effectiveTitle} — Detaylı bilgi kartı için tıklayın">${n}<span class="badge-dot">ℹ️</span></span>`;
+}
+function kvRows(pairs){
+  return `<div class="kv">${pairs.map(([k,v])=>`<span class="k">${esc(k)}</span><span class="v">${v}</span>`).join("")}</div>`;
+}
+function meaning(n){
+  return E.NUMBER_MEANINGS[n] ? `<div style="font-size:12px;color:#6b7686;margin-top:6px">${esc(E.NUMBER_MEANINGS[n])}</div>` : "";
+}
+function matrixHTML(m){
+  return `<div class="matrix">${m.grid.flat().map(c=>
+    `<div><b>${c.sayi}</b><span>${c.adet} adet</span></div>`).join("")}</div>`;
+}
+function tableHTML(headers, rows){
+  return `<div class="data-table-wrap"><table class="data"><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead>
+  <tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+}
+
+/* ---------- Dikey Sütunlu OMURGA Bileşeni ---------- */
+function renderOmurgaHTML(f){
+  const name = f.name || f.n || "";
+  const d = Number(f.d) || 0;
+  const m = Number(f.m) || 0;
+  const y = Number(f.y) || 0;
+
+  const ot = E.omurgaTable ? E.omurgaTable(name, d, m, y) : { top: {}, rows: [], indicators: null, hasDate: false, hasName: false };
+  window._currentOmurga = ot;
+  const top = ot.top || {};
+  const rows = ot.rows || [];
+  const hasDate = ot.hasDate;
+  const hasName = ot.hasName;
+  const ind = ot.indicators;
+
+  // Bilinçaltı ve karma değerleri (Decoz standart formülü: 6, 3, 2)
+  const sk = hasName && E.subconsciousAndKarma ? E.subconsciousAndKarma(name, d, m, y) : { bilincalti: "-", direktKarma: "-", dolayliKarma: "-" };
+  const dolayliKarma = sk.dolayliKarma !== undefined ? sk.dolayliKarma : (hasDate && E.reduceFull ? E.reduceFull(d + m) : "-");
+
+  return `
+  <div class="omurga-container">
+    <!-- Üst Başlık Şeridi -->
+    <div class="omurga-top-bar">
+      <div class="omurga-top-item" onclick="NumerologyDefinitions.show('Cornerstone','${top.cornerstone?.val || 1}','Başlangıç (Köşe Taşı): ${top.cornerstone?.char || '-'}')">
+        <div class="omurga-top-label">BAŞLANGIÇ</div>
+        <div class="omurga-top-val">${top.cornerstone?.text || '-'}</div>
+      </div>
+      <div class="omurga-top-item" onclick="NumerologyDefinitions.show('FinalLetterStone','${top.capstone?.val || 1}','Bitiş Taşı: ${top.capstone?.char || '-'}')">
+        <div class="omurga-top-label">BİTİŞ</div>
+        <div class="omurga-top-val">${top.capstone?.text || '-'}</div>
+      </div>
+      <div class="omurga-top-item" onclick="NumerologyDefinitions.show('FirstVowelLetterNumber','${top.firstVowel?.val || 1}','İlk Sesli Harf: ${top.firstVowel?.char || '-'}')">
+        <div class="omurga-top-label">İLK SESLİ</div>
+        <div class="omurga-top-val">${top.firstVowel?.text || '-'}</div>
+      </div>
+      <div class="omurga-top-item" onclick="NumerologyDefinitions.show('KeyNumber','${top.key?.val || 1}','Anahtar Sayı: ${top.key?.val || '-'}')">
+        <div class="omurga-top-label">ANAHTAR</div>
+        <div class="omurga-top-val">${top.key?.text || '-'}</div>
+      </div>
+      <div class="omurga-top-item" onclick="NumerologyDefinitions.show('Balance','${top.balance?.val || 1}','Denge Sayısı: ${top.balance?.initials || '-'}')">
+        <div class="omurga-top-label">DENGE</div>
+        <div class="omurga-top-val">${top.balance?.text || '-'}</div>
+      </div>
+    </div>
+
+    <!-- OMURGA Kartı -->
+    <div class="omurga-card">
+      <div class="omurga-header">
+        <div class="omurga-title">OMURGA</div>
+        <button class="omurga-icon-btn" type="button" title="Dikey Sütun Görünümü">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+            <line x1="12" y1="18" x2="12" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="omurga-table-wrapper">
+        <table class="omurga-table">
+          <thead>
+            <tr>
+              <th class="omurga-col-dot"></th>
+              <th class="omurga-col-r">R</th>
+              <th class="omurga-col-num"></th>
+              <th class="omurga-col-h">H</th>
+              <th class="omurga-col-e">E</th>
+              <th class="omurga-col-a">A</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(r => {
+              const dotHtml = r.hasIndicator ? '<span class="omurga-green-dot" title="Çekirdek titreşim göstergesi"></span>' : '';
+
+              const numHtml = r.isHighlight
+                ? `<span class="omurga-highlight-num" onclick="NumerologyDefinitions.show('NumericalVibration','${r.num}','Aktif Titreşim ${r.num}')" title="Aktif Titreşim ${r.num}">${r.num}</span>`
+                : `<span style="font-weight:700;cursor:pointer;" onclick="NumerologyDefinitions.show('NumericalVibration','${r.num}','Sayı Titreşimi ${r.num}')" title="Sayı Titreşimi ${r.num}">${r.num}</span>`;
+
+              const rDisplay = r.rCount > 0 ? 'x'.repeat(r.rCount) : '-';
+              const rHtml = rDisplay !== '-'
+                ? `<span style="font-weight:600;color:#334155;cursor:pointer;" onclick="NumerologyDefinitions.show('NumericalVibration','${r.num}','R Frekansı: ${r.r}')" title="R Frekansı ${r.r}">${rDisplay}</span>`
+                : '<span style="color:#94a3b8;">-</span>';
+
+              const hHtml = r.h !== '-'
+                ? `<span style="font-weight:600;color:#0f172a;cursor:pointer;" onclick="NumerologyDefinitions.show('Expression','${r.num}','İsim Harf Titreşimi: ${r.h}')" title="Harf Grubu ${r.h}">${r.h}</span>`
+                : '<span style="color:#94a3b8;">-</span>';
+
+              const eHtml = `<span class="omurga-e-text" style="font-size:12px;color:#334155;letter-spacing:0.5px;cursor:pointer;" onclick="NumerologyDefinitions.show('NumericalVibration','${r.num}','Evrensel Pisagor Harfleri: ${r.e}')" title="Evrensel Pisagor Harfleri ${r.e}">${r.e}</span>`;
+
+              let aHtml = '<span style="color:#94a3b8;">-</span>';
+              if (r.aNum !== null) {
+                const subHtml = r.aEcho ? `<span class="omurga-a-sub">(${r.aEcho})</span>` : '';
+                aHtml = `
+                  <div class="omurga-a-box" style="background:${r.aBoxBg};" onclick="window.showOmurgaPopover(event, ${r.num})" title="${r.haneName} (${r.ageRange}) — Popover ve Çakra Detayı için Tıklayın">
+                    ${subHtml}
+                    <span class="omurga-a-main">${r.aNum}</span>
+                  </div>
+                `;
+              }
+
+              return `
+                <tr style="background:${r.bgColor};">
+                  <td class="omurga-col-dot">${dotHtml}</td>
+                  <td class="omurga-col-r">${rHtml}</td>
+                  <td class="omurga-col-num">${numHtml}</td>
+                  <td class="omurga-col-h">${hHtml}</td>
+                  <td class="omurga-col-e">${eHtml}</td>
+                  <td class="omurga-col-a">${aHtml}</td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Alt Karma ve Bilinçaltı Tablosu (frame_500.png ile birebir) -->
+      <div class="omurga-bottom-table">
+        <div class="omurga-bottom-head-row">
+          <div class="omurga-bottom-th" onclick="NumerologyDefinitions.show('SubconsciousSelf','${sk.bilincalti}','Bilinçaltı Benlik: ${sk.bilincalti}')">BİLİNÇALTI</div>
+          <div class="omurga-bottom-th" onclick="NumerologyDefinitions.show('KarmicDebt','${sk.direktKarma}','Direk Karma Dersi: ${sk.direktKarma}')">DİREK KARMA</div>
+          <div class="omurga-bottom-th" onclick="NumerologyDefinitions.show('KarmicDebt','${dolayliKarma}','Dolaylı Karma Dersi: ${dolayliKarma}')">DOLAYLI KARMA</div>
+        </div>
+        <div class="omurga-bottom-body-row">
+          <div class="omurga-bottom-td" onclick="NumerologyDefinitions.show('SubconsciousSelf','${sk.bilincalti}','Bilinçaltı Benlik: ${sk.bilincalti}')">${sk.bilincalti}</div>
+          <div class="omurga-bottom-td" onclick="NumerologyDefinitions.show('KarmicDebt','${sk.direktKarma}','Direk Karma Dersi: ${sk.direktKarma}')">${sk.direktKarma}</div>
+          <div class="omurga-bottom-td" onclick="NumerologyDefinitions.show('KarmicDebt','${dolayliKarma}','Dolaylı Karma Dersi: ${dolayliKarma}')">${dolayliKarma}</div>
+        </div>
+      </div>
+
+      <!-- Denge Sayı Sekansı Bloğu (frame_500.png ile birebir) -->
+      ${ind ? `
+      <div class="omurga-sequence-box" onclick="NumerologyDefinitions.show('Balance','${ind.dengeSekansi}','Denge Sayı Sekansı: ${ind.dengeSekansi}')">
+        <div class="omurga-sequence-title">DENGE SAYI SEKANSI</div>
+        <div class="omurga-sequence-val">${ind.dengeSekansi}</div>
+      </div>
+      ` : ''}
+    </div>
+
+    <!-- Alt Bağımsız Beyaz Kartlar Bloğu (frame_1800.png ile birebir) -->
+    ${ind ? `
+    <div class="omurga-cards-stack">
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('LifePurpose','${ind.hayatAmaci}','HAYAT AMACI: ${ind.hayatAmaci}')">
+        <div class="omurga-sub-card-title">HAYAT AMACI</div>
+        <div class="omurga-sub-card-val">${ind.hayatAmaci}</div>
+      </div>
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('LifePath','${ind.yasamYolu}','YAŞAM YOLU: ${ind.yasamYolu}')">
+        <div class="omurga-sub-card-title">YAŞAM YOLU</div>
+        <div class="omurga-sub-card-val">${ind.yasamYolu}</div>
+      </div>
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('Maturity','${ind.olgunluk}','OLGUNLUK: ${ind.olgunluk}')">
+        <div class="omurga-sub-card-title">OLGUNLUK</div>
+        <div class="omurga-sub-card-val">${ind.olgunluk}</div>
+      </div>
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('LifePath','${ind.yasamKodu}','YAŞAM KODU: ${ind.yasamKodu}')">
+        <div class="omurga-sub-card-title">YAŞAM KODU</div>
+        <div class="omurga-sub-card-val">${ind.yasamKodu}</div>
+      </div>
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('Expression','${ind.kader}','KADER: ${ind.kader}')">
+        <div class="omurga-sub-card-title">KADER</div>
+        <div class="omurga-sub-card-val">${ind.kader}</div>
+      </div>
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('Bridge','${ind.kopru}','KÖPRÜ: ${ind.kopru}')">
+        <div class="omurga-sub-card-title">KÖPRÜ</div>
+        <div class="omurga-sub-card-val">${ind.kopru}</div>
+      </div>
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('Attitude','${ind.tutum}','TUTUM: ${ind.tutum}')">
+        <div class="omurga-sub-card-title">TUTUM</div>
+        <div class="omurga-sub-card-val">${ind.tutum}</div>
+      </div>
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('EarlyLesson','${ind.erkenDers}','ERKEN DERS: ${ind.erkenDers}')">
+        <div class="omurga-sub-card-title">ERKEN DERS</div>
+        <div class="omurga-sub-card-val">${ind.erkenDers}</div>
+      </div>
+      <div class="omurga-sub-card" onclick="NumerologyDefinitions.show('MoneyCode','${ind.paraKodu}','PARA KODU: ${ind.paraKodu}')">
+        <div class="omurga-sub-card-title">PARA KODU</div>
+        <div class="omurga-sub-card-val">${ind.paraKodu}</div>
+      </div>
+    </div>
+    ` : ''}
+  </div>
+  `;
+}
+
+/* Floating Hane Popover & Çakra Detay Modal Yöneticisi */
+window.showOmurgaPopover = function(e, num) {
+  if (e && e.stopPropagation) e.stopPropagation();
+  const ot = window._currentOmurga;
+  if (!ot || !ot.rows) return;
+  const r = ot.rows.find(x => x.num === num);
+  if (!r || r.aNum === null) return;
+
+  let pop = document.getElementById('omurgaFloatingPopover');
+  if (!pop) {
+    pop = document.createElement('div');
+    pop.id = 'omurgaFloatingPopover';
+    pop.className = 'omurga-popover';
+    document.body.appendChild(pop);
+    document.addEventListener('click', (evt) => {
+      if (pop && !pop.contains(evt.target)) {
+        pop.style.display = 'none';
+      }
+    });
+  }
+
+  const badgeColor = (r.uyum && r.uyum.title.includes('Zorlu')) ? '#f87171' : '#6ee7b7';
+
+  pop.innerHTML = `
+    <div style="position:relative;">
+      <button type="button" onclick="document.getElementById('omurgaFloatingPopover').style.display='none'" style="position:absolute;top:-4px;right:-4px;background:none;border:none;color:#94a3b8;font-size:16px;cursor:pointer;padding:4px;line-height:1;" aria-label="Kapat">✕</button>
+      <div style="font-size:13px;font-weight:700;color:#ffffff;line-height:1.3;padding-right:20px;">${r.haneName}</div>
+      <div style="font-size:11px;color:#cbd5e1;margin-top:2px;">(${r.ageRange})</div>
+      <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-top:4px;letter-spacing:0.3px;">(ETKİ:${r.etki} - STRES:${r.stres} - GÖLGE:${r.golge})</div>
+      <div style="height:1px;background:rgba(255,255,255,0.14);margin:10px 0;"></div>
+      <div style="font-size:13px;font-weight:700;color:#ffffff;">Uyum</div>
+      <div style="font-size:12px;font-weight:700;color:${badgeColor};margin-top:2px;">${r.uyum ? r.uyum.title : '-'}</div>
+      <div style="font-size:11px;color:#cbd5e1;margin-top:3px;line-height:1.4;">${r.uyum ? r.uyum.desc : ''}</div>
+      <button type="button" class="omurga-popover-btn" onclick="window.openChakraModal(${r.num})">NUMEROLOJİ > ÇAKRA AÇILIMI →</button>
+    </div>
+  `;
+
+  // Tıklanan kutunun konumuna göre yerleşim
+  const target = e.currentTarget || e.target;
+  const rect = target.getBoundingClientRect();
+  pop.style.display = 'block';
+  pop.style.visibility = 'hidden';
+
+  requestAnimationFrame(() => {
+    const popWidth = pop.offsetWidth || 280;
+    const popHeight = pop.offsetHeight || 190;
+    const padding = 12;
+
+    if (window.innerWidth <= 640) {
+      pop.style.left = '50%';
+      let top = rect.bottom + 8;
+      if (top + popHeight > window.innerHeight - padding) {
+        top = Math.max(padding, rect.top - popHeight - 8);
+      }
+      if (top + popHeight > window.innerHeight - padding) {
+        top = Math.max(padding, (window.innerHeight - popHeight) / 2);
+      }
+      pop.style.top = `${top}px`;
+    } else {
+      let left = rect.left - popWidth - 10;
+      if (left < padding) {
+        left = Math.max(padding, Math.min(window.innerWidth - popWidth - padding, rect.left));
+      }
+
+      let top = rect.top + (rect.height / 2) - (popHeight / 2);
+      if (top < padding) top = padding;
+      if (top + popHeight > window.innerHeight - padding) {
+        top = window.innerHeight - popHeight - padding;
+      }
+
+      pop.style.left = `${left}px`;
+      pop.style.top = `${top}px`;
+    }
+    pop.style.visibility = 'visible';
+  });
+};
+
+window.openChakraModal = function(num) {
+  const pop = document.getElementById('omurgaFloatingPopover');
+  if (pop) pop.style.display = 'none';
+
+  const ot = window._currentOmurga;
+  if (!ot || !ot.rows) return;
+  const r = ot.rows.find(x => x.num === Number(num));
+  if (!r) return;
+
+  const chakraData = (window.NumerologyData && window.NumerologyData.findChakra) ? window.NumerologyData.findChakra(num) : null;
+  const chakraName = chakraData ? chakraData.name : `${num}. Çakra`;
+
+  let mainDef = (window.NumerologyDefinitions && window.NumerologyDefinitions.get) ? (window.NumerologyDefinitions.get(`Num/Chakra/${num}.html`) || '') : '';
+  let karmaDef = (window.NumerologyDefinitions && window.NumerologyDefinitions.get) ? (window.NumerologyDefinitions.get(`Num/ChakraKarma/${num}.html`) || '') : '';
+
+  const modalTitle = 'NUMEROLOJİ > ÇAKRA AÇILIMI';
+  const html = `
+    <div style="font-family:'Segoe UI',system-ui,sans-serif;line-height:1.7;color:#334155;">
+      <!-- Çakra & Hane Başlık Kartı -->
+      <div style="background:linear-gradient(135deg,#1e293b,#0f172a);color:#ffffff;padding:16px 20px;border-radius:12px;margin-bottom:18px;box-shadow:0 4px 12px rgba(0,0,0,0.15);">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div>
+            <span style="background:rgba(255,255,255,0.15);color:#93c5fd;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:0.5px;text-transform:uppercase;">${num}. ÇAKRA REZONANSI</span>
+            <h3 style="margin:6px 0 2px;color:#ffffff;font-size:18px;">${num}. Çakra — ${chakraName}</h3>
+            <div style="font-size:13px;color:#cbd5e1;">${num}. Hane: <b>${r.haneName}</b> (${r.ageRange} Yaş Dönemi)</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:11px;color:#94a3b8;font-weight:600;">HANE ENERJİSİ</div>
+            <div style="font-size:22px;font-weight:800;color:#facc15;">${r.aDisplay}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4'lü Metrik Paneli (Etki - Stres - Gölge - Uyum) -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px;">
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;color:#64748b;">ETKİ (REZONANS)</div>
+          <div style="font-size:20px;font-weight:800;color:#2563eb;margin-top:2px;">${r.etki !== null ? r.etki : '-'}</div>
+          <div style="font-size:10px;color:#94a3b8;margin-top:2px;">Tezahür Gücü</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;color:#64748b;">STRES (DİRENÇ)</div>
+          <div style="font-size:20px;font-weight:800;color:#dc2626;margin-top:2px;">${r.stres !== null ? r.stres : '-'}</div>
+          <div style="font-size:10px;color:#94a3b8;margin-top:2px;">Gelişim Gerilimi</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;color:#64748b;">GÖLGE (KÖR NOKTA)</div>
+          <div style="font-size:20px;font-weight:800;color:#d97706;margin-top:2px;">${r.golge !== null ? r.golge : '-'}</div>
+          <div style="font-size:10px;color:#94a3b8;margin-top:2px;">Dönüşüm Sınavı</div>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;color:#64748b;">UYUM MODELİ</div>
+          <div style="font-size:13px;font-weight:700;color:${(r.uyum && r.uyum.title.includes('Zorlu')) ? '#dc2626' : '#15803d'};margin-top:4px;">${r.uyum ? r.uyum.title : '-'}</div>
+          <div style="font-size:10px;color:#64748b;margin-top:2px;">${r.uyum ? r.uyum.desc : ''}</div>
+        </div>
+      </div>
+
+      <!-- Çakra Açılım Metinleri -->
+      <div style="font-size:14px;line-height:1.7;">
+        ${mainDef}
+        ${karmaDef ? `<div style="margin-top:20px;padding-top:16px;border-top:1px solid #e2e8f0;">${karmaDef}</div>` : ''}
+      </div>
+    </div>
+  `;
+
+  window.NumerologyDefinitions.openModal(modalTitle, html);
+};
+
+/* ---------- Analiz görünümleri ---------- */
+function renderHolistic(f){
+  const d = Number(f.d), m = Number(f.m), y = Number(f.y), name = f.name || "";
+  const lp = E.lifePath(d, m, y), ex = E.expressionNumber(name),
+        su = E.soulUrgeNumber(name), pe = E.personalityNumber(name),
+        ma = E.maturityNumber(name, d, m, y), at = E.attitudeNumber(d, m),
+        ba = E.balanceNumber(name), co = E.cornerstone(name), ca = E.capstone(name),
+        fv = E.firstVowelValue(name), br = E.bridgeNumber(name, d, m, y);
+  const im = E.numberMatrix(name, false), dm = E.numberMatrix(`${d}${m}${y}`, true);
+  const synth = {}; for(let i=1;i<=9;i++) synth[i]=(im.counts[i]||0)+(dm.counts[i]||0);
+  const sm = { counts:synth, grid:[[3,6,9],[2,5,8],[1,4,7]].map(r=>r.map(v=>({sayi:v,adet:synth[v]}))) };
+  const lg = E.letterGroups(name), tc = E.transitionCycles(name, y);
+  const ep = E.expressionPlanes(name);
+
+  // Ek Hesaplamalar
+  const mc = E.moneyCode(d, m, y);
+  const pc = E.pinCode(d, m, y);
+  const kDebts = E.karmicDebtCheck(d, m, y, name);
+  const el = E.element(d, m, y);
+  const pnc = E.pinnaclesAndChallenges(d, m, y);
+
+  window._lastHolisticAnalysis = { lp, ex, su, pe, ma, at, ba, co, ca, fv, br, mc, pc, kDebts, im, dm, sm, lg, tc, ep, p: pnc, el };
+
+  const karmicAlert = kDebts.length ? `
+    <div class="holistic-karmic-alert">
+      <span class="holistic-karmic-icon">⚠️</span>
+      <div>
+        <strong class="holistic-karmic-title">Karmik Borç Uyarısı:</strong>
+        <div class="holistic-karmic-badges">
+          ${kDebts.map(kd => badge(kd.code, 'KarmicDebt', `Karmik Borç ${kd.code}`)).join(' ')}
+          <span class="holistic-karmic-sub">Ruhsal sınav ve arınma reçetesi için sayılara tıklayın.</span>
+        </div>
+      </div>
+    </div>` : '';
+
+  return `
+  <div class="holistic-report-body">
+  <!-- Altın Rapor Butonu -->
+  <div class="a4-export-card holistic-danisan-file-card">
+    <div class="a4-export-info">
+      <h4 class="a4-export-title">Yazdırılabilir analiz dosyası</h4>
+      <p class="a4-export-desc">Bu analizin 24 bölümlük A4 hesaplama çıktısı.</p>
+    </div>
+    <button type="button" class="a4-export-btn" onclick="AnalysisExpositor.openReportWindow({name:'${esc(name)}',d:${d},m:${m},y:${y}}, window._lastHolisticAnalysis)">
+      A4 çıktıyı aç
+    </button>
+  </div>
+
+  ${karmicAlert}
+
+  <!-- Numerolojik OMURGA Haritası -->
+  ${renderOmurgaHTML(f)}
+
+  <!-- Para Kodu & Pin Kodu -->
+  <div class="holistic-codes-grid">
+    <div class="holistic-code-card">
+      <div class="holistic-code-head">
+        <h4>Para Kodu</h4>
+        <span class="holistic-code-val">${mc.code}</span>
+      </div>
+      <div class="holistic-code-digits">
+        ${mc.digits.map((num, i) => badge(num, 'MoneyCode', `Para Kodu Hane ${i+1}: ${num}`)).join(' ')}
+      </div>
+      <div class="holistic-code-meta">
+        <b>Yankı (Echo):</b> ${mc.echo} &nbsp;|&nbsp; <b>Sayı Titreşimi:</b> ${badge(mc.number, 'NumericalVibration', 'Para Kodu Sayı Titreşimi')}
+      </div>
+    </div>
+
+    <div class="holistic-code-card">
+      <div class="holistic-code-head">
+        <h4>Pin Kodu</h4>
+        <span class="holistic-code-val">${pc.pinStr}</span>
+      </div>
+      <div class="holistic-pin-grid">
+        <div>H1: <b>${pc.c1}</b></div>
+        <div>H2: <b>${pc.c2}</b></div>
+        <div>H3: <b>${pc.c3}</b></div>
+        <div>H4: <b>${pc.c4}</b></div>
+        <div>H5: <b>${pc.c5}</b></div>
+        <div>H6: <b>${pc.c6}</b></div>
+        <div>H7: <b>${pc.c7}</b></div>
+        <div>H8: <b>${pc.c8}</b></div>
+        <div>H9: <b>${pc.c9}</b></div>
+      </div>
+      <div class="holistic-code-meta">
+        <b>Baba Çizgisi:</b> ${pc.fatherLine} | <b>Anne Çizgisi:</b> ${pc.motherLine}<br>
+        <b>Ben Çizgisi:</b> ${pc.selfLine} | <b>Kader Çizgisi:</b> ${pc.destinyLine}
+      </div>
+    </div>
+  </div>
+
+  <h3>Temel Göstergeler (Detay için sayılara tıklayın)</h3>
+  ${kvRows([
+    ["Yaşam Yolu", badge(lp, "LifePath", "Yaşam Yolu " + lp) + meaning(lp)],
+    ["İfade Sayısı", badge(ex, "Expression", "İfade Sayısı " + ex) + meaning(ex)],
+    ["Kalp Arzusu (Ruh)", badge(su, "HeartDesire", "Kalp Arzusu " + su) + meaning(su)],
+    ["Kişilik Sayısı", badge(pe, "Personality", "Kişilik Sayısı " + pe) + meaning(pe)],
+    ["Olgunluk Sayısı", badge(ma, "Maturity", "Olgunluk Sayısı " + ma)],
+    ["Tutum Sayısı", badge(at, "Attitude", "Tutum Sayısı " + at)],
+    ["Denge Sayısı", badge(ba, "Balance", "Denge Sayısı " + ba)],
+    ["Köşe Taşı", badge(co, "Cornerstone", "Köşe Taşı")],
+    ["Bitiş Taşı", badge(ca, "FinalLetterStone", "Bitiş Taşı")],
+    ["İlk Sesli Harf", badge(fv, "FirstVowelLetterNumber", "İlk Sesli Harf")],
+    ["Köprü Sayısı", badge(br, "Bridge", "Köprü Sayısı " + br)],
+  ])}
+
+  <h3>İsim Rakamsal Matrisi</h3>${matrixHTML(im)}
+  <h3>Doğum Tarihi Rakamsal Matrisi</h3>${matrixHTML(dm)}
+  <h3>Sentez Rakamsal Matrisi</h3>${matrixHTML(sm)}
+
+  <h3>Harf Grupları</h3>
+  <div class="holistic-table-wrap">${tableHTML(["Grup","Harfler","Toplam"],[
+    ["Düz Çizgili",lg.duz.join(", ")||"-",lg.duz.length],
+    ["Eğri Çizgili",lg.egri.join(", ")||"-",lg.egri.length],
+    ["Kavisli + Düz",lg.kavisli.join(", ")||"-",lg.kavisli.length],
+  ])}</div>
+
+  <h3>İfade Düzlemleri</h3>
+  <div class="holistic-table-wrap">${tableHTML(["Düzlem","Esinlenmiş","İkili","Dengeli"],[
+    ["Zihinsel",ep.zihinsel.esinlenmiş.join(", ")||"-",ep.zihinsel.ikili.join(", ")||"-",ep.zihinsel.dengeli.join(", ")||"-"],
+    ["Fiziksel",ep.fiziksel.esinlenmiş.join(", ")||"-",ep.fiziksel.ikili.join(", ")||"-",ep.fiziksel.dengeli.join(", ")||"-"],
+    ["Duygusal",ep.duygusal.esinlenmiş.join(", ")||"-",ep.duygusal.ikili.join(", ")||"-",ep.duygusal.dengeli.join(", ")||"-"],
+    ["Sezgisel",ep.sezgisel.esinlenmiş.join(", ")||"-",ep.sezgisel.ikili.join(", ")||"-",ep.sezgisel.dengeli.join(", ")||"-"],
+  ])}</div>
+
+  <h3>Zirveler (Pinnacles) ve Meydan Okumalar</h3>
+  <div class="holistic-table-wrap">${tableHTML(["Dönem","Zirve","Meydan Okuma"], (pnc.zirveler||[]).map((z,i)=>[
+    z.yas!==undefined ? z.yas : ("Dönem "+(i+1)),
+    badge(z.deger, "Attitude", "Zirve " + z.deger),
+    badge((pnc.zorluklar[i]||{}).deger, "EarlyLesson", "Meydan Okuma")
+  ]))}</div>
+
+  <h3>Geçiş Döngüleri</h3>
+  <div class="holistic-table-wrap">${tableHTML(["Harf","Sayı","Başlangıç","Bitiş"], tc.slice(0,18).map(t=>[t.harf,badge(t.sayi),t.baslangic,t.bitis]))}</div>
+  ${tc.length>18?`<div class="empty">… toplam ${tc.length} geçiş döngüsü</div>`:""}
+  </div>
+  `;
+}
+function renderFullName(f){
+  const ex=E.expressionNumber(f.name), su=E.soulUrgeNumber(f.name), pe=E.personalityNumber(f.name),
+        ba=E.balanceNumber(f.name), co=E.cornerstone(f.name), ca=E.capstone(f.name), fv=E.firstVowelValue(f.name);
+  const im=E.numberMatrix(f.name,false), lg=E.letterGroups(f.name), ep=E.expressionPlanes(f.name);
+  return `
+  <!-- Numerolojik OMURGA Haritası -->
+  ${renderOmurgaHTML(f)}
+
+  <h3>İsim Göstergeleri (Detay için sayılara tıklayın)</h3>
+  ${kvRows([
+    ["İfade Sayısı",badge(ex,"Expression","İfade Sayısı "+ex)+meaning(ex)],
+    ["Kalp Arzusu",badge(su,"HeartDesire","Kalp Arzusu "+su)+meaning(su)],
+    ["Kişilik",badge(pe,"Personality","Kişilik "+pe)+meaning(pe)],
+    ["Denge",badge(ba,"Balance","Denge "+ba)],
+    ["Köşe Taşı",badge(co,"Cornerstone","Köşe Taşı")],
+    ["Bitiş Taşı",badge(ca,"FinalLetterStone","Bitiş Taşı")],
+    ["İlk Sesli Harf",badge(fv,"FirstVowelLetterNumber","İlk Sesli Harf")]
+  ])}
+  <h3>İsim Rakamsal Matrisi</h3>${matrixHTML(im)}
+  <h3>Harf Grupları</h3>
+  ${tableHTML(["Grup","Harfler","Toplam"],[
+    ["Düz Çizgili",lg.duz.join(", ")||"-",lg.duz.length],
+    ["Eğri Çizgili",lg.egri.join(", ")||"-",lg.egri.length],
+    ["Kavisli + Düz",lg.kavisli.join(", ")||"-",lg.kavisli.length]])}
+  <h3>İfade Düzlemleri</h3>
+  ${tableHTML(["Düzlem","Esinlenmiş","İkili","Dengeli"],[
+    ["Zihinsel",ep.zihinsel.esinlenmiş.join(", ")||"-",ep.zihinsel.ikili.join(", ")||"-",ep.zihinsel.dengeli.join(", ")||"-"],
+    ["Fiziksel",ep.fiziksel.esinlenmiş.join(", ")||"-",ep.fiziksel.ikili.join(", ")||"-",ep.fiziksel.dengeli.join(", ")||"-"],
+    ["Duygusal",ep.duygusal.esinlenmiş.join(", ")||"-",ep.duygusal.ikili.join(", ")||"-",ep.duygusal.dengeli.join(", ")||"-"],
+    ["Sezgisel",ep.sezgisel.esinlenmiş.join(", ")||"-",ep.sezgisel.ikili.join(", ")||"-",ep.sezgisel.dengeli.join(", ")||"-"],
+  ])}
+  `;
+}
+function renderBirthday(f){
+  const d = Number(f.d), m = Number(f.m), y = Number(f.y);
+  const lp = E.lifePath(d, m, y), bn = E.birthdayNumber(d), at = E.attitudeNumber(d, m);
+  const mc = E.moneyCode(d, m, y);
+  const pc = E.pinCode(d, m, y);
+  const start = y, rows = [];
+  for(let yr = start, age = 0; yr <= start + 100; yr++, age++){
+    const kab = E.reduceNumber((d + m) + yr);
+    const en = E.reduceNumber(yr);
+    rows.push([yr, age, E.reduceDetailed(d + m + yr).steps.join("→"), badge(en, "NumericalVibration", `Yıl Titreşimi ${en}`)]);
+  }
+  return `
+  <!-- Numerolojik OMURGA Haritası -->
+  ${renderOmurgaHTML({ d, m, y, name: "" })}
+
+  <h3>Doğum Tarihi Göstergeleri</h3>
+  ${kvRows([
+    ["Yaşam Yolu", badge(lp, "LifePath", "Yaşam Yolu " + lp) + meaning(lp)],
+    ["Doğum Günü Sayısı", badge(bn, "Attitude", "Doğum Günü " + bn)],
+    ["Tutum Sayısı", badge(at, "Attitude", "Tutum Sayısı " + at)],
+    ["Doğum Günü Arkanası", badge(E.arcana(d), "Arcana", `Arkana ${E.arcana(d)}`)],
+    ["Para Kodu", (mc.digits || [...(mc.code||'')].map(Number)).map((num, i) => badge(num, 'MoneyCode', `Para Kodu Hane ${i+1}: ${num}`)).join(' ') + ` <span style="font-size:12px;color:#64748b">(Sayı: ${badge(mc.number, 'NumericalVibration')}, Yankı: ${mc.echo})</span>`],
+    ["Pin Kodu", (pc.digits || [...(pc.pinStr||'')].map(Number)).map((num, i) => badge(num, 'NumericalVibration', `Pin Kodu Hane ${i+1}: ${num}`)).join(' ') + ` <span style="font-size:12px;color:#64748b">(${pc.pinStr})</span>`]
+  ])}
+  <h3>Yıllara Göre Dağılım</h3>
+  ${tableHTML(["Yıl","Yaş","Kabala","Enerji"], rows)}
+  `;
+}
+function renderCompare(f){
+  const a = { d: f.d1, m: f.m1, y: f.y1, name: f.n1 };
+  const b = { d: f.d2, m: f.m2, y: f.y2, name: f.n2 };
+  const h = E.harmonyAnalysis(a, b);
+  const aLp = E.lifePath(f.d1, f.m1, f.y1), bLp = E.lifePath(f.d2, f.m2, f.y2);
+  const aEx = E.expressionNumber(f.n1), bEx = E.expressionNumber(f.n2);
+  const aSu = E.soulUrgeNumber(f.n1), bSu = E.soulUrgeNumber(f.n2);
+  const aPe = E.personalityNumber(f.n1), bPe = E.personalityNumber(f.n2);
+  const aMc = E.moneyCode(f.d1, f.m1, f.y1), bMc = E.moneyCode(f.d2, f.m2, f.y2);
+  const aPc = E.pinCode(f.d1, f.m1, f.y1), bPc = E.pinCode(f.d2, f.m2, f.y2);
+
+  const rows = [
+    ["Yaşam Yolu", badge(aLp, "LifePath"), badge(bLp, "LifePath"), aLp === bLp ? "Tam Rezonans" : "Farklı"],
+    ["İfade", badge(aEx, "Expression"), badge(bEx, "Expression"), aEx === bEx ? "Aynı Enerji" : "Tamamlayıcı"],
+    ["Kalp Arzusu", badge(aSu, "HeartDesire"), badge(bSu, "HeartDesire"), aSu === bSu ? "Ortak Ruh" : "Farklı"],
+    ["Kişilik", badge(aPe, "Personality"), badge(bPe, "Personality"), aPe === bPe ? "Benzer Algı" : "Farklı"],
+    ["Para Kodu", (aMc.digits || []).map(n => badge(n, 'MoneyCode')).join(' '), (bMc.digits || []).map(n => badge(n, 'MoneyCode')).join(' '), aMc.code === bMc.code ? "Aynı Kod" : "Bireysel"],
+    ["Pin Kodu", (aPc.digits || []).map(n => badge(n, 'NumericalVibration')).join(' '), (bPc.digits || []).map(n => badge(n, 'NumericalVibration')).join(' '), "-"]
+  ];
+
+  return `
+  <h3>${esc(f.n1 || "1. Kişi")} &amp; ${esc(f.n2 || "2. Kişi")} — İlişki &amp; Sinerji Analizi</h3>
+
+  <!-- Uyum Kartı -->
+  <div style="background:${h.bgcolor};color:${h.color};border:1px solid rgba(0,0,0,0.08);border-radius:12px;padding:20px;margin-bottom:20px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+      <h3 style="margin:0;color:inherit;border:0;padding:0;font-size:18px;">Uyum Tipi: ${h.type}</h3>
+      <div style="font-size:24px;font-weight:800;">%${h.score}</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.6);border-radius:20px;height:10px;overflow:hidden;margin-bottom:12px;">
+      <div style="background:currentColor;height:100%;width:${h.score}%;border-radius:20px;"></div>
+    </div>
+    <p style="margin:0;font-size:14px;line-height:1.7;">${h.analysis}</p>
+  </div>
+
+  <h3>Detaylı Gösterge Karşılaştırması</h3>
+  ${tableHTML(["Gösterge", esc(f.n1 || "1. Kişi"), esc(f.n2 || "2. Kişi"), "Dinamik"], rows)}
+  `;
+}
+function renderCompareName(f){
+  const a=E.expressionNumber(f.n1), b=E.expressionNumber(f.n2);
+  return `<h3>İsim Karşılaştırma</h3>
+  ${tableHTML(["İsim","İfade","Kalp Arzusu","Kişilik"],[
+    [esc(f.n1),badge(a),badge(E.soulUrgeNumber(f.n1)),badge(E.personalityNumber(f.n1))],
+    [esc(f.n2),badge(b),badge(E.soulUrgeNumber(f.n2)),badge(E.personalityNumber(f.n2))]])}
+  <p style="margin-top:12px">İfade sayıları ${a===b?"<b>aynı</b> — güçlü sayısal rezonans.":"<b>farklı</b> — tamamlayıcı enerjiler."}</p>`;
+}
+function renderLocation(f){
+  const parts=[f.ulke,f.eyalet,f.sehir,f.ilce,f.semt].filter(Boolean);
+  const full=parts.join(" ");
+  const ex=E.reduceNumber(E.letterSum(full));
+  return `<h3>Adres Değeri</h3>
+  ${kvRows([["Tam Adres",esc(full)||"-"],["Harf Toplamı",E.letterSum(full)],["Sayısal Değer",badge(ex)+meaning(ex)]])}
+  ${tableHTML(["Bileşen","Değer"],parts.map((p,i)=>[esc(p),badge(E.reduceNumber(E.letterSum(p)))]))}`;
+}
+function renderEcho(no,title){
+  const rows=E.echoTable(no);
+  return `<h3>${esc(title)} — Yankı Tablosu</h3>
+  ${rows.length?tableHTML(["Sayı","Yankı"],rows.map(r=>[r.sayi,r.yanki])):'<div class="empty">Rakam bulunamadı.</div>'}
+  <p style="margin-top:10px">Girilen: <b>${esc(no)}</b> — rakam toplamı: ${badge(E.reduceNumber(String(no).replace(/\D/g,"")))}</p>`;
+}
+function renderPlate(no,title){
+  const digits=String(no).replace(/\D/g,"");
+  const letters=String(no).replace(/[^A-Za-zÇĞİÖŞÜçğıöşü]/g,"");
+  const ex=E.reduceNumber(E.letterSum(letters));
+  const dsum=E.reduceNumber(digits);
+  const total=E.reduceNumber(ex+dsum);
+  return `<h3>${esc(title)}</h3>
+  ${kvRows([["Plaka",esc(no)],["Harfler",esc(letters)||"-"],["Harf Değeri",badge(ex)],
+    ["Rakam Toplamı",badge(dsum)],["Genel Değer",badge(total)+meaning(total)]])}
+  ${tableHTML(["Rakam","Adet"],E.echoTable(digits).map(r=>[r.sayi,r.yanki]))}`;
+}
+function renderPersonalDate(f){
+  const py=E.personalYear(f.d,f.m,f.y,f.cy), pm=E.personalMonth(f.d,f.m,f.y,f.cy,f.cm),
+        pd=E.personalDay(f.d,f.m,f.y,f.cy,f.cm,f.cd);
+  return `<h3>Kişisel Tarih — ${esc(f.cd)}.${esc(f.cm)}.${esc(f.cy)}</h3>
+  ${kvRows([["Kişisel Yıl",badge(py)+meaning(py)],["Kişisel Ay",badge(pm)+meaning(pm)],["Kişisel Gün",badge(pd)+meaning(pd)]])}`;
+}
+function renderPersonalWeek(f){
+  const pw=E.personalWeek(f.d,f.m,f.y,f.cy,f.cm,f.cd);
+  const pd=E.personalDay(f.d,f.m,f.y,f.cy,f.cm,f.cd);
+  return `<h3>Kişisel Hafta</h3>
+  ${kvRows([["Kişisel Gün",badge(pd)],["Kişisel Hafta",badge(pw)+meaning(pw)]])}`;
+}
+function renderFibonacci(f,scope){
+  const lp=E.lifePath(f.d||1,f.m||1,f.y||2026);
+  const seq=E.fibonacciSequence(12).map(n=>E.reduceNumber(n));
+  return `<h3>${scope} Fibonacci Dizilimi</h3>
+  ${kvRows([["Temel Sayı",badge(lp)]])}
+  <div style="margin-top:10px">${seq.map(n=>badge(n)).join(" ")}</div>
+  <p style="margin-top:10px;font-size:13px;color:#6b7686">Dizilim, temel sayı ile başlar ve Fibonacci toplamlarına göre ilerler.</p>`;
+}
+function renderPinnacles(f,title){
+  const p=E.pinnaclesAndChallenges(f.d,f.m,f.y);
+  const zir=p.zirveler||[];
+  const zor=p.zorluklar||[];
+  const rows=zir.map((z,i)=>[
+    (z.yas!==undefined? z.yas : ("Dönem "+(z.no||i+1))),
+    badge(z.deger),
+    badge((zor[i]||{}).deger)
+  ]);
+  return `<h3>${esc(title||"Kişisel Döngüler")}</h3>
+  ${tableHTML(["Dönem","Zirve (Pinnacle)","Meydan Okuma"],rows)}
+  <p style="margin-top:10px;font-size:13px;color:#6b7686">Zirveler 36 − Yaşam Yolu yaşına göre sıralanır; meydan okumalar ilgili dönemin zorluk sayısıdır.</p>`;
+}
+function renderTransformation(f){
+  const cy=Number(f.cy)||new Date().getFullYear();
+  const lp=E.lifePath(f.d,f.m,f.y);
+  const rows=[];
+  for(let yr=cy-3; yr<=cy+6; yr++){
+    const py=E.personalYear(f.d,f.m,f.y,yr);
+    rows.push([yr,py,(py===lp?"⭐ Dönüşüm":"")]);
+  }
+  return `<h3>Dönüşüm Yılları (${cy})</h3>
+  ${tableHTML(["Yıl","Kişisel Yıl","Not"],rows.map(r=>[r[0],badge(r[1]),r[2]]))}`;
+}
+function renderUniversal(f,mode){
+  const uy=E.universalYear(f.y), um=E.universalMonth(f.y,f.m), ud=E.universalDay(f.y,f.m,f.d),
+        uw=E.universalWeek(f.y,f.m,f.d);
+  return `<h3>Evrensel ${esc(mode)} — ${esc(f.d)}.${esc(f.m)}.${esc(f.y)}</h3>
+  ${kvRows([["Evrensel Yıl",badge(uy)+meaning(uy)],["Evrensel Ay",badge(um)+meaning(um)],
+    ["Evrensel Gün",badge(ud)+meaning(ud)],["Evrensel Hafta",badge(uw)]])}`;
+}
+function renderUniversalCycles(f){
+  const start=Number(f.y)||new Date().getFullYear();
+  const n=Math.min(Number(f.n)||9, 30);
+  const rows=[];
+  for(let i=0;i<n;i++){
+    const yr=start+i;
+    rows.push([yr, badge(E.universalYear(yr)), E.NUMBER_MEANINGS[E.universalYear(yr)]||""]);
+  }
+  return `<h3>Evrensel Döngüler (${start} – ${start+n-1})</h3>
+  ${tableHTML(["Yıl","Evrensel Yıl","Anlam"],rows)}`;
+}
+function renderWheel(f){
+  const y=Number(f.y)||new Date().getFullYear();
+  const rows=[];
+  for(let i=0;i<9;i++){
+    const yr=y+i;
+    rows.push([yr, badge(E.universalYear(yr)), badge(E.reduceNumber(E.universalYear(yr)+1))]);
+  }
+  return `<h3>Evrensel Çark (${y})</h3>
+  ${tableHTML(["Yıl","Çark Sayısı","Sonraki"],rows)}`;
+}
+function renderKarmic(f){
+  const d = Number(f.d), m = Number(f.m), y = Number(f.y), name = f.name || "";
+  const karmicData = E.karmicAnalysis(d, m, y, name);
+  const im = E.numberMatrix(name, false), dm = E.numberMatrix(`${d}${m}${y}`, true);
+  const missingName = Object.entries(im.counts).filter(([k,v])=>v===0).map(([k])=>k);
+  const missingDate = Object.entries(dm.counts).filter(([k,v])=>v===0).map(([k])=>k);
+  const lp = E.lifePath(d, m, y);
+  const kDebts = E.karmicDebtCheck(d, m, y, name);
+
+  return `
+  <h3>Ladini Karma Analizi (Çift-Üçgen Haritası)</h3>
+  <p class="desc">Kişilik ve Halef üçgenleri ile karmik düğüm noktaları. Düğümlere tıklayarak detaylı bilgi kartlarını inceleyebilirsiniz.</p>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin-bottom:20px;text-align:center;">
+    <div id="karmicSvgBox"></div>
+  </div>
+
+  <h3>Karmik Göstergeler &amp; Yollar</h3>
+  ${tableHTML(["Gösterge","Arkana","Açıklama"],[
+    ["Ruhsal Yol (Aks)", badge(karmicData.spiritualPath, "Arcana", "Ruhsal Yol"), "Ruhun bu yaşamda ilerlemesi gereken temel evrimsel hat."],
+    ["Başarı Yolu", badge(karmicData.successPath, "Arcana", "Başarı Yolu"), "Maddi ve manevi hedeflere ulaşmada açıcı anahtar arketip."],
+    ["Karmik Düğüm Noktası (Merkez)", badge(karmicData.karmicKnot, "Arcana", "Karmik Düğüm"), "Geçmişten taşınan ve bu yaşamda çözülmesi gereken kilit sınav."],
+    ["Kuyruk Karması (Geçmiş Yaşam)", karmicData.tailKarma.map(n => badge(n, "Arcana", "Kuyruk Arkanası")).join(" "), "Geçmiş enkarnasyonlardan getirilen alışkanlıklar ve gölge yanlar."],
+    ["Enkarnasyon Görevi", "-", karmicData.incarnationMission]
+  ])}
+
+  <h3>Karmik Borçlar</h3>
+  <div style="margin-bottom:16px;">
+    ${kDebts.length ? kDebts.map(kd => badge(kd.code, "KarmicDebt", `Karmik Borç ${kd.code}`)).join(" ") + " <span style='font-size:12px;color:#b91c1c;margin-left:8px;'>(Aktif borç var — detay için tıklayın)</span>" : "<span class='chip ok'>Karmik borç tespit edilmedi (Dengeli)</span>"}
+  </div>
+
+  <h3>Karmik Eksik Sayılar</h3>
+  ${kvRows([
+    ["İsimde Eksik Sayılar", missingName.length ? missingName.map(n => badge(n, "NumericalVibration")).join(" ") : "Tüm sayılar mevcut"],
+    ["Doğum Tarihinde Eksik", missingDate.length ? missingDate.map(n => badge(n, "NumericalVibration")).join(" ") : "Tüm sayılar mevcut"]
+  ])}
+
+  <h3>İsim Matrisi</h3>${matrixHTML(im)}
+  <h3>Doğum Tarihi Matrisi</h3>${matrixHTML(dm)}
+  `;
+}
+
+function renderDestinyMatrix(f){
+  const d = Number(f.d), m = Number(f.m), y = Number(f.y), name = f.name || "";
+  const dmData = E.destinyMatrix(d, m, y, name);
+  const im = E.numberMatrix(name, false), dm = E.numberMatrix(`${d}${m}${y}`, true);
+  const synth = {}; for(let i=1;i<=9;i++) synth[i]=(im.counts[i]||0)+(dm.counts[i]||0);
+  const sm = { counts:synth, grid:[[3,6,9],[2,5,8],[1,4,7]].map(r=>r.map(v=>({sayi:v,adet:synth[v]}))) };
+  const lp = E.lifePath(d, m, y), ex = E.expressionNumber(name);
+
+  const chakras = dmData.chakras || [];
+  const dest = dmData.destinations || {};
+
+  return `
+  <h3>22 Arcana Kader Matrisi (Oktagram Haritası)</h3>
+  <p class="desc">Natalia Ladini ekolü 22 Arkana oktagram haritası. Düğümlere tıklayarak ezoterik bilgi kartlarını açabilirsiniz.</p>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin-bottom:20px;text-align:center;">
+    <div id="destinyMatrixSvgBox"></div>
+  </div>
+
+  <h3>4 Temel Kadersel Yönelim (Destinations)</h3>
+  ${tableHTML(["Kader Seviyesi","Değer","Anlam &amp; Açılım"],[
+    ["Kişisel Kader (1. Dönem / 20-40 Yaş)", badge(dest.personal, "Arcana", "Kişisel Kader"), "Kendini keşfetme, ego ve ruh dengesini kurma arketipi."],
+    ["Sosyal Kader (2. Dönem / 40-60 Yaş)", badge(dest.social, "Arcana", "Sosyal Kader"), "Topluma ve soyuna aktarılan değer, sosyal rol."],
+    ["Ruhsal Kader (3. Dönem / 60+ Yaş)", badge(dest.spiritual, "Arcana", "Ruhsal Kader"), "Kişisel ve sosyal kaderin ilahi sentezi, ruhsal olgunluk."],
+    ["Kolektif / Evrensel Kader (Genel Sentez)", badge(dest.planetary, "Arcana", "Kolektif Kader"), "Evrensel planla hizalanma ve kolektif görevin arketipi."]
+  ])}
+
+  <h3>7 Çakra Enerji Matrisi</h3>
+  ${tableHTML(["Çakra","Fiziksel","Enerji","Duygusal"],[
+    ["7. Sahasrara (Taç)", badge(chakras[6]?.fiziksel, "Arcana"), badge(chakras[6]?.enerji, "Arcana"), badge(chakras[6]?.duygusal, "Arcana")],
+    ["6. Ajna (Üçüncü Göz)", badge(chakras[5]?.fiziksel, "Arcana"), badge(chakras[5]?.enerji, "Arcana"), badge(chakras[5]?.duygusal, "Arcana")],
+    ["5. Vishuddha (Boğaz)", badge(chakras[4]?.fiziksel, "Arcana"), badge(chakras[4]?.enerji, "Arcana"), badge(chakras[4]?.duygusal, "Arcana")],
+    ["4. Anahata (Kalp)", badge(chakras[3]?.fiziksel, "Arcana"), badge(chakras[3]?.enerji, "Arcana"), badge(chakras[3]?.duygusal, "Arcana")],
+    ["3. Manipura (Solar)", badge(chakras[2]?.fiziksel, "Arcana"), badge(chakras[2]?.enerji, "Arcana"), badge(chakras[2]?.duygusal, "Arcana")],
+    ["2. Svadhisthana (Sakral)", badge(chakras[1]?.fiziksel, "Arcana"), badge(chakras[1]?.enerji, "Arcana"), badge(chakras[1]?.duygusal, "Arcana")],
+    ["1. Muladhara (Kök)", badge(chakras[0]?.fiziksel, "Arcana"), badge(chakras[0]?.enerji, "Arcana"), badge(chakras[0]?.duygusal, "Arcana")]
+  ])}
+
+  <h3>Klasik Matrisler</h3>
+  <h3>İsim Matrisi</h3>${matrixHTML(im)}
+  <h3>Doğum Tarihi Matrisi</h3>${matrixHTML(dm)}
+  <h3>Sentez Matrisi</h3>${matrixHTML(sm)}
+  `;
+}
+function renderCompatibility(f){
+  const a={su:E.soulUrgeNumber(f.n1),pe:E.personalityNumber(f.n1),ex:E.expressionNumber(f.n1)};
+  const b={su:E.soulUrgeNumber(f.n2),pe:E.personalityNumber(f.n2),ex:E.expressionNumber(f.n2)};
+  const pct=(x,y)=>{ const d=Math.abs(x-y); return Math.max(0,100-d*11); };
+  const su=pct(a.su,b.su), pe=pct(a.pe,b.pe), ex=pct(a.ex,b.ex);
+  const gen=Math.round((su+pe+ex)/3);
+  return `<h3>${esc(f.n1)} &amp; ${esc(f.n2)} — Uyumluluk</h3>
+  ${tableHTML(["Alan","1.","2.","Uyum"],
+    [["Kalp Arzusu",badge(a.su),badge(b.su),su+"%"],
+     ["Kişilik",badge(a.pe),badge(b.pe),pe+"%"],
+     ["İfade",badge(a.ex),badge(b.ex),ex+"%"]])}
+  <h3>Genel Uyum</h3>
+  <div style="font-size:30px;font-weight:700;color:#2f5597">${gen}%</div>`;
+}
+function renderCalculator(f){
+  const v=String(f.val||"");
+  const letters=v.replace(/[^A-Za-zÇĞİÖŞÜçğıöşü]/g,"");
+  const digits=v.replace(/\D/g,"");
+  const lsum=E.letterSum(letters), dsum=digits?E.reduceNumber(digits):0;
+  return `<h3>Hesaplama Aracı</h3>
+  ${kvRows([["Girilen",esc(v)],["Harf Toplamı",lsum||"-"],["Harf Değeri",letters?badge(E.reduceNumber(lsum)):"-"],
+    ["Rakam Toplamı",dsum||"-"]])}
+  ${letters?`<h3>Harf Değerleri</h3><div>${[...letters.toUpperCase()].map(c=>`<span class="chip">${esc(c)} = ${E.LETTER_VALUES[c]||"-"}</span>`).join("")}</div>`:""}`;
+}
+function renderPinCompare(f){
+  const echo1=E.echoTable(f.p1), echo2=E.echoTable(f.p2);
+  const set1=new Set(echo1.map(r=>r.sayi)), set2=new Set(echo2.map(r=>r.sayi));
+  const ortak=[...set1].filter(x=>set2.has(x));
+  const all=Array.from({length:10},(_,i)=>String(i));
+  const rows=all.map(d=>[d, (echo1.find(r=>r.sayi===d)?.yanki||0), (echo2.find(r=>r.sayi===d)?.yanki||0)]);
+  return `<h3>Pin Kodu Karşılaştırma</h3>
+  ${tableHTML(["Rakam","1. Kod","2. Kod"],rows)}
+  <h3>Ortak Rakamlar</h3>
+  <div>${ortak.length?ortak.map(d=>`<span class="chip ok">${d}</span>`).join(""):'<span class="empty">Ortak rakam yok</span>'}</div>`;
+}
+
+/* ============================================================
+   ÇALIŞMA ALANI (PostgreSQL API Entegrasyonu)
+   ============================================================ */
+const TR_ILLER = ["Adana","Adıyaman","Afyonkarahisar","Ağrı","Aksaray","Amasya","Ankara","Antalya","Ardahan","Artvin","Aydın","Balıkesir","Bartın","Batman","Bayburt","Bilecik","Bingöl","Bitlis","Bolu","Burdur","Bursa","Çanakkale","Çankırı","Çorum","Denizli","Diyarbakır","Düzce","Edirne","Elazığ","Erzincan","Erzurum","Eskişehir","Gaziantep","Giresun","Gümüşhane","Hakkâri","Hatay","Iğdır","Isparta","İstanbul","İzmir","Kahramanmaraş","Karabük","Karaman","Kars","Kastamonu","Kayseri","Kırıkkale","Kırklareli","Kırşehir","Kilis","Kocaeli","Konya","Kütahya","Malatya","Manisa","Mardin","Mersin","Muğla","Muş","Nevşehir","Niğde","Ordu","Osmaniye","Rize","Sakarya","Samsun","Siirt","Sinop","Sivas","Şanlıurfa","Şırnak","Tekirdağ","Tokat","Trabzon","Tunceli","Uşak","Van","Yalova","Yozgat","Zonguldak"];
+const TR_ULKELER = ["Türkiye","KKTC","Almanya","Hollanda","Fransa","İngiltere","ABD","Avusturya","Belçika","İsviçre","İsveç","Kanada","Avustralya","Diğer"];
+
+function dayOptions(sel){ let o='<option value="">Gün</option>'; for(let i=1;i<=31;i++) o+='<option value="'+i+'"'+(sel==String(i)?' selected':'')+'>'+i+'</option>'; return o; }
+function monthOptions(sel){ const A=["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"]; let o='<option value="">Ay</option>'; A.forEach(function(a,i){ const v=i+1; o+='<option value="'+v+'"'+(sel==String(v)?' selected':'')+'>'+a+' ('+v+')</option>'; }); return o; }
+function yearOptions(sel){ let o='<option value="">Yıl</option>'; const now=new Date().getFullYear(); for(let y=now;y>=1920;y--) o+='<option value="'+y+'"'+(sel==String(y)?' selected':'')+'>'+y+'</option>'; return o; }
+function hourOptions(sel){ let o='<option value="">Saat</option>'; for(let h=0;h<24;h++){ const v=(h<10?'0'+h:''+h); o+='<option value="'+v+'"'+(sel===v?' selected':'')+'>'+v+'</option>'; } return o; }
+function minuteOptions(sel){ let o='<option value="">Dk</option>'; for(let mn=0;mn<60;mn++){ const v=(mn<10?'0'+mn:''+mn); o+='<option value="'+v+'"'+(sel===v?' selected':'')+'>'+v+'</option>'; } return o; }
+function countryOptions(sel){ let o='<option value="">Ülke</option>'; TR_ULKELER.forEach(function(u){ o+='<option value="'+u+'"'+(sel===u?' selected':'')+'>'+u+'</option>'; }); return o; }
+
+window._peopleCache = [];
+window._historyCache = [];
+
+async function loadPeople(){
+  try {
+    const res = await fetch('/api/people');
+    if (res.ok) {
+      window._peopleCache = await res.json();
+    } else {
+      window._peopleCache = [];
+    }
+  } catch (err) {
+    console.error('Kayıtlı kişiler yüklenemedi:', err);
+    window._peopleCache = [];
+  }
+  return window._peopleCache;
+}
+
+function renderWorkspace(){
+  const people = window._peopleCache || [];
+  const rows = people.length ? people.map((p)=>`<tr>
+    <td><b>${esc(p.name)}</b></td><td>${esc(p.d)}.${esc(p.m)}.${esc(p.y)}</td>
+    <td>${esc(p.time||"-")}</td><td>${esc(p.place||"-")}</td>
+    <td><button class="btn-sm" style="background:#4D304A;color:#fff;font-weight:600;" onclick="analyzePerson(${p.id})">Analiz Et ➜</button>
+        <button class="btn-sm danger" onclick="removePerson(${p.id})">Sil</button></td>
+  </tr>`).join("") : '<tr><td colspan="5" style="text-align:center;padding:24px;color:#8fa2c0;">Henüz kayıtlı danışan yok. Yukarıdaki formdan ekleyebilirsiniz.</td></tr>';
+
+  return `
+  <div class="card">
+    <h2>Çalışma Alanım</h2>
+    <p class="desc">Analiz edeceğiniz danışanları kaydedin; kayıtlı çalışmalardan tek tıkla analize ulaşın.</p>
+    <div class="grid c4">
+      <div class="field"><label>Danışan Adı Soyadı</label><input id="ws_name" placeholder="Örn: Deniz Aras"></div>
+      <div class="field"><label>Doğum Tarihi</label>
+        <div class="grid c3" style="gap:6px">
+          <select id="ws_d">${dayOptions()}</select>
+          <select id="ws_m">${monthOptions()}</select>
+          <select id="ws_y">${yearOptions()}</select>
+        </div>
+      </div>
+      <div class="field"><label>Doğum Saati (Opsiyonel)</label>
+        <div class="grid c2" style="gap:6px">
+          <select id="ws_hh">${hourOptions()}</select>
+          <select id="ws_mm">${minuteOptions()}</select>
+        </div>
+      </div>
+      <div class="field"><label>Doğum Yeri (Opsiyonel)</label>
+        <div class="grid c2" style="gap:6px">
+          <input id="ws_place" placeholder="Şehir">
+          <select id="ws_country">${countryOptions("Türkiye")}</select>
+        </div>
+      </div>
+    </div>
+    <div class="actions" style="margin-top:14px">
+      <button class="btn btn-go" onclick="addPerson()">+ Danışanı Kaydet</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Kayıtlı Danışanlar (${people.length})</h2>
+    <table class="data">
+      <thead>
+        <tr><th>Ad Soyad</th><th>Doğum Tarihi</th><th>Saat</th><th>Yer</th><th>İşlemler</th></tr>
+      </thead>
+      <tbody>
+        ${rows}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+async function addPerson(){
+  const name = ($("ws_name") ? $("ws_name").value.trim() : "");
+  const d = ($("ws_d") ? $("ws_d").value.trim() : "");
+  const m = ($("ws_m") ? $("ws_m").value.trim() : "");
+  const y = ($("ws_y") ? $("ws_y").value.trim() : "");
+  const city = ($("ws_place") ? $("ws_place").value.trim() : "");
+  const country = ($("ws_country") ? $("ws_country").value : "") || "";
+  const place = [city, country].filter(Boolean).join(", ");
+  const hh = ($("ws_hh") ? $("ws_hh").value : "");
+  const mm = ($("ws_mm") ? $("ws_mm").value : "");
+  const time = (hh && mm) ? (hh + ":" + mm) : "";
+
+  if(!name || !d || !m || !y){
+    alert("Ad ve doğum tarihi (gün/ay/yıl) zorunludur.");
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/people', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, d, m, y, time, place })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      alert(err.error || 'Kişi kaydedilemedi.');
+      return;
+    }
+    await loadPeople();
+    renderWorkspaceView();
+  } catch (e) {
+    alert('Sunucu bağlantı hatası.');
+  }
+}
+
+async function removePerson(id){
+  if(!confirm("Bu danışanı silmek istediğinizden emin misiniz?")) return;
+  try {
+    const res = await fetch('/api/people/' + id, { method: 'DELETE' });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      alert(err.error || 'Kişi silinemedi.');
+      return;
+    }
+    await loadPeople();
+    renderWorkspaceView();
+  } catch (e) {
+    alert('Sunucu bağlantı hatası.');
+  }
+}
+
+function analyzePerson(id){
+  const people = window._peopleCache || [];
+  const p = people.find(x => x.id === id) || people[0];
+  if (!p) return;
+  window._prefill = { name: p.name, d: p.d, m: p.m, y: p.y };
+  openModule("holistic");
+  setTimeout(() => {
+    runModule("holistic");
+  }, 40);
+}
+
+function fillFromSaved(id){
+  if (!id) return;
+  const numId = parseInt(id, 10);
+  const p = (window._peopleCache || []).find(x => x.id === numId);
+  if (!p) return;
+  if ($("fld_name")) $("fld_name").value = p.name || "";
+  if ($("fld_d")) $("fld_d").value = p.d || "";
+  if ($("fld_m")) $("fld_m").value = p.m || "";
+  if ($("fld_y")) $("fld_y").value = p.y || "";
+}
+
+/* ============================================================
+   GEÇMİŞ (PostgreSQL API Entegrasyonu)
+   ============================================================ */
+async function addHistory(moduleId, inputs){
+  try {
+    const res = await fetch('/api/history', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ moduleId, inputData: inputs })
+    });
+    if (!res.ok) {
+      showHistorySaveWarning();
+      return null;
+    }
+    return await res.json();
+  } catch (err) {
+    console.error('Analiz geçmişe kaydedilemedi:', err);
+    showHistorySaveWarning();
+    return null;
+  }
+}
+
+function showHistorySaveWarning(){
+  const notice = $("historySaveNotice");
+  if (notice) {
+    notice.style.display = "block";
+  }
+}
+
+async function renderHistoryView(){
+  closeSidebar();
+  renderNav('history');
+  $("crumb").textContent = "Geçmiş";
+  $("content").innerHTML = `<div class="card" id="historyLoading"><h2>Geçmiş Analizler</h2><p class="desc" role="status">Yükleniyor…</p></div>`;
+  const loading = $("historyLoading");
+  try {
+    const res = await fetch('/api/history');
+    if (!res.ok) throw new Error('Geçmiş alınamadı');
+    const items = await res.json();
+    if (!loading.isConnected) return;
+    window._historyCache = items;
+    $("content").innerHTML = renderHistoryHtml(items);
+  } catch (err) {
+    if (loading.isConnected) $("content").innerHTML = `<div class="card"><h2>Geçmiş Analizler</h2><div class="empty">Geçmiş yüklenirken hata oluştu.</div></div>`;
+  }
+}
+
+function renderHistoryHtml(items){
+  if (!items || !items.length) {
+    return `<div class="card"><h2>Geçmiş Analizler</h2><div class="empty">Henüz analiz çalıştırılmadı.</div></div>`;
+  }
+  return `<div class="card"><h2>Geçmiş Analizler (${items.length})</h2>
+    ${items.map(item => {
+      const inp = item.inputData || {};
+      const summary = Object.keys(inp).map(k => `${k}: ${inp[k]}`).join(" · ");
+      const at = item.createdAt ? new Date(item.createdAt).toLocaleString("tr-TR") : "";
+      return `<div class="history-item">
+        <div><div class="h-title">${esc(item.moduleName || item.moduleId)}</div>
+        <div class="h-meta">${esc(at)} · ${esc(summary).slice(0,80)}</div></div>
+        <span class="spacer"></span>
+        <button class="btn-sm" onclick="viewHistoryItem(${item.id})">Görüntüle</button>
+        <button class="btn-sm danger" onclick="delHistoryItem(${item.id})">Sil</button>
+      </div>`;
+    }).join("")}
+    <div class="actions" style="margin-top:14px"><button class="btn btn-ghost" onclick="clearAllHistory()">Tümünü Temizle</button></div>
+  </div>`;
+}
+
+function viewHistoryItem(id){
+  const item = (window._historyCache || []).find(x => x.id === id);
+  if (!item) return;
+  const m = MODULES.find(x => x.id === item.moduleId) || MODULES.find(x => x.name === item.moduleName);
+  if (!m) {
+    alert("Bu analize ait modül tanımı bulunamadı.");
+    return;
+  }
+  const f = item.inputData || {};
+  let html = "";
+  try {
+    html = m.run(f);
+  } catch (err) {
+    html = `<div class="card"><h2>Hata</h2><p>${esc(err.message)}</p></div>`;
+  }
+  const at = item.createdAt ? new Date(item.createdAt).toLocaleString("tr-TR") : new Date().toLocaleString("tr-TR");
+
+  $("crumb").textContent = "Geçmiş / " + (m.name || item.moduleName);
+  $("content").innerHTML = `
+  <div class="card no-print module-actions-bar holistic-actions-bar">
+    <button class="btn-sm" onclick="renderHistoryView()">← Geçmişe dön</button>
+    <button class="btn-sm" onclick="printReport()">Sonucu yazdır</button>
+    <button class="btn-sm" onclick="openModule('${m.id}')">Yeni analiz</button>
+  </div>
+  <div class="card no-print" id="analysisPdf"></div>
+  <div class="card" id="reportView">
+    <div class="report-head${m.id === 'holistic' ? ' report-head-holistic' : ''}">
+      <div><h1>${esc(m.name)}</h1>
+        <div style="font-size:12px;color:#6b7686">Astro Şuşu Numeroloji Sistemi — Numeroloji Raporu</div></div>
+      <div class="meta">${esc(at)}</div>
+    </div>
+    ${m.id === 'holistic' ? `
+    <div class="holistic-hint-note">Ayrıntıları görmek için sayılara veya harita üzerindeki işaretlere dokunabilirsin.</div>
+    <div class="holistic-print-tip" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 16px;margin-bottom:18px;font-size:13px;color:#1e40af;display:none;align-items:center;gap:10px;">
+      <span style="font-size:18px;">💡</span>
+      <span><b>İpucu:</b> Sayılara (<span style="color:#2f5597;font-weight:700;">mavi/kırmızı/altın butonlar</span>) ve haritalardaki renkli düğümlere tıklayarak kapsamlı pop-up analiz kartlarını açabilirsiniz.</span>
+    </div>` : `
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 16px;margin-bottom:18px;font-size:13px;color:#1e40af;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:18px;">💡</span>
+      <span><b>İpucu:</b> Sayılara (<span style="color:#2f5597;font-weight:700;">mavi/kırmızı/altın butonlar</span>) ve haritalardaki renkli düğümlere tıklayarak kapsamlı pop-up analiz kartlarını açabilirsiniz.</span>
+    </div>`}
+    <div class="report-section">${html}</div>
+    <div class="report-foot">Astro Şuşu Numeroloji Sistemi · Yerel numeroloji analizi · Bu rapor matematiksel/sembolik hesaplama amaçlıdır.</div>
+  </div>`;
+
+  triggerPostRender(m.id, f);
+  ReportUI.analysis($('analysisPdf'), item.id);
+}
+
+async function delHistoryItem(id){
+  try {
+    const res = await fetch('/api/history/' + id, { method: 'DELETE' });
+    if (res.ok) {
+      renderHistoryView();
+    }
+  } catch (err) {
+    alert('Geçmiş silinemedi.');
+  }
+}
+
+async function clearAllHistory(){
+  if(!confirm("Tüm geçmiş silinsin mi?")) return;
+  try {
+    const res = await fetch('/api/history', { method: 'DELETE' });
+    if (res.ok) {
+      renderHistoryView();
+    }
+  } catch (err) {
+    alert('Geçmiş temizlenemedi.');
+  }
+}
+
+function printReport(){ window.print(); }
+
+/* ============================================================
+   NAVİGASYON / YÖNLENDİRME
+   ============================================================ */
+function renderNav(activeId){
+  const root=$("navRoot");
+  let html=`
+    <div class="nav-group">
+      <h4>GENEL</h4>
+      <a class="nav-item${activeId==='dashboard'?' active':''}" ${activeId==='dashboard'?'aria-current="page"':''} href="/uygulama" onclick="renderMemberDashboard();return false;">Üye Paneli</a>
+      <a class="nav-item${activeId==='workspace'?' active':''}" href="#" onclick="renderWorkspaceView();return false;">Çalışma Alanım</a>
+      <a class="nav-item${activeId==='history'?' active':''}" href="#" onclick="renderHistoryView();return false;">Analiz Geçmişi</a>
+      <a class="nav-item" href="/raporlarim">Raporlarım</a>
+      ${memberSession?.role === 'admin' ? '<a class="nav-item" href="/admin">Yönetici Paneli</a>' : ''}
+    </div>
+  `;
+  CAT_ORDER.forEach(cat=>{
+    const mods=MODULES.filter(m=>m.cat===cat);
+    if(!mods.length) return;
+    html+=`<div class="nav-group"><h4>${esc(cat)}</h4>`;
+    mods.forEach(m=>{
+      html+=`<a class="nav-item${m.id===activeId?" active":""}" href="#" onclick="openModule('${m.id}');return false;">${esc(m.name)}</a>`;
+    });
+    html+="</div>";
+  });
+  root.innerHTML=html;
+}
+
+function openModule(id){
+  closeSidebar();
+  const m=MODULES.find(x=>x.id===id); if(!m) return;
+  renderNav(id);
+  $("crumb").textContent = m.cat + " / " + m.name;
+  const pre=window._prefill||{};
+  const fields=m.fields.map(fd=>{
+    const val = pre[fd.k]!==undefined ? pre[fd.k] : "";
+    return `<div class="field"><label>${esc(fd.label)}</label>
+      <input id="fld_${fd.k}" type="${fd.type||'text'}" value="${esc(val)}" placeholder="${esc(fd.placeholder||'')}">
+    </div>`;
+  }).join("");
+  const people = window._peopleCache || [];
+  const picker = people.length ? `
+    <div class="card no-print module-customer-picker holistic-customer-picker">
+      <h2>Kayıtlı kişi seç</h2>
+      <p class="desc" style="margin-bottom:10px">Kayıtlı bir kişiyi seçin, alanlar otomatik dolsun.</p>
+      <div class="module-picker-row holistic-picker-row">
+        <div class="field module-picker-select-field holistic-picker-select-field"><select id="custPick" onchange="fillFromSaved(this.value)">
+          <option value="">— Kişi seçin —</option>
+          ${people.map(p=>`<option value="${p.id}">${esc(p.name)} · ${esc(p.d)}.${esc(p.m)}.${esc(p.y)}</option>`).join("")}
+        </select></div>
+        <button type="button" class="btn-sm module-picker-btn holistic-picker-btn" onclick="fillFromSaved($('custPick').value)">Alanları doldur</button>
+      </div>
+    </div>` : "";
+  $("content").innerHTML = `
+  <div class="card no-print module-input-card${m.id === 'holistic' ? ' holistic-input-card' : ''}">
+    <h2>${esc(m.name)} ${m.free?'<span class="pill free">Ücretsiz</span>':'<span class="pill paid">Abonelik</span>'}</h2>
+    <p class="desc">${esc(m.desc)}</p>
+    <div class="grid c4">${fields}</div>
+    <div class="actions">
+      <button class="btn btn-go" onclick="runModule('${m.id}')">Analiz Et ➜</button>
+      <button class="btn btn-ghost" onclick="clearFields('${m.id}')">Temizle</button>
+    </div>
+  </div>
+  ${picker}
+  <div id="resultArea"></div>`;
+  window._prefill = null;
+}
+
+function clearFields(id){
+  const m=MODULES.find(x=>x.id===id); if(!m) return;
+  m.fields.forEach(fd=>{ const el=$("fld_"+fd.k); if(el) el.value=""; });
+  $("resultArea").innerHTML="";
+}
+
+// Both new and saved results arrive here; presentation only, never recalculation.
+function prepareHolisticScreen() {
+  const report = $('reportView');
+  const body = report?.querySelector('.holistic-report-body');
+  if (!body || report.classList.contains('holistic-screen')) return;
+  report.classList.add('holistic-screen');
+  const actions = report.parentElement.querySelector('.module-actions-bar');
+  actions.classList.add('holistic-toolbar');
+  report.querySelector('.report-head').after(actions);
+  const a4 = body.querySelector('.a4-export-btn');
+  if (a4) {
+    const button = document.createElement('button');
+    button.type = 'button'; button.className = 'btn-sm';
+    button.textContent = 'A4 çıktıyı aç';
+    button.onclick = () => a4.click();
+    button.title = 'A4 hesaplama çıktısı — Yorum PDF’sinden ayrıdır';
+    actions.append(button);
+  }
+  const pdf = $('analysisPdf');
+  pdf.classList.remove('card');
+  actions.append(pdf);
+  const credits = document.createElement('span');
+  credits.className = 'holistic-pdf-credits';
+  credits.setAttribute('aria-live', 'polite');
+  const pdfGroup = document.createElement('div');
+  pdfGroup.className = 'holistic-pdf-group';
+  actions.append(pdfGroup);
+  pdfGroup.append(pdf, credits);
+  ReportUI.credits(credits);
+
+  const omurga = body.querySelector('.omurga-container');
+  const core = document.createElement('div');
+  core.className = 'holistic-omurga-core';
+  omurga.prepend(core);
+  core.append(omurga.querySelector('.omurga-top-bar'), omurga.querySelector('.omurga-card'));
+
+  const kv = body.querySelector('.kv');
+  const cells = Array.from(kv.children);
+  for (let i = 0; i < cells.length; i += 2) {
+    const item = document.createElement('div');
+    item.className = 'holistic-indicator';
+    item.append(cells[i], cells[i + 1]); kv.append(item);
+  }
+  const matrices = document.createElement('div');
+  matrices.className = 'holistic-matrices';
+  const allMatrices = Array.from(body.querySelectorAll('.matrix'));
+  allMatrices[0].previousElementSibling.before(matrices);
+  allMatrices.forEach(matrix => {
+    const section = document.createElement('section');
+    section.append(matrix.previousElementSibling, matrix); matrices.append(section);
+  });
+  const pair = document.createElement('div');
+  pair.className = 'holistic-detail-pair';
+  const headings = Array.from(body.querySelectorAll(':scope > h3'));
+  const letters = headings.find(h => h.textContent === 'Harf Grupları');
+  const planes = headings.find(h => h.textContent === 'İfade Düzlemleri');
+  letters.before(pair);
+  [letters, planes].forEach(h => {
+    const section = document.createElement('section');
+    section.append(h, h.nextElementSibling); pair.append(section);
+  });
+}
+
+function triggerPostRender(idOrName, f) {
+  if (!f) return;
+  if (idOrName === 'holistic') prepareHolisticScreen();
+  setTimeout(() => {
+    const isDestiny = idOrName === 'destiny' || idOrName === 'Kader Matrisi';
+    const isKarmic = idOrName === 'karmic' || idOrName === 'Karma Analizi (Ladini)';
+
+    if (isDestiny && window.DestinyMatrixSVG && $('destinyMatrixSvgBox')) {
+      DestinyMatrixSVG.render('destinyMatrixSvgBox', { d: f.d, m: f.m, y: f.y, name: f.name });
+    }
+    if (isKarmic && window.KarmicSVG && $('karmicSvgBox')) {
+      KarmicSVG.render('karmicSvgBox', { d: f.d, m: f.m, y: f.y, name: f.name });
+    }
+  }, 30);
+}
+
+function runModule(id){
+  const m=MODULES.find(x=>x.id===id); if(!m) return;
+  const f={};
+  for(let i=0;i<m.fields.length;i++){
+    const fd=m.fields[i];
+    const el=$("fld_"+fd.k);
+    const val=(el?el.value.trim():"");
+    if(!val && fd.k!=="time" && fd.k!=="place"){
+      alert(fd.label + " alanı zorunludur.");
+      if(el) el.focus();
+      return;
+    }
+    f[fd.k]=val;
+  }
+  let html="";
+  try{
+    html = m.run(f);
+  }catch(err){
+    html = `<div class="card"><h2>Hata</h2><p>${esc(err.message)}</p></div>`;
+    console.error(err);
+  }
+  $("resultArea").innerHTML = `
+  <div id="historySaveNotice" class="card no-print" style="display:none;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:8px;padding:12px 16px;margin-bottom:14px;font-size:14px;font-weight:600;">Analiz sonucu hazır, ancak geçmişe kaydedilemedi.</div>
+  <div class="card no-print module-actions-bar holistic-actions-bar">
+    <button class="btn-sm" onclick="printReport()">Sonucu yazdır</button>
+    <button class="btn-sm" onclick="openModule('${m.id}')">Yeni analiz</button>
+  </div>
+  <div class="card no-print" id="analysisPdf" hidden></div>
+  <div class="card" id="reportView">
+    <div class="report-head${m.id === 'holistic' ? ' report-head-holistic' : ''}">
+      <div><h1>${esc(m.name)}</h1>
+        <div style="font-size:12px;color:#6b7686">Astro Şuşu Numeroloji Sistemi — Numeroloji Raporu</div></div>
+      <div class="meta">${new Date().toLocaleString("tr-TR")}</div>
+    </div>
+    ${m.id === 'holistic' ? `
+    <div class="holistic-hint-note">Ayrıntıları görmek için sayılara veya harita üzerindeki işaretlere dokunabilirsin.</div>
+    <div class="holistic-print-tip" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 16px;margin-bottom:18px;font-size:13px;color:#1e40af;display:none;align-items:center;gap:10px;">
+      <span style="font-size:18px;">💡</span>
+      <span><b>İpucu:</b> Sayılara (<span style="color:#2f5597;font-weight:700;">mavi/kırmızı/altın butonlar</span>) ve haritalardaki renkli düğümlere tıklayarak kapsamlı pop-up analiz kartlarını açabilirsiniz.</span>
+    </div>` : `
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 16px;margin-bottom:18px;font-size:13px;color:#1e40af;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:18px;">💡</span>
+      <span><b>İpucu:</b> Sayılara (<span style="color:#2f5597;font-weight:700;">mavi/kırmızı/altın butonlar</span>) ve haritalardaki renkli düğümlere tıklayarak kapsamlı pop-up analiz kartlarını açabilirsiniz.</span>
+    </div>`}
+    <div class="report-section">${html}</div>
+    <div class="report-foot">Astro Şuşu Numeroloji Sistemi · Yerel numeroloji analizi · Bu rapor matematiksel/sembolik hesaplama amaçlıdır.</div>
+  </div>`;
+  triggerPostRender(m.id, f);
+  const pdfTarget = $('analysisPdf');
+  addHistory(m.id, f).then(item => {
+    if (item && pdfTarget.isConnected) {
+      pdfTarget.hidden = false;
+      ReportUI.analysis(pdfTarget, item.id);
+    }
+  });
+}
+
+/* ============================================================
+   OTURUM VE BAŞLATMA
+   ============================================================ */
+async function checkSession(){
+  try {
+    const res = await fetch('/api/auth/me');
+    if (!res.ok) {
+      window.location.href = '/hesap';
+      return false;
+    }
+    const data = await res.json();
+    if (data.status !== 'active' || !data.subscription) {
+      window.location.href = '/hesap';
+      return false;
+    }
+    memberSession = data;
+    $("userBox").innerHTML = "👤 <b>" + esc(data.email) + "</b>";
+    return true;
+  } catch (err) {
+    window.location.href = '/hesap';
+    return false;
+  }
+}
+
+function dashboardDate(value, includeTime = false) {
+  const date = value ? new Date(value) : null;
+  if (!date || Number.isNaN(date.getTime())) return '—';
+  const options = { dateStyle: 'medium', timeZone: 'Europe/Istanbul' };
+  if (includeTime) options.timeStyle = 'short';
+  return new Intl.DateTimeFormat('tr-TR', options).format(date);
+}
+
+async function renderMemberDashboard() {
+  closeSidebar();
+  renderNav('dashboard');
+  $('crumb').textContent = 'Üye Paneli';
+  const subscription = memberSession.subscription;
+  $('content').innerHTML = `
+    <section class="member-dashboard no-print" aria-labelledby="dashboardTitle">
+      <div class="dashboard-layout">
+        <div class="dashboard-card dashboard-intro">
+          <h1 id="dashboardTitle">Üye Paneli</h1>
+          <p>Yeni bir analiz başlat veya kaldığın çalışmaya dön.</p>
+          <div class="dashboard-actions">
+            <button type="button" class="dashboard-button dashboard-primary" onclick="openModule('holistic')">Yeni analiz</button>
+            <button type="button" class="dashboard-button" onclick="renderWorkspaceView()">Kayıtlı kişiler</button>
+          </div>
+        </div>
+        <section class="dashboard-card" aria-labelledby="dashboardMembership">
+          <h2 id="dashboardMembership">Üyeliğim</h2>
+          <dl class="dashboard-membership">
+            <div><dt>Plan</dt><dd id="dashboardPlan"></dd></div>
+            <div><dt>Bitiş tarihi</dt><dd id="dashboardExpiry"></dd></div>
+          </dl>
+          <a class="dashboard-button" href="/hesap">Üyeliği yönet</a>
+          <h2 style="margin-top:20px">PDF kredileri</h2>
+          <p id="dashboardPdfCredits" role="status">Yükleniyor…</p>
+          <a class="dashboard-button" href="/raporlarim">Raporlarım</a>
+        </section>
+      </div>
+      <section class="dashboard-card" aria-labelledby="dashboardHistory">
+        <div class="dashboard-history-header">
+          <h2 id="dashboardHistory">Son analizler</h2>
+          <button type="button" class="dashboard-button" onclick="renderHistoryView()">Tüm geçmiş</button>
+        </div>
+        <section id="dashboardRecent" aria-label="Son analiz kayıtları" aria-busy="true">
+          <p role="status">Analizler yükleniyor…</p>
+        </section>
+      </section>
+    </section>`;
+  $('dashboardPlan').textContent = subscription.plan_name;
+  $('dashboardExpiry').textContent = dashboardDate(subscription.expires_at);
+  ReportUI.credits($('dashboardPdfCredits'));
+
+  const recent = $('dashboardRecent');
+  try {
+    const res = await fetch('/api/history');
+    if (!recent.isConnected) return;
+    if (res.status === 401) {
+      window.location.href = '/hesap';
+      return;
+    }
+    if (!res.ok) throw new Error('Geçmiş alınamadı');
+    const items = await res.json();
+    if (!recent.isConnected) return;
+    window._historyCache = items;
+    const latest = items.slice(0, 5);
+    if (!latest.length) {
+      recent.firstElementChild.textContent = 'Henüz analiz kaydı yok. İlk analizini başlattığında burada görebilirsin.';
+      return;
+    }
+    const list = document.createElement('ul');
+    list.className = 'dashboard-history-items';
+    for (const item of latest) {
+      const row = document.createElement('li');
+      row.className = 'dashboard-history-row';
+      const details = document.createElement('div');
+      const title = document.createElement('strong');
+      title.textContent = item.moduleName || item.moduleId;
+      const date = document.createElement('p');
+      date.textContent = dashboardDate(item.createdAt, true);
+      details.append(title, date);
+      const open = document.createElement('button');
+      open.type = 'button';
+      open.className = 'dashboard-button';
+      open.textContent = 'Görüntüle';
+      open.setAttribute('aria-label', `${title.textContent} kaydını görüntüle, ${date.textContent}`);
+      open.addEventListener('click', () => {
+        renderNav('history');
+        viewHistoryItem(item.id);
+      });
+      row.append(details, open);
+      list.append(row);
+    }
+    recent.replaceChildren(list);
+  } catch (err) {
+    if (recent.isConnected) recent.firstElementChild.textContent = 'Son analizler şu anda yüklenemedi.';
+  } finally {
+    recent.setAttribute('aria-busy', 'false');
+  }
+}
+
+async function logout(){
+  try {
+    await fetch('/api/auth/logout', { method: 'POST' });
+  } catch (err) {}
+  window.location.href = '/hesap';
+}
+
+async function renderWorkspaceView(){
+  closeSidebar();
+  renderNav('workspace');
+  $("crumb").textContent = "Çalışma Alanım";
+  $("content").innerHTML = '<p id="workspaceLoading" role="status">Kayıtlı kişiler yükleniyor…</p>';
+  const loading = $("workspaceLoading");
+  await loadPeople();
+  if (loading.isConnected) $("content").innerHTML = renderWorkspace();
+}
+
+function toggleSidebar(){
+  const sb = $("sidebar");
+  const bd = $("sidebarBackdrop");
+  if(!sb) return;
+  const isOpen = sb.classList.toggle("open");
+  if(bd) bd.classList.toggle("open", isOpen);
+}
+function closeSidebar(){
+  const sb = $("sidebar");
+  const bd = $("sidebarBackdrop");
+  if(sb) sb.classList.remove("open");
+  if(bd) bd.classList.remove("open");
+}
+
+/* ---------- Olay Dinleyicileri ---------- */
+$("btnLogout").addEventListener("click", logout);
+$("btnWorkspace").addEventListener("click", renderWorkspaceView);
+$("btnHistory").addEventListener("click", renderHistoryView);
+
+/* ---------- Başlat ---------- */
+(async function boot(){
+  const ok = await checkSession();
+  if (!ok) return;
+  await loadPeople();
+  renderMemberDashboard();
+})();
+</script>
+<a class="whatsapp-fab" href="https://wa.me/905370300640" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp’tan yaz" title="WhatsApp’tan yaz"></a>
+</body>
+</html>

@@ -1,0 +1,43 @@
+# Dependencies and local environment
+node_modules/
+.env
+.env.*
+!/.env.example
+.vercel/
+*.pem
+*.key
+
+# Local databases and logs
+.data/
+.pgdisk/
+postgres_data/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite*
+*.dump
+*.backup
+*.log
+
+# Private reports, reference captures and test artifacts
+private-reports/
+test-artifacts/
+/kaynak_ornekler/
+*.pdf
+!/astro-susu-ornek-rapor.pdf
+/gizem-sule-mert-portre.png
+
+# One-off local report and account scripts
+/inspect_*.js
+/inspect_*.py
+/run_live_*.js
+/run_editorial_live.js
+/run_single_live_acceptance.js
+/run_style_live.js
+/first_live_report.js
+/finalize_live_layout.js
+/finish_report_revision.js
+/revise_closing_layout.js
+/fix_local_test_membership.js
+/test_holistic_layout.js
+/verify_8782.js
