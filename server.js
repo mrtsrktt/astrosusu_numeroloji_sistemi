@@ -530,8 +530,8 @@ app.post('/api/auth/register', async (req, res) => {
   if (!email || !email.includes('@') || email.length < 5) {
     return res.status(400).json({ error: 'Geçerli bir e-posta adresi giriniz.' });
   }
-  if (!password || password.length < 12) {
-    return res.status(400).json({ error: 'Yeni şifreniz en az 12 karakter olmalıdır.' });
+  if (!password || password.length < 8) {
+    return res.status(400).json({ error: 'Yeni şifreniz en az 8 karakter olmalıdır.' });
   }
 
   try {
