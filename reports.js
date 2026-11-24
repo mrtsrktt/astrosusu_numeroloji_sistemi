@@ -26,7 +26,7 @@ function createReports(pool, options = {}) {
       const endpoint=process.env.PDF_R2_ENDPOINT;
       if(!endpoint||!process.env.PDF_R2_ACCESS_KEY_ID||!process.env.PDF_R2_SECRET_ACCESS_KEY)throw new Error('PDF_R2_NOT_CONFIGURED');
       if(new URL(endpoint).protocol!=='https:')throw new Error('PDF_R2_INVALID_ENDPOINT');
-      r2=new S3Client({region:'auto',endpoint,forcePathStyle:true,
+      r2=new S3Client({region:process.env.PDF_R2_REGION || 'auto',endpoint,forcePathStyle:true,
         credentials:{accessKeyId:process.env.PDF_R2_ACCESS_KEY_ID,secretAccessKey:process.env.PDF_R2_SECRET_ACCESS_KEY}});
     }
     return r2;
